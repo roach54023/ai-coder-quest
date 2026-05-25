@@ -1,0 +1,48 @@
+---
+id: "3-4"
+title: "一个像样的产品"
+page_title: "打磨成一个像样的产品"
+chapter: "chapter_3"
+order: 4
+is_delivery: true
+verification_type: "screenshot"
+verification_config: {}
+estimated_minutes: 30
+---
+
+最后的打磨。加入动画、SEO、性能优化，让它从"学生作业"变成"产品级网站"。
+
+## 操作步骤
+
+1. 对 AI 说：
+
+```text
+帮我做最后的产品化打磨：
+
+1. 页面加载动画：元素从下往上淡入（stagger 效果）
+2. 滚动动画：滚动到可视区域时触发动画（用 Intersection Observer）
+3. 加入 SEO meta 标签（title, description, og:image）
+4. 加一个 404 页面（有趣的设计）
+5. 加入 Google Analytics（先用占位 ID）
+6. 图片懒加载
+7. 加一个网站 favicon
+8. 确保 Lighthouse 性能分数 > 90
+```
+
+2. 打开浏览器开发者工具 → Lighthouse → 跑一次性能测试
+3. 如果分数不够，让 AI 帮你优化
+
+## 通关条件
+
+截图完整的网站（展示动画效果或 Lighthouse 分数）
+
+## 卡住了？
+
+- Lighthouse 分数低？最常见原因是图片太大，让 AI 帮你压缩或转 WebP 格式
+- 如果动画卡顿，可能是用了 `margin`/`top` 做动画，让 AI 改用 `transform`
+- 如果 404 页面不显示，检查路由配置中是否有通配符路由（`*`）
+- 实在搞不定？发邮件给我：**roach54023@qq.com**
+
+## 本章交付物
+
+一个有暗色模式、实时搜索、联系表单、动画效果、SEO 优化的完整前端产品。

@@ -1,0 +1,45 @@
+---
+id: "4-1"
+title: "后端 API 初体验"
+page_title: "创建你的第一个后端 API"
+chapter: "chapter_4"
+order: 1
+is_delivery: false
+verification_type: "url_check"
+verification_config:
+  expected_status: 200
+estimated_minutes: 20
+---
+
+前端是用户看到的部分，后端是幕后的大脑。这一关你会创建一个后端 API——一个能接收请求、返回数据的服务。
+
+## 操作步骤
+
+1. 创建一个新项目：
+
+```bash
+cd ~/Desktop
+mkdir my-fullstack-app
+cd my-fullstack-app
+```
+
+2. 启动 AI，对它说：
+
+```text
+帮我创建一个 Next.js 全栈项目（用 App Router）。
+然后创建一个 API 路由 /api/hello，返回 JSON：
+{ "message": "Hello from my API!", "timestamp": "当前时间" }
+```
+
+3. AI 会初始化项目并创建 API 路由
+4. 启动开发服务器后，在浏览器访问 `http://localhost:3000/api/hello`
+5. 你会看到 JSON 数据直接显示在浏览器中
+
+## 通关条件
+
+粘贴你的 API 地址（如 `http://localhost:3000/api/hello`）
+
+## 卡住了？
+
+- 如果看到 404，检查文件路径是否正确：`app/api/hello/route.ts`
+- Next.js API 路由必须导出 GET/POST 等函数

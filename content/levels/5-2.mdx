@@ -1,0 +1,122 @@
+---
+id: "5-2"
+title: "部署到 Vercel"
+page_title: "把网站部署到互联网上"
+chapter: "chapter_5"
+order: 2
+is_delivery: false
+verification_type: "url_check"
+verification_config:
+  expected_status: 200
+estimated_minutes: 25
+---
+
+代码在 GitHub 上了，现在让它变成一个真正的网站——有 URL，全世界都能访问。
+
+## 部署平台选择
+
+| 平台 | 特点 | 免费额度 | 推荐场景 |
+|------|------|---------|---------|
+| **Vercel**（首推） | Next.js 官方平台，部署最简单 | 每月 100GB 带宽 | Next.js 项目 |
+| **Netlify** | 老牌平台，稳定可靠 | 每月 100GB 带宽 | 静态站点、前端项目 |
+| **Railway** | 支持数据库+后端一站式 | 每月 $5 免费额度 | 全栈项目 |
+| **Zeabur** | 国内团队，对大陆友好 | 有免费计划 | 大陆用户首选备选 |
+
+**推荐 Vercel**，因为我们用的是 Next.js，Vercel 是它的"亲爹"，兼容性最好。
+
+---
+
+## 方案一：Vercel 部署（推荐）
+
+### 操作步骤
+
+1. 打开 https://vercel.com 用 **GitHub 账号**登录
+2. 点击 **"Add New → Project"**
+3. 选择你刚才推送的 GitHub 仓库
+4. 在 **Environment Variables** 中添加你的环境变量：
+   - `NEXT_PUBLIC_SUPABASE_URL` = 你的 Supabase URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = 你的 Supabase Anon Key
+   - 其他 `.env.local` 中的变量（**不要**加 `.env.local` 文件本身）
+5. 点击 **"Deploy"**
+6. 等待 1-2 分钟，部署完成！
+7. 你会得到一个 `https://xxx.vercel.app` 的地址
+
+### 避坑指南
+
+**坑1：环境变量没生效**
+
+Vercel 的环境变量分三个环境：Production / Preview / Development。确保你的变量勾选了 **Production**。添加完变量后需要**重新部署**才会生效（点 Deployments → 最新一条 → Redeploy）。
+
+**坑2：构建失败 — TypeScript 类型错误**
+
+Vercel 构建比本地严格。本地 `npm run dev` 没问题不代表构建能过。部署前先在本地跑一次：
+
+```bash
+npm run build
+```
+
+如果报错，把错误信息发给 AI："帮我修这个构建错误：[粘贴错误]"
+
+**坑3：API 路由 404**
+
+确保你的 API 路由文件在 `app/api/` 目录下，且导出了正确的 HTTP 方法函数（`GET`、`POST` 等）。
+
+**坑4：Supabase 连接失败**
+
+在 Supabase 控制台 → Settings → API → 确认你的 Vercel 域名不在 CORS 限制中。如果用了 RLS，确保策略允许匿名访问公开数据。
+
+**坑5：部署后页面白屏**
+
+通常是客户端组件用了服务端 API。检查浏览器控制台（F12）的报错信息，发给 AI 帮你修。
+
+---
+
+## 方案二：Zeabur（大陆用户备选）
+
+如果你访问 Vercel 速度很慢，可以试试 Zeabur：
+
+1. 打开 https://zeabur.com 注册账号
+2. 创建项目 → 添加服务 → 选择 Git → 连接 GitHub 仓库
+3. 添加环境变量
+4. 自动部署完成
+
+Zeabur 的优势是服务器有亚洲节点，大陆访问速度更快。
+
+---
+
+## 方案三：Netlify
+
+适合纯前端或静态站点：
+
+1. 打开 https://netlify.com 用 GitHub 登录
+2. "Add new site" → "Import an existing project" → 选仓库
+3. Build command 填 `npm run build`，Publish directory 填 `.next`（或 `out`）
+4. 添加环境变量 → Deploy
+
+注意：Netlify 对 Next.js App Router 的支持不如 Vercel 完善，如果遇到问题优先用 Vercel。
+
+---
+
+## 方案四：Railway（全栈一站式）
+
+如果你的项目需要后端服务或数据库：
+
+1. 打开 https://railway.app 用 GitHub 登录
+2. "New Project" → "Deploy from GitHub repo"
+3. Railway 会自动检测 Next.js 项目并配置
+4. 添加环境变量 → 自动部署
+
+Railway 的优势是可以在同一个平台上跑数据库 + 后端 + 前端。
+
+---
+
+## 通关条件
+
+粘贴你的部署地址（如 `https://my-app.vercel.app` 或其他平台的 URL）
+
+## 卡住了？
+
+- 部署失败？先看构建日志（Build Logs），把**最后几行红色错误**发给 AI
+- 对 AI 说："Vercel 部署报错了：[粘贴错误信息]，帮我修"
+- 如果是网络问题访问不了 Vercel，换 Zeabur 试试
+- 实在搞不定？发邮件给我：**roach54023@qq.com**，附上报错截图

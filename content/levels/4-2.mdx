@@ -1,0 +1,54 @@
+---
+id: "4-2"
+title: "数据库"
+page_title: "接入数据库"
+chapter: "chapter_4"
+order: 2
+is_delivery: false
+verification_type: "screenshot"
+verification_config: {}
+estimated_minutes: 30
+---
+
+API 能返回数据了，但数据从哪来？数据库。这一关接入 Supabase——一个免费的云数据库，自带管理界面。
+
+## 操作步骤
+
+1. 打开 https://supabase.com 注册账号（用 GitHub 登录最快）
+2. 创建一个新项目（选免费计划，区域选新加坡）
+3. 等待项目初始化完成（约1分钟）
+4. 对 AI 说：
+
+```text
+帮我接入 Supabase 数据库。
+
+1. 安装 @supabase/supabase-js
+2. 创建一个 lib/supabase.ts 配置文件
+3. 在 Supabase 中创建一个 "posts" 表：
+   - id (uuid, 主键, 自动生成)
+   - title (text, 必填)
+   - content (text)
+   - created_at (timestamp, 默认当前时间)
+4. 创建 API 路由：
+   - GET /api/posts - 获取所有文章
+   - POST /api/posts - 创建新文章
+5. 创建一个简单的前端页面展示文章列表，并有一个表单可以添加新文章
+
+Supabase URL: [你的项目URL]
+Supabase Anon Key: [你的anon key]
+```
+
+5. 在 Supabase 控制台的 Settings → API 中找到 URL 和 anon key
+6. 测试：在页面上添加一篇文章，刷新后确认数据还在
+
+## 通关条件
+
+截图显示从数据库读取数据的页面（至少有一条数据）
+
+## 卡住了？
+
+- Supabase URL 和 Anon Key 在哪？→ 项目 Dashboard → Settings → API，第一个就是
+- 如果页面报 `relation "posts" does not exist`，说明表还没创建。去 Supabase → Table Editor → New Table 手动建
+- 如果数据写入成功但读取为空，检查 RLS（Row Level Security）是否开启了但没设置策略。最简单的办法：暂时关闭 RLS（Table Editor → 点表名 → RLS 开关）
+- 如果报 `Invalid API key`，检查 `.env.local` 中的 key 是否复制完整（没有多余空格）
+- 实在搞不定？发邮件给我：**roach54023@qq.com**

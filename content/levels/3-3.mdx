@@ -1,0 +1,55 @@
+---
+id: "3-3"
+title: "联系表单"
+page_title: "做一个能发邮件的联系表单"
+chapter: "chapter_3"
+order: 3
+is_delivery: false
+verification_type: "screenshot"
+verification_config: {}
+estimated_minutes: 20
+---
+
+一个真正的网站需要让访客能联系你。这一关做一个联系表单，并接入免费的表单服务让它真的能收到消息。
+
+## 操作步骤
+
+1. 对 AI 说：
+
+```text
+帮我做一个联系表单页面（/contact）：
+
+表单字段：
+- 姓名（必填）
+- 邮箱（必填，需要格式验证）
+- 主题（选择框：合作咨询 / 技术交流 / 其他）
+- 消息内容（多行文本框，必填，最少10字）
+
+功能：
+- 实时表单验证（输入时就提示错误）
+- 提交按钮在表单无效时禁用
+- 提交时显示 loading 状态
+- 提交成功后显示感谢消息
+- 接入 Formspree（https://formspree.io）免费服务，这样真的能收到邮件
+
+样式：
+- 和网站整体风格一致
+- 输入框有 focus 动画
+- 错误提示用红色小字显示在字段下方
+```
+
+2. 去 https://formspree.io 注册一个免费账号，创建一个表单，获取表单 ID
+3. 告诉 AI 你的表单 ID，让它接入
+4. 测试：填写表单并提交，检查邮箱是否收到
+
+## 通关条件
+
+截图联系表单页面（显示表单验证效果）
+
+## 卡住了？
+
+- Formspree 注册后，在 Dashboard 创建表单会给你一个 ID（类似 `xrgvknzl`），把它告诉 AI
+- 如果提交后没收到邮件，检查垃圾邮件文件夹
+- 如果表单验证不触发，让 AI 检查是否正确绑定了 `onSubmit` 和 `onChange`
+- 如果 Formspree 报 CORS 错误，确认你是从 `localhost` 而不是直接打开 HTML 文件
+- 实在搞不定？发邮件给我：**roach54023@qq.com**

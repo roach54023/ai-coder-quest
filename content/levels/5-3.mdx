@@ -1,0 +1,68 @@
+---
+id: "5-3"
+title: "正式发布"
+page_title: "正式发布你的产品"
+chapter: "chapter_5"
+order: 3
+is_delivery: true
+verification_type: "composite"
+verification_config:
+  checks:
+    - type: "url_check"
+      expected_status: 200
+    - type: "github_url"
+      must_have_files: ["package.json"]
+estimated_minutes: 30
+---
+
+最后一关。你的网站已经上线了，但一个真正的产品还需要一些收尾工作。
+
+## 操作步骤
+
+1. 对 AI 说：
+
+```text
+帮我做上线前的最后检查和优化：
+
+1. 确保所有页面都能正常访问（没有 404）
+2. 检查移动端适配
+3. 添加网站 favicon 和 og:image
+4. 优化 SEO：每个页面有独立的 title 和 description
+5. 添加 sitemap.xml
+6. 确保环境变量没有泄露到前端
+7. README.md 写清楚项目介绍和技术栈
+8. 在 Supabase 中设置 RLS（行级安全策略）
+```
+
+2. 推送最终代码到 GitHub
+3. Vercel 会自动重新部署
+4. 用手机访问你的网站，确认一切正常
+5. 把链接发给一个朋友，让他们试试
+
+## 通关条件
+
+粘贴你的线上网站 URL + GitHub 仓库地址
+
+## 卡住了？
+
+- RLS 策略不会写？对 AI 说："帮我给 posts 表设置 RLS，规则是：所有人可以读公开文章，只有作者可以编辑自己的文章"
+- Lighthouse 分数低？让 AI 帮你优化，通常是图片和未使用的 JS 包导致的
+- 如果 Vercel 自动部署没触发，检查 GitHub 仓库是否正确关联
+- 有任何问题随时联系我：**roach54023@qq.com**
+
+## 恭喜通关！
+
+你从"打开终端"开始，到现在拥有了一个：
+- 有前端界面的
+- 有后端 API 的
+- 有数据库的
+- 有用户系统的
+- 有文件上传的
+- 部署在互联网上的
+- 全世界都能访问的
+
+**完整互联网产品。**
+
+而你从头到尾没有手动写过一行代码。你做的事情是：用自然语言告诉 AI 你想要什么，然后验证结果。
+
+这就是 AI 时代的编程方式。欢迎来到新世界。

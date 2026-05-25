@@ -1,0 +1,53 @@
+---
+id: "2-1"
+title: "第一个 npm 项目"
+page_title: "创建第一个 npm 项目"
+chapter: "chapter_2"
+order: 1
+is_delivery: false
+verification_type: "regex"
+verification_config:
+  pattern: "react"
+estimated_minutes: 15
+---
+
+到目前为止你的网站是几个独立的 HTML 文件。这就像手写信——能用，但效率低。npm 项目就像一个工厂系统：有统一的管理、自动化的流程、可复用的零件。
+
+## 操作步骤
+
+1. 在终端中创建一个新项目文件夹：
+
+```bash
+cd ~/Desktop
+mkdir my-portfolio
+cd my-portfolio
+```
+
+2. 启动 AI 搭档，对它说：
+
+```text
+帮我用 Vite + React 初始化一个新项目。用 TypeScript。
+初始化完成后，帮我启动开发服务器。
+```
+
+3. AI 会执行类似这样的命令：
+```bash
+npm create vite@latest . -- --template react-ts
+npm install
+npm run dev
+```
+
+4. 你会看到终端输出一个本地地址（通常是 `http://localhost:5173`）
+5. 在浏览器打开这个地址，看到 Vite + React 的默认页面
+
+## 通关条件
+
+粘贴 `package.json` 中 dependencies 部分的内容（包含 "react" 即可）
+
+## 卡住了？
+
+- 如果 `npm create` 报错，试试先运行 `npm install -g create-vite`
+- 如果端口被占用，AI 会自动换一个端口
+- 如果报 `EACCES` 权限错误，不要用 `sudo npm`，让 AI 帮你修 npm 权限
+- 如果 `npm install` 卡住不动，设置镜像：`npm config set registry https://registry.npmmirror.com`
+- 实在搞不定？发邮件给我：**roach54023@qq.com**

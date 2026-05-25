@@ -1,0 +1,16 @@
+{
+  "id": "chapter_1",
+  "title": "第一章 · 静态世界",
+  "subtitle": "用 AI 做出一个纯 HTML 网站",
+  "description": "HTML 是互联网的基础语言。但你不需要学它——你只需要告诉 AI 你想要什么样的页面，它会帮你写出来。",
+  "rank_unlocked": {
+    "id": "rank_1",
+    "name": "会装软件的普通人",
+    "subtitle": "至少不用找人帮忙了",
+    "salary": "¥3K/月"
+  },
+  "levels": ["1-1", "1-2", "1-3"],
+  "delivery_level": "1-3",
+  "estimated_total_minutes": 45,
+  "completion_message": "你刚才做的事情，2015 年的程序员需要学一周 HTML/CSS 课程才能做到。而你在 20 分钟内做出了一个比他们大多数人更好看的网站。"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "chapter_5",
+  "title": "第五章 · 上线与发布",
+  "subtitle": "部署到互联网让全世界访问",
+  "description": "到现在为止你的网站只在你的电脑上运行。这一章用10分钟让它上线，获得一个真实的 URL。",
+  "rank_unlocked": {
+    "id": "rank_5",
+    "name": "独立开发者",
+    "subtitle": "我的网站上线了，用户来了",
+    "salary": "¥50K/月"
+  },
+  "levels": ["5-1", "5-2", "5-3"],
+  "delivery_level": "5-3",
+  "estimated_total_minutes": 60,
+  "completion_message": "从打开终端到现在，你做了一个有前端、有后端、有数据库、有登录系统、有管理后台、有文件上传、有SEO、有响应式、能被全世界访问的互联网产品。"
+}

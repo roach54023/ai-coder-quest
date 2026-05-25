@@ -1,0 +1,16 @@
+{
+  "id": "chapter_4",
+  "title": "第四章 · 全栈之路",
+  "subtitle": "后端、数据库、用户认证",
+  "description": "前三章你做的所有事情都发生在前端。但真正的应用背后都有后端。这一章你会触碰这些东西。",
+  "rank_unlocked": {
+    "id": "rank_4",
+    "name": "全干工程师",
+    "subtitle": "前后端数据库都能搞",
+    "salary": "¥30K/月"
+  },
+  "levels": ["4-1", "4-2", "4-3", "4-4"],
+  "delivery_level": "4-4",
+  "estimated_total_minutes": 120,
+  "completion_message": "回顾一下你现在拥有的东西：一个网站前端、一个后端API、一个数据库、一个用户登录系统、一个管理后台、一个文件存储。这就是一个完整的互联网应用的全部组成部分。"
+}

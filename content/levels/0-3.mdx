@@ -1,0 +1,138 @@
+---
+id: "0-3"
+title: "召唤 AI 搭档"
+page_title: "召唤你的 AI 搭档"
+chapter: "prologue"
+order: 3
+is_delivery: false
+verification_type: "regex"
+verification_config:
+  pattern: "\\d+\\.\\d+\\.\\d+"
+estimated_minutes: 20
+---
+
+这是你在整个闯关过程中最重要的伙伴。它不是一个编辑器，不是一个搜索引擎——它是一个能理解你说的话、直接帮你写代码的 AI。你说中文，它写代码。就这么简单。
+
+## 推荐工具
+
+| 工具 | 出品方 | 特点 | 费用 |
+|------|--------|------|------|
+| **Claude Code**（首推） | Anthropic | 当前代码能力最强，理解上下文能力出色 | 需订阅，有免费额度 |
+| **OpenAI Codex** | OpenAI | GPT 系列，生态广泛 | 需订阅 |
+
+两个都是终端里运行的 AI 编程助手，你只需要选一个安装就行。**推荐 Claude Code**，它在代码理解和生成方面目前是最强的。
+
+---
+
+## Claude Code 安装教程
+
+### 第一步：安装
+
+打开终端，输入：
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+如果报权限错误（Mac），加 `sudo`：
+
+```bash
+sudo npm install -g @anthropic-ai/claude-code
+```
+
+### 第二步：启动
+
+```bash
+claude
+```
+
+首次运行会打开浏览器让你登录 Anthropic 账号。
+
+### 第三步：验证
+
+登录成功后，试着对它说：
+
+```text
+你好！请做一下自我介绍，你能帮我做什么？
+```
+
+看到 AI 的回复就说明一切就绪了。
+
+### 基础操作
+
+- **启动**：在项目目录下输入 `claude` 即可开始对话
+- **退出**：输入 `/exit` 或按 `Ctrl+C`
+- **清除上下文**：输入 `/clear`
+- **查看帮助**：输入 `/help`
+- **多行输入**：按 `Shift+Enter` 换行，`Enter` 发送
+
+Claude Code 会自动读取你当前目录下的代码，所以**一定要先 `cd` 到你的项目文件夹再启动它**。
+
+---
+
+## OpenAI Codex 安装教程
+
+### 第一步：安装
+
+```bash
+npm install -g @openai/codex
+```
+
+### 第二步：启动
+
+```bash
+codex
+```
+
+首次运行会要求你输入 OpenAI API Key。
+
+### 第三步：验证
+
+登录后同样试着和它对话，确认能正常回复。
+
+### 基础操作
+
+- **启动**：`codex` 进入交互模式
+- **退出**：`Ctrl+C`
+- **全自动模式**：`codex --full-auto "你的需求"` 让它自动完成任务
+
+---
+
+## 大陆用户购买指南
+
+由于 Anthropic 和 OpenAI 的服务在大陆无法直接访问，你需要：
+
+### Claude Code（Anthropic）
+
+1. **注册账号**：访问 https://console.anthropic.com （需要科学上网）
+2. **订阅方式**：
+   - 方式一：使用 **虚拟信用卡**（推荐 WildCard https://bewildcard.com ），支持支付宝充值，开卡后绑定到 Anthropic 即可
+   - 方式二：找朋友代付或使用海外信用卡
+3. **费用**：Claude Code 使用 API 计费，新用户有 $5 免费额度，足够完成本课程
+4. **使用**：注册完成后，`claude` 命令会引导你登录，之后就能正常使用
+
+### OpenAI Codex
+
+1. **注册账号**：访问 https://platform.openai.com （需要科学上网）
+2. **订阅方式**：同样可以用 WildCard 虚拟信用卡充值
+3. **费用**：API 按量计费，新用户有免费额度
+
+### 省钱提示
+
+- 两个工具的免费额度都足够你完成本课程的所有关卡
+- 如果额度用完了，充 $10 就能用很久
+- 不要让 AI 反复重写整个文件，学会给它精确的指令可以省很多 token
+
+---
+
+## 通关条件
+
+粘贴 `claude --version`（或 `codex --version`）的输出
+
+## 卡住了？
+
+- 如果 `npm install` 报错 `command not found: npm`，说明 Node.js 没装好，回到上一关
+- 如果安装很慢，先设置镜像：`npm config set registry https://registry.npmmirror.com`
+- 如果登录页面打不开，确认你的网络能访问国外网站
+- 如果 API 报错 `insufficient_quota`，说明免费额度用完了，需要充值
+- 实在搞不定？发邮件给我：**roach54023@qq.com**，描述你的问题和报错截图

@@ -1,0 +1,16 @@
+{
+  "id": "chapter_2",
+  "title": "第二章 · 工程化起步",
+  "subtitle": "从HTML文件升级到前端工程",
+  "description": "第一章的网站能用，但它是手工作坊模式。这一章把它升级成工厂模式：一套系统管理所有页面，改一次全生效。",
+  "rank_unlocked": {
+    "id": "rank_2",
+    "name": "能出活的实习生",
+    "subtitle": "老板，我做了个网页",
+    "salary": "¥5K/月"
+  },
+  "levels": ["2-1", "2-2", "2-3", "2-4"],
+  "delivery_level": "2-4",
+  "estimated_total_minutes": 60,
+  "completion_message": "现在你手上的东西，已经比大多数前端实习生的面试作品更好看了。区别是他们学了3个月 HTML/CSS/JavaScript，而你从头到尾没有手动写过一行代码。"
+}

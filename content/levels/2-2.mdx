@@ -1,0 +1,56 @@
+---
+id: "2-2"
+title: "迁移到组件化"
+page_title: "把网站迁移到组件化"
+chapter: "chapter_2"
+order: 2
+is_delivery: false
+verification_type: "screenshot"
+verification_config: {}
+estimated_minutes: 20
+---
+
+现在你有了一个现代化的项目结构。接下来把第一章做的个人网站"搬"进来，同时升级为组件化架构。
+
+## 操作步骤
+
+1. 对 AI 说：
+
+```text
+帮我把项目改造成我的个人网站。参考这个结构：
+
+组件拆分：
+- Header 组件：导航栏，包含 首页/关于/作品 三个链接
+- Hero 组件：首页的大标题欢迎区域
+- About 组件：关于我的内容
+- ProjectCard 组件：单个作品卡片
+- ProjectGrid 组件：作品网格，使用 ProjectCard
+- Footer 组件：页脚
+
+页面路由（用 React Router）：
+- / 首页
+- /about 关于
+- /works 作品
+
+设计风格：简约现代，深色主题，参考 Linear.app 的设计感。
+```
+
+2. AI 会创建多个组件文件和路由配置
+3. 刷新浏览器查看效果
+4. 如果需要调整，继续对话：
+
+```text
+Header 的导航链接间距太小了，加大一点。
+Hero 区域的标题太小了，用更大的字号。
+```
+
+## 通关条件
+
+截图显示组件化后的网站首页（在 localhost 运行）
+
+## 卡住了？
+
+- 如果页面白屏，打开浏览器控制台（F12）看红色报错，把错误信息发给 AI
+- 如果路由不生效（点链接没反应），确认 React Router 已安装：`npm install react-router-dom`
+- 如果样式全乱了，可能是旧 CSS 和新组件冲突，让 AI 清理旧样式文件
+- 实在搞不定？发邮件给我：**roach54023@qq.com**

@@ -1,0 +1,16 @@
+{
+  "id": "prologue",
+  "title": "序章 · 开机",
+  "subtitle": "把AI编程需要的基础环境装好",
+  "description": "本章目标：把AI编程需要的基础环境装好。装完之后，所有事情交给AI。",
+  "rank_unlocked": {
+    "id": "rank_0",
+    "name": "IT文盲",
+    "subtitle": "连终端都没打开过",
+    "salary": "¥0"
+  },
+  "levels": ["0-1", "0-2", "0-3"],
+  "delivery_level": null,
+  "estimated_total_minutes": 30,
+  "completion_message": "环境就绪。从下一关开始，你说话，AI 写代码。不需要记任何命令、任何语法。你只需要知道你想要什么。"
+}

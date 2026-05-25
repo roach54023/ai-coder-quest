@@ -1,0 +1,56 @@
+---
+id: "4-4"
+title: "全栈管理系统"
+page_title: "做一个完整的全栈管理系统"
+chapter: "chapter_4"
+order: 4
+is_delivery: true
+verification_type: "composite"
+verification_config:
+  checks:
+    - type: "screenshot"
+    - type: "url_check"
+      expected_status: 200
+estimated_minutes: 40
+---
+
+把前面所有东西整合起来，做一个完整的全栈应用——一个内容管理系统（CMS）。
+
+## 操作步骤
+
+1. 对 AI 说：
+
+```text
+帮我把项目升级为一个完整的内容管理系统：
+
+功能清单：
+1. 用户系统：注册、登录、个人资料编辑
+2. 文章管理：创建、编辑、删除、发布/草稿状态
+3. 富文本编辑器（用 Tiptap 或类似库）
+4. 文章列表：分页、搜索、按状态筛选
+5. 图片上传（用 Supabase Storage）
+6. 公开的文章展示页面（不需要登录就能看）
+7. Dashboard 统计：文章数、总浏览量
+8. 响应式设计，手机也能用
+
+技术栈：Next.js + Supabase + TailwindCSS
+```
+
+2. 逐一测试每个功能
+3. 确保数据持久化（刷新不丢失）
+
+## 通关条件
+
+截图管理后台 + 粘贴公开文章页面的 URL
+
+## 卡住了？
+
+- 这一关内容较多，建议分步完成：先做文章 CRUD → 再加富文本 → 最后加图片上传
+- 如果 Tiptap 编辑器报错，让 AI 换用 `@tiptap/react` 最新版，或者换成更简单的 `react-quill`
+- 图片上传失败？→ 确认 Supabase Storage 已创建 bucket，且设置了公开访问策略
+- 如果功能太多一次搞不定，对 AI 说："我们一个功能一个功能来，先帮我做文章的增删改查"
+- 实在搞不定？发邮件给我：**roach54023@qq.com**
+
+## 本章交付物
+
+一个完整的全栈内容管理系统：有用户认证、数据库 CRUD、文件上传、富文本编辑、公开展示页面。

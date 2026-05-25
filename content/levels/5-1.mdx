@@ -1,0 +1,42 @@
+---
+id: "5-1"
+title: "推送到 GitHub"
+page_title: "把代码推送到 GitHub"
+chapter: "chapter_5"
+order: 1
+is_delivery: false
+verification_type: "github_url"
+verification_config:
+  must_have_files: ["package.json", "README.md"]
+estimated_minutes: 15
+---
+
+你的代码现在只在你的电脑上。GitHub 是全球最大的代码托管平台——把代码放上去，既是备份，也是部署的前提。
+
+## 操作步骤
+
+1. 打开 https://github.com 注册账号（如果还没有）
+2. 对 AI 说：
+
+```text
+帮我把这个项目推送到 GitHub：
+
+1. 初始化 git 仓库
+2. 创建 .gitignore（忽略 node_modules、.env 等）
+3. 创建一个 README.md，简单介绍这个项目
+4. 做第一次 commit
+5. 告诉我怎么在 GitHub 上创建仓库并推送
+```
+
+3. 按 AI 的指引在 GitHub 网站上创建一个新仓库
+4. 执行 AI 给你的推送命令
+5. 刷新 GitHub 页面，确认代码已经上去了
+
+## 通关条件
+
+粘贴你的 GitHub 仓库地址（如 `https://github.com/yourname/my-fullstack-app`）
+
+## 卡住了？
+
+- 如果推送时要求输入密码，需要设置 SSH key 或使用 Personal Access Token
+- 让 AI 帮你："帮我设置 GitHub SSH key"
