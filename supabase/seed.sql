@@ -5,8 +5,8 @@ INSERT INTO public.chapters (id, title, subtitle, description, order_index, rank
 ('prologue', '序章 - 开机', '把AI编程需要的基础环境装好', '本章目标：把AI编程需要的基础环境装好。', 0, 'rank_0', 30, '环境就绪。从下一关开始，你说话，AI 写代码。'),
 ('chapter_1', '第一章 - 静态世界', '用 AI 做出一个纯 HTML 网站', 'HTML 是互联网的基础语言。但你不需要学它。', 1, 'rank_1', 45, '你在 20 分钟内做出了一个比大多数人更好看的网站。'),
 ('chapter_2', '第二章 - 工程化起步', '从HTML文件升级到前端工程', '第一章的网站能用，但它是手工作坊模式。', 2, 'rank_2', 60, '现在你手上的东西，已经比大多数前端实习生的面试作品更好看了。'),
-('chapter_3', '第三章 - 让网站活起来', '给网站加上交互功能', '到目前为止你的网站像一本画册。这一章让它变成活的。', 3, 'rank_3', 90, '一个初级前端工程师的工作内容也不过如此。'),
-('chapter_4', '第四章 - 全栈之路', '后端、数据库、用户认证', '前三章都发生在前端。但真正的应用背后都有后端。', 4, 'rank_4', 120, '你现在拥有一个完整互联网应用的全部组成部分。'),
+('chapter_3', '第三章 - 让网站活起来', '给网站加上交互功能和视觉素材', '到目前为止你的网站像一本画册。这一章让它变成活的，还教你用 AI 生成专业素材。', 3, 'rank_3', 115, '一个初级前端工程师的工作内容也不过如此。'),
+('chapter_4', '第四章 - 全栈之路', '后端、数据库、支付、AI 集成', '前三章都发生在前端。但真正的应用背后都有后端、支付和 AI。这一章做出能赚钱的产品。', 4, 'rank_4', 195, '你现在拥有一个完整的、能赚钱的互联网产品。'),
 ('chapter_5', '第五章 - 上线与发布', '部署到互联网让全世界访问', '到现在为止你的网站只在你的电脑上运行。', 5, 'rank_5', 60, '你做了一个全世界都能访问的完整互联网产品。');
 
 -- Levels
@@ -25,10 +25,13 @@ INSERT INTO public.levels (id, chapter_id, title, page_title, order_index, is_de
 ('3-2', 'chapter_3', '实时搜索', '给作品页加实时搜索', 2, FALSE, 'screenshot', '{}', 15),
 ('3-3', 'chapter_3', '联系表单', '做一个能发邮件的联系表单', 3, FALSE, 'screenshot', '{}', 20),
 ('3-4', 'chapter_3', '一个像样的产品', '打磨成一个像样的产品', 4, TRUE, 'screenshot', '{}', 30),
+('3-5', 'chapter_3', 'AI 生图素材', '用 AI 生成网站图片和素材', 5, FALSE, 'screenshot', '{}', 25),
 ('4-1', 'chapter_4', '后端 API 初体验', '创建你的第一个后端 API', 1, FALSE, 'url_check', '{"expected_status": 200}', 20),
 ('4-2', 'chapter_4', '数据库', '接入数据库', 2, FALSE, 'screenshot', '{}', 30),
 ('4-3', 'chapter_4', '用户系统', '实现用户注册登录', 3, FALSE, 'screenshot', '{}', 30),
-('4-4', 'chapter_4', '全栈管理系统', '做一个完整的全栈管理系统', 4, TRUE, 'composite', '{"checks": [{"type": "screenshot"}, {"type": "url_check", "expected_status": 200}]}', 40),
+('4-4', 'chapter_4', '全栈管理系统', '做一个完整的全栈管理系统', 4, FALSE, 'composite', '{"checks": [{"type": "screenshot"}, {"type": "url_check", "expected_status": 200}]}', 40),
+('4-5', 'chapter_4', '接入支付', '给你的应用接入支付功能', 5, FALSE, 'screenshot', '{}', 35),
+('4-6', 'chapter_4', 'AI 能力集成', '给你的应用接入 AI 超能力', 6, TRUE, 'composite', '{"checks": [{"type": "screenshot"}, {"type": "url_check", "expected_status": 200}]}', 40),
 ('5-1', 'chapter_5', '推送到 GitHub', '把代码推送到 GitHub', 1, FALSE, 'github_url', '{"must_have_files": ["package.json", "README.md"]}', 15),
 ('5-2', 'chapter_5', '部署到 Vercel', '一键部署到 Vercel', 2, FALSE, 'url_check', '{"expected_status": 200}', 15),
 ('5-3', 'chapter_5', '正式发布', '正式发布你的产品', 3, TRUE, 'composite', '{"checks": [{"type": "url_check", "expected_status": 200}, {"type": "github_url", "must_have_files": ["package.json"]}]}', 30);

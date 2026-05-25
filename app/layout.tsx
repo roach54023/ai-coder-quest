@@ -15,10 +15,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "AI Coder Quest - AI 时代的编程入门",
-  description: "18 关闯关挑战，从打开终端到上线全栈网站。不需要学编程语言，只需要学会驱动 AI 写代码。",
+  description: "24 关闯关挑战，从打开终端到上线全栈网站。不需要学编程语言，只需要学会驱动 AI 写代码。",
   openGraph: {
-    title: "AI Coder Quest - AI 时代的编程入门，不需要学编程",
-    description: "18 关闯关挑战，从打开终端到上线全栈网站",
+    title: "AI Coder Quest - 用 AI 写代码，你只需要说人话",
+    description: "24 关闯关挑战，零基础到独立开发者。完全免费开源。",
     type: "website",
   },
 };

@@ -1,0 +1,161 @@
+---
+id: "4-6"
+title: "AI 能力集成"
+page_title: "给你的应用接入 AI 超能力"
+chapter: "chapter_4"
+order: 6
+is_delivery: true
+verification_type: "composite"
+verification_config:
+  checks:
+    - type: "screenshot"
+    - type: "url_check"
+      expected_status: 200
+estimated_minutes: 40
+---
+
+这是第四章的终极关卡。你已经有了全栈应用、有了支付——现在给它加上 AI 能力，让你的产品真正具备"2025年该有的样子"。
+
+## AI 能力能做什么？
+
+你的应用可以：
+- **智能对话**：接入 ChatGPT/Claude API，让用户跟你的产品对话
+- **内容生成**：自动写文案、生成摘要、翻译
+- **图片理解**：上传图片让 AI 分析内容
+- **智能搜索**：语义搜索，而不是关键词匹配
+- **数据分析**：让 AI 帮用户分析数据、生成报告
+
+## 操作步骤
+
+### 第一步：获取 AI API Key
+
+推荐方案（按性价比排序）：
+
+| 服务 | 模型 | 价格 | 获取方式 |
+|------|------|------|----------|
+| **DeepSeek** | DeepSeek-V3 | ¥1/百万token | platform.deepseek.com |
+| **智谱 AI** | GLM-4 | 免费额度 | open.bigmodel.cn |
+| **OpenAI** | GPT-4o-mini | $0.15/百万token | platform.openai.com |
+| **Anthropic** | Claude 3.5 | $3/百万token | console.anthropic.com |
+
+**推荐新手**：DeepSeek（国内直连、便宜、效果好）
+
+### 第二步：创建 AI 聊天功能
+
+对 AI 说：
+
+```text
+帮我给项目添加 AI 聊天功能：
+
+技术方案：
+1. 使用 DeepSeek API（兼容 OpenAI SDK 格式）
+2. 安装 openai 包（DeepSeek 兼容 OpenAI 的 SDK）
+3. 创建 /api/chat 接口，实现流式响应（streaming）
+4. 前端做一个聊天界面：
+   - 消息列表（区分用户消息和 AI 回复）
+   - 输入框 + 发送按钮
+   - AI 回复时显示打字机效果（逐字显示）
+   - 支持 Markdown 渲染
+5. 添加对话历史记录（存到数据库）
+
+环境变量：
+DEEPSEEK_API_KEY=sk-xxx
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+
+代码示例：
+const openai = new OpenAI({
+  apiKey: process.env.DEEPSEEK_API_KEY,
+  baseURL: process.env.DEEPSEEK_BASE_URL,
+});
+
+const stream = await openai.chat.completions.create({
+  model: "deepseek-chat",
+  messages: [...],
+  stream: true,
+});
+```
+
+### 第三步：添加智能功能
+
+根据你的应用类型，选择合适的 AI 功能：
+
+**如果是内容管理系统：**
+```text
+帮我添加 AI 辅助写作功能：
+1. 文章编辑器旁边加一个"AI 助手"面板
+2. 功能：一键生成摘要、续写、改写、翻译成英文
+3. 选中文字后右键菜单出现"AI 润色"选项
+4. 自动生成 SEO 标题和描述
+```
+
+**如果是电商/产品类：**
+```text
+帮我添加 AI 智能推荐：
+1. 根据用户浏览历史推荐相关内容
+2. 智能搜索：用户输入自然语言，AI 理解意图后返回结果
+3. 自动生成产品描述
+```
+
+**如果是工具类应用：**
+```text
+帮我添加 AI 数据分析功能：
+1. 用户上传 CSV/Excel 文件
+2. AI 自动分析数据特征、生成可视化图表
+3. 用自然语言提问，AI 回答关于数据的问题
+4. 生成分析报告（Markdown 格式）
+```
+
+### 第四步：添加安全防护
+
+```text
+帮我给 AI 功能添加安全措施：
+1. Rate limiting：每个用户每分钟最多 10 次请求
+2. Token 限制：单次对话最多 2000 tokens
+3. 内容过滤：检测并拒绝不当内容
+4. 费用控制：设置每日 API 调用预算上限
+5. 错误处理：API 超时、额度用完时的友好提示
+```
+
+### 第五步：优化体验
+
+```text
+帮我优化 AI 功能的用户体验：
+1. 加载状态：AI 思考时显示动画
+2. 错误重试：失败时自动重试一次
+3. 响应缓存：相同问题不重复调用 API
+4. 流式输出：逐字显示 AI 回复，不要等全部生成完
+5. 快捷指令：预设一些常用 prompt 模板
+```
+
+## 通关条件
+
+截图展示：
+1. 你的应用中有一个可用的 AI 功能（聊天/生成/分析都行）
+2. 能看到 AI 的实时响应效果
+
+提交你的应用 URL（本地 localhost 截图也可以）。
+
+## 进阶挑战（可选）
+
+- 接入多个 AI 模型，让用户选择
+- 实现 RAG（检索增强生成）：让 AI 基于你的数据回答问题
+- 添加语音输入（Web Speech API）
+- 实现 AI Agent：让 AI 能调用工具完成复杂任务
+
+## 卡住了？
+
+**Q: DeepSeek API 怎么获取？**
+访问 platform.deepseek.com，注册后在"API Keys"页面创建。新用户有免费额度。
+
+**Q: 流式响应怎么实现？**
+后端用 `ReadableStream`，前端用 `fetch` + `reader.read()` 逐块读取。让 AI 帮你写这段代码就行。
+
+**Q: API 调用费用会不会很高？**
+DeepSeek 非常便宜，日常开发测试一个月花不到 10 块钱。上线后可以通过 rate limiting 控制成本。
+
+**Q: 能不能用免费的 AI API？**
+智谱 AI（GLM-4）有免费额度，Groq 提供免费的 Llama 模型调用。足够开发和测试用。
+
+---
+
+遇到问题？联系 roach54023@qq.com
