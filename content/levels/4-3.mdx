@@ -2,10 +2,13 @@
 id: "4-3"
 title: "用户系统"
 page_title: "实现用户注册登录"
+seo_title: "用户登录注册功能教程 - AI 帮你实现完整认证系统"
+seo_description: "用 AI + Better Auth 实现用户注册、登录、会话管理，给你的产品加上完整的用户系统。"
+keywords: ["用户登录功能实现","nextjs认证教程","AI实现登录注册","better auth教程","用户系统开发"]
 chapter: "chapter_4"
 order: 3
 is_delivery: false
-verification_type: "screenshot"
+verification_type: "checklist"
 verification_config: {}
 estimated_minutes: 30
 ---
@@ -14,23 +17,50 @@ estimated_minutes: 30
 
 ## 操作步骤
 
-1. 在 Supabase 控制台中，进入 Authentication → Providers，确认 Email 已启用
-2. 对 AI 说：
+### 第一步：做登录页面
+
+在 Supabase 控制台中，进入 Authentication → Providers，确认 Email 已启用。
+
+然后对 AI 说：
 
 ```text
-帮我实现完整的用户认证系统：
+帮我实现用户认证系统：
 
 1. 使用 Supabase Auth
 2. 注册页面（/register）：邮箱 + 密码
 3. 登录页面（/login）：邮箱 + 密码
 4. 登录后跳转到 /dashboard
-5. 导航栏显示当前用户邮箱，有退出按钮
-6. 未登录用户访问 /dashboard 自动跳转到 /login
-7. posts 表加一个 user_id 字段，只显示当前用户的文章
-8. 加入 GitHub OAuth 登录（可选）
 ```
 
-3. 测试完整流程：注册 → 收到确认邮件 → 登录 → 看到自己的数据
+完成后，在浏览器访问 `/register`，注册一个测试账号，完成邮件确认（如果有）后尝试登录。
+
+### 第二步：导航栏登录态切换
+
+继续对 AI 说：
+
+```text
+帮我完善登录状态的显示：
+
+5. 导航栏显示当前用户邮箱，有退出按钮
+6. 未登录用户访问 /dashboard 自动跳转到 /login
+7. 加入 GitHub OAuth 登录（可选）
+```
+
+测试完整流程：注册 → 登录 → 看到导航栏显示邮箱 → 点退出 → 重新登录。
+
+### 第三步：权限控制 /admin
+
+让每个用户只能看到自己的数据。对 AI 说：
+
+```text
+帮我加入数据权限控制：
+
+8. posts 表加一个 user_id 字段，关联到当前登录用户
+9. 查询时只返回当前用户的文章
+10. 在 Supabase 中设置 RLS（行级安全策略）：用户只能读写自己的数据
+```
+
+截图登录后的 Dashboard 页面（显示用户信息），准备提交通关。
 
 ## 通关条件
 

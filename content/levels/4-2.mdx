@@ -2,22 +2,33 @@
 id: "4-2"
 title: "数据库"
 page_title: "接入数据库"
+seo_title: "Supabase 数据库教程 - 用 AI 搭建数据存储"
+seo_description: "用 AI + Supabase 给你的应用加上数据库，实现数据的增删改查，让用户数据真正存下来。"
+keywords: ["supabase教程中文","AI接入数据库","supabase零基础","nextjs数据库","AI全栈数据库"]
 chapter: "chapter_4"
 order: 2
 is_delivery: false
-verification_type: "screenshot"
+verification_type: "checklist"
 verification_config: {}
 estimated_minutes: 30
 ---
 
 API 能返回数据了，但数据从哪来？数据库。这一关接入 Supabase——一个免费的云数据库，自带管理界面。
 
+> 💡 **Prompt 提示：** 这一关的 prompt 比较复杂（涉及数据库表结构、API 路由、前端页面），用好"分点列清楚"原则尤其重要——把数据结构、接口需求、页面需求分开描述，AI 才不会漏掉东西。
+
 ## 操作步骤
+
+### 第一步：注册 Supabase
 
 1. 打开 https://supabase.com 注册账号（用 GitHub 登录最快）
 2. 创建一个新项目（选免费计划，区域选新加坡）
 3. 等待项目初始化完成（约1分钟）
-4. 对 AI 说：
+4. 进入项目后，在 **Settings → API** 中找到你的 **URL** 和 **Anon Key**，备用
+
+### 第二步：创建数据表
+
+对 AI 说：
 
 ```text
 帮我接入 Supabase 数据库。
@@ -32,14 +43,26 @@ API 能返回数据了，但数据从哪来？数据库。这一关接入 Supaba
 4. 创建 API 路由：
    - GET /api/posts - 获取所有文章
    - POST /api/posts - 创建新文章
-5. 创建一个简单的前端页面展示文章列表，并有一个表单可以添加新文章
 
 Supabase URL: [你的项目URL]
 Supabase Anon Key: [你的anon key]
 ```
 
-5. 在 Supabase 控制台的 Settings → API 中找到 URL 和 anon key
-6. 测试：在页面上添加一篇文章，刷新后确认数据还在
+等 AI 完成后，检查 Supabase 控制台的 Table Editor，确认 posts 表已创建。
+
+### 第三步：写入测试数据
+
+创建一个简单的前端表单，添加几条测试数据。对 AI 说：
+
+```text
+帮我创建一个简单的前端页面，展示文章列表，并有一个表单可以添加新文章。
+```
+
+在页面上填写标题和内容，点击添加，然后刷新页面确认数据还在——数据持久化成功！
+
+### 第四步：前端展示数据库数据
+
+刷新页面后，你应该能看到从数据库读取的文章列表。截图这个页面（至少要有一条数据），准备提交通关。
 
 ## 通关条件
 

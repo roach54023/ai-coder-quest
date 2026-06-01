@@ -2,10 +2,13 @@
 id: "3-1"
 title: "暗色模式"
 page_title: "实现暗色/亮色模式切换"
+seo_title: "网站暗色模式实现教程 - 用 AI 一键搞定 Dark Mode"
+seo_description: "用 AI 给网站加上暗色/亮色模式切换，支持跟随系统设置，localStorage 记住用户偏好。"
+keywords: ["网站暗色模式教程","dark mode实现","react主题切换","AI实现dark mode","暗色模式切换"]
 chapter: "chapter_3"
 order: 1
 is_delivery: false
-verification_type: "screenshot"
+verification_type: "checklist"
 verification_config: {}
 estimated_minutes: 15
 ---
@@ -14,7 +17,11 @@ estimated_minutes: 15
 
 ## 操作步骤
 
-1. 对 AI 说：
+### 第一步：加入主题切换按钮
+
+还记得 1-1 学的 prompt 原则吗？下面的 prompt 就是一个好示范——**分点列清楚、每条都具体**。后面你自己写 prompt 时也这样做：
+
+对 AI 说：
 
 ```text
 帮我实现暗色/亮色模式切换功能：
@@ -28,9 +35,14 @@ estimated_minutes: 15
 7. 暗色模式：深灰背景，浅色文字
 ```
 
-2. 测试：点击切换按钮，观察整个页面的颜色变化
-3. 刷新页面，确认选择被记住了
+等 AI 完成后，点击导航栏的切换按钮，观察整个页面的颜色变化。
+
+### 第二步：localStorage 记住偏好
+
+刷新页面，确认你之前选择的主题被记住了（刷新后不会重置回默认主题）。
+
+如果刷新后主题丢失，对 AI 说："刷新页面后主题设置没有被记住，帮我检查 localStorage 的读取逻辑"
 
 ## 通关条件
 
-截图分别展示亮色和暗色模式（两张截图，或一张拼图）
+实现暗色/亮色模式切换功能，点击按钮可以正常切换主题，且刷新页面后主题选择能被记住。完成上方所有操作步骤即可通关。

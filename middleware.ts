@@ -8,8 +8,8 @@ export function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   const isLoggedIn = !!sessionCookie;
 
-  // 受保护的路由
-  const protectedPaths = ["/dashboard", "/levels", "/profile", "/share", "/admin"];
+  // 受保护的路由（/levels 已移除，教程页公开可访问）
+  const protectedPaths = ["/dashboard", "/profile", "/share", "/admin"];
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
 
   // 未登录用户访问受保护页面 → 重定向到登录
@@ -31,7 +31,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/levels/:path*",
     "/profile/:path*",
     "/share/:path*",
     "/admin/:path*",

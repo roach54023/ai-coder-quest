@@ -1,13 +1,12 @@
 import { RegexVerifier } from './regex-verifier';
 import { UrlVerifier } from './url-verifier';
 import { GitHubVerifier } from './github-verifier';
-import { ScreenshotVerifier } from './screenshot-verifier';
 import { CompositeVerifier } from './composite-verifier';
+import { ChecklistVerifier } from './checklist-verifier';
 
 export interface VerificationInput {
   text_content?: string;
   url_content?: string;
-  screenshot_urls?: string[];
 }
 
 export interface VerificationResult {
@@ -29,11 +28,11 @@ export function createVerifier(type: string): Verifier {
       return new UrlVerifier();
     case 'github_url':
       return new GitHubVerifier();
-    case 'screenshot':
-      return new ScreenshotVerifier();
     case 'composite':
       return new CompositeVerifier();
+    case 'checklist':
+      return new ChecklistVerifier();
     default:
-      return new ScreenshotVerifier();
+      return new ChecklistVerifier();
   }
 }

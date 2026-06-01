@@ -66,30 +66,6 @@ export default async function AdminSubmissionsPage() {
                   </div>
                 )}
 
-                {/* Screenshots */}
-                {sub.screenshot_urls && sub.screenshot_urls.length > 0 && (
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-2">截图</p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {sub.screenshot_urls.map((url: string, i: number) => (
-                        <a
-                          key={i}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block aspect-video rounded-md overflow-hidden border hover:opacity-80 transition-opacity"
-                        >
-                          <img
-                            src={url}
-                            alt={`Screenshot ${i + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Auto verification result */}
                 {sub.auto_verification_result && (
                   <div>

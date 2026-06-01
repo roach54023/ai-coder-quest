@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createVerifier, VerificationInput } from "@/lib/verification";
+import { awardLevelXP } from "@/lib/xp";
 
 export async function POST(request: NextRequest) {
   const session = await auth.api.getSession({
@@ -21,7 +22,6 @@ export async function POST(request: NextRequest) {
   const type = formData.get("type") as string;
   const textContent = formData.get("text_content") as string | null;
   const urlContent = formData.get("url_content") as string | null;
-  const screenshotFiles = formData.getAll("screenshots") as File[];
 
   if (!levelId || !type) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -38,28 +38,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Level not found" }, { status: 404 });
   }
 
-  // Upload screenshots if any
-  let screenshotUrls: string[] = [];
-  for (const file of screenshotFiles) {
-    const fileName = `${userId}/${levelId}/${Date.now()}-${file.name}`;
-    const { data: uploadData } = await supabase.storage
-      .from("screenshots")
-      .upload(fileName, file);
-
-    if (uploadData) {
-      const { data: urlData } = supabase.storage
-        .from("screenshots")
-        .getPublicUrl(uploadData.path);
-      screenshotUrls.push(urlData.publicUrl);
-    }
-  }
-
   // Run verification
   const verifier = createVerifier(level.verification_type);
   const verificationInput: VerificationInput = {
     text_content: textContent || undefined,
     url_content: urlContent || undefined,
-    screenshot_urls: screenshotUrls.length > 0 ? screenshotUrls : undefined,
   };
 
   const verificationResult = await verifier.verify(
@@ -73,8 +56,6 @@ export async function POST(request: NextRequest) {
     submissionStatus = "auto_passed";
   } else if (verificationResult.passed === false) {
     submissionStatus = "auto_failed";
-  } else {
-    submissionStatus = "manual_review";
   }
 
   // Create submission record
@@ -86,15 +67,14 @@ export async function POST(request: NextRequest) {
       submission_type: type,
       text_content: textContent,
       url_content: urlContent,
-      screenshot_urls: screenshotUrls.length > 0 ? screenshotUrls : null,
       status: submissionStatus,
       auto_verification_result: verificationResult as any,
     })
     .select()
     .single();
 
-  // If auto passed, update progress
-  let rankUnlocked = null;
+  // If auto passed, update progress and award XP
+  let xpResult = { xp_earned: 0, total_xp: 0, rank_changed: false, new_rank_id: "rank_0" };
   if (verificationResult.passed === true) {
     await supabase
       .from("user_progress")
@@ -104,13 +84,18 @@ export async function POST(request: NextRequest) {
         status: "completed",
         completed_at: new Date().toISOString(),
       }, { onConflict: "user_id,level_id" });
+
+    xpResult = await awardLevelXP(supabase, userId, levelId);
   }
 
   return NextResponse.json({
     submission,
     verification: verificationResult,
     level_completed: verificationResult.passed === true,
-    rank_unlocked: rankUnlocked,
+    xp_earned: xpResult.xp_earned,
+    total_xp: xpResult.total_xp,
+    rank_changed: xpResult.rank_changed,
+    new_rank_id: xpResult.new_rank_id,
   });
 }
 

@@ -1,47 +1,97 @@
 ---
 id: "2-4"
-title: "完整作品集"
-page_title: "完成你的作品集网站"
+title: "部署到 Vercel"
+page_title: "把 React 作品集部署到 Vercel，实现自动更新"
+seo_title: "Vercel 部署 React 项目教程 - 推代码自动上线"
+seo_description: "用 Vercel 把 React 作品集部署到互联网，连接 GitHub 后每次推代码自动更新，告别手动上传。"
+keywords: ["vercel部署react","vercel github自动部署","react项目上线","CI/CD入门","前端自动部署"]
 chapter: "chapter_2"
 order: 4
-is_delivery: true
-verification_type: "screenshot"
+is_delivery: false
+verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 20
+estimated_minutes: 15
 ---
 
-最后一步：把所有东西打磨完整，做成一个你真正愿意发给别人看的作品集。
+你的 React 作品集已经很漂亮了，但它还只跑在你的电脑上。这一关用 Vercel 把它部署到互联网——而且连接 GitHub 之后，**以后每次 `git push`，网站自动更新**，不用再手动上传文件。
+
+这就是"持续部署"——专业开发者的标准工作流。
+
+---
 
 ## 操作步骤
 
-1. 对 AI 说：
+### 第一步：把代码推送到 GitHub
+
+如果你在 2-1 用了模板，代码已经在 GitHub 上了，可以跳到第二步。
+
+如果是从零创建的项目，对 AI 说：
 
 ```text
-帮我完善这个作品集网站，加入以下内容：
-
-1. 首页 Hero 区域加一个打字机动画效果
-2. 关于页面加一个技能进度条（用动画从0到目标值）
-3. 作品页面的卡片点击后弹出详情模态框
-4. 加入页面切换的过渡动画（fade in）
-5. 加一个"回到顶部"的浮动按钮
-6. 底部加一个简单的联系表单（纯前端，不需要真的发送）
-7. 确保所有页面在手机上完美显示
+帮我把这个 React 项目推送到 GitHub：
+1. 初始化 git 仓库（如果还没有）
+2. 创建 .gitignore 文件，忽略 node_modules 和 dist 目录
+3. 提交所有文件
+4. 告诉我怎么在 GitHub 上新建仓库并推送上去
 ```
 
-2. 逐一检查每个功能是否正常
-3. 用浏览器的开发者工具（F12）切换到手机视图，检查响应式
+按照 AI 的指引：
+1. 在 [github.com](https://github.com) 新建一个仓库，命名为 `my-portfolio`（不要勾选 README）
+2. 在终端执行 AI 给你的 git 命令
+
+推送完成后，刷新 GitHub 仓库页面，能看到你的代码文件就说明成功了。
+
+### 第二步：用 Vercel 连接 GitHub 仓库
+
+1. 打开 [vercel.com](https://vercel.com)，点右上角 **Sign Up**，选 **Continue with GitHub** 用 GitHub 账号登录
+2. 登录后点 **「Add New Project」**
+3. 在仓库列表里找到 `my-portfolio`，点 **「Import」**
+4. Vercel 会自动识别这是 Vite 项目，配置已经填好了，直接点 **「Deploy」**
+5. 等 1-2 分钟，部署完成！
+
+你会得到一个 `https://my-portfolio-xxx.vercel.app` 的网址。
+
+### 第三步：验证自动部署
+
+现在测试"推代码自动更新"的魔法：
+
+对 AI 说：
+
+```text
+帮我在作品集首页的 Hero 区域加一行小字："🚀 持续部署测试 - 这行字是自动更新的"
+然后帮我 git add、git commit 并 push 到 GitHub。
+```
+
+推送完成后，打开 Vercel 控制台，你会看到一个新的部署正在进行。等 1-2 分钟，刷新你的 Vercel 网址，新的文字出现了——**你没有手动做任何事，代码一推，网站自动更新**。
+
+这就是现代开发的工作方式。
+
+### 第四步：用手机验证并分享
+
+用手机打开你的 Vercel 网址，确认：
+- 页面正常显示
+- 导航切换正常
+- 响应式布局在手机上好看
+
+把链接发给朋友看看！
+
+---
 
 ## 通关条件
 
-截图完整的作品集网站（至少包含首页和一个其他页面）
+1. React 作品集成功部署到 Vercel，能通过公网链接访问
+2. 完成一次代码修改 → git push → Vercel 自动更新的完整流程
 
-## 卡住了？
+## 常见问题
 
-- 如果动画不生效，可能需要安装额外库，让 AI 推荐（如 `framer-motion`）
-- 如果模态框弹出后无法关闭，让 AI 检查事件绑定
-- 如果手机视图下布局错乱，对 AI 说："帮我修复移动端响应式布局"
-- 实在搞不定？发邮件给我：**roach54023@qq.com**
+**Q: 部署后页面白屏？**
+让 AI 帮你检查：`我的 Vite 项目部署到 Vercel 后白屏了，帮我排查原因`
 
-## 本章交付物
+**Q: 路由刷新 404？**
+对 AI 说：`帮我在项目根目录创建 vercel.json，配置 SPA 路由重写规则`
 
-一个基于 React + TailwindCSS 的现代化个人作品集网站，有组件化架构、路由切换、动画效果和响应式设计。
+**Q: 没有 GitHub 账号？**
+去 [github.com](https://github.com) 免费注册一个，以后会经常用到。
+
+**Q: Vercel 部署失败，报 Build Error？**
+把 Vercel 的错误日志复制给 AI，说"帮我修复这个 Vercel 构建错误"。

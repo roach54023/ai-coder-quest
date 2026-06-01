@@ -144,6 +144,7 @@ export interface Database {
           password_salt: string | null;
           github_username: string | null;
           current_rank_id: string;
+          total_xp: number;
           total_time_seconds: number;
           started_at: string | null;
           completed_at: string | null;
@@ -161,6 +162,7 @@ export interface Database {
           password_salt?: string | null;
           github_username?: string | null;
           current_rank_id?: string;
+          total_xp?: number;
           total_time_seconds?: number;
           started_at?: string | null;
           completed_at?: string | null;
@@ -175,6 +177,7 @@ export interface Database {
           password_salt?: string | null;
           github_username?: string | null;
           current_rank_id?: string;
+          total_xp?: number;
           total_time_seconds?: number;
           started_at?: string | null;
           completed_at?: string | null;
@@ -200,6 +203,7 @@ export interface Database {
           completed_at: string | null;
           time_spent_seconds: number;
           attempts: number;
+          xp_earned: number;
           created_at: string;
           updated_at: string;
         };
@@ -212,6 +216,7 @@ export interface Database {
           completed_at?: string | null;
           time_spent_seconds?: number;
           attempts?: number;
+          xp_earned?: number;
         };
         Update: {
           status?: string;
@@ -219,6 +224,7 @@ export interface Database {
           completed_at?: string | null;
           time_spent_seconds?: number;
           attempts?: number;
+          xp_earned?: number;
         };
         Relationships: [
           {
@@ -245,7 +251,6 @@ export interface Database {
           submission_type: string;
           text_content: string | null;
           url_content: string | null;
-          screenshot_urls: string[] | null;
           status: string;
           auto_verification_result: Json | null;
           reviewer_id: string | null;
@@ -262,7 +267,6 @@ export interface Database {
           submission_type: string;
           text_content?: string | null;
           url_content?: string | null;
-          screenshot_urls?: string[] | null;
           status?: string;
           auto_verification_result?: Json | null;
           reviewer_id?: string | null;

@@ -55,7 +55,7 @@ CREATE TABLE public.levels (
   page_title TEXT,
   order_index INTEGER NOT NULL,
   is_delivery BOOLEAN DEFAULT FALSE,
-  verification_type TEXT NOT NULL CHECK (verification_type IN ('regex', 'url_check', 'github_url', 'screenshot', 'composite')),
+  verification_type TEXT NOT NULL CHECK (verification_type IN ('regex', 'url_check', 'github_url', 'checklist', 'composite')),
   verification_config JSONB DEFAULT '{}',
   estimated_minutes INTEGER DEFAULT 10,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -78,7 +78,7 @@ CREATE TABLE public.user_progress (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   level_id TEXT NOT NULL REFERENCES public.levels(id) ON DELETE CASCADE,
-  status TEXT NOT NULL DEFAULT 'locked' CHECK (status IN ('locked', 'unlocked', 'in_progress', 'completed')),
+  status TEXT NOT NULL DEFAULT 'locked' CHECK (status IN ('locked', 'unlocked', 'in_progress', 'completed', 'skipped')),
   started_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
   time_spent_seconds INTEGER DEFAULT 0,
@@ -95,8 +95,7 @@ CREATE TABLE public.submissions (
   submission_type TEXT NOT NULL,
   text_content TEXT,
   url_content TEXT,
-  screenshot_urls TEXT[],
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'auto_passed', 'auto_failed', 'manual_review', 'admin_approved', 'admin_rejected')),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'auto_passed', 'auto_failed')),
   auto_verification_result JSONB,
   admin_notes TEXT,
   reviewed_by UUID REFERENCES auth.users(id),
@@ -179,10 +178,6 @@ CREATE POLICY "Anyone can read achievements" ON public.achievements FOR SELECT U
 ALTER TABLE public.user_achievements ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own achievements" ON public.user_achievements FOR SELECT USING (auth.uid() = user_id);
 
--- Storage
-INSERT INTO storage.buckets (id, name, public) VALUES ('screenshots', 'screenshots', true) ON CONFLICT (id) DO NOTHING;
-CREATE POLICY "Users can upload screenshots" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'screenshots' AND auth.uid()::text = (storage.foldername(name))[1]);
-CREATE POLICY "Anyone can view screenshots" ON storage.objects FOR SELECT USING (bucket_id = 'screenshots');
 
 -- Updated_at trigger
 CREATE OR REPLACE FUNCTION public.update_updated_at() RETURNS TRIGGER AS $$

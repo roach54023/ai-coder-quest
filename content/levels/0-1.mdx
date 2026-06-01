@@ -1,38 +1,124 @@
 ---
 id: "0-1"
-title: "打开终端"
-page_title: "打开终端"
+title: "安装 AI 编程助手"
+page_title: "下载安装你的 AI 编程助手"
+seo_title: "Claude Code / Codex / Trae 安装教程 - 零基础 AI 编程第一步"
+seo_description: "手把手教你安装 Claude Code、OpenAI Codex 或 Trae（国内免翻墙），完成 AI 编程工具的第一次配置。零基础也能 10 分钟搞定。"
+keywords: ["claude code 安装", "codex 安装教程", "trae 安装", "AI编程工具安装", "vibe coding 入门"]
 chapter: "prologue"
 order: 1
 is_delivery: false
-verification_type: "screenshot"
+verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 5
+estimated_minutes: 10
 ---
 
-终端是你和电脑对话的地方。不需要学任何命令——你只需要打开它。从现在起，它就是你和AI搭档交流的窗口。
+这门课的玩法是：你说话，AI 写代码。第一步，先把 AI 编程助手装到电脑上。
+
+## ⚠️ 网络要求
+
+本教程主推的 Codex 和 Claude Code 都是海外服务，**需要能访问国外网站**（即"科学上网"/"翻墙"）。
+
+请确认你的电脑能正常打开 https://chat.openai.com 再继续。
+
+> 🇨🇳 **完全无法翻墙？** 直接跳到下方"方案三：Trae"，使用字节跳动的免费工具（无需翻墙）。
+
+---
+
+## 选一个方案
+
+| 工具 | 出品方 | 特点 | 费用 |
+|------|--------|------|------|
+| **Codex**（首推） | OpenAI | 桌面 App，开箱即用，支持多 Agent 并行 | ChatGPT Plus（$20/月）即可 |
+| Claude Code | Anthropic | 终端工具，代码理解力强 | 需订阅 Anthropic |
+| **Trae**（国内免翻墙） | 字节跳动 | AI 代码编辑器，内置豆包大模型 | 完全免费 |
+
+**主推 Codex 桌面客户端**——有图形界面，下载即用，对零基础用户最友好。选定后按对应步骤操作。
+
+---
+
+**方案一：Codex（首推）**
+
+访问 Codex 官网下载对应系统版本：**官网：** https://openai.com/codex/download
+
+> 💡 Mac 需要 Apple Silicon 芯片（M1 及以后）。Windows 10/11 均可。
+
+安装完成后打开，用 **ChatGPT 账号**登录（需要 Plus 或以上订阅）。登录成功后你会看到一个简洁的界面，左侧是项目列表，中间是对话区域。
+
+---
+
+**方案二：Claude Code**
+
+打开终端（Mac 叫"Terminal"，Windows 叫"PowerShell"），输入：
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+安装后输入 `claude --version` 看到版本号就说明成功。之后输入 `claude` 回车即可开始对话。
+
+---
+
+**方案三：Trae（国内免翻墙）**
+
+下载地址：**https://www.trae.cn/ide/download**
+
+下载对应系统版本，安装后打开即可，不需要任何订阅或付费。Trae 是 AI 原生代码编辑器，右侧有 Chat/Builder 面板可以直接和 AI 对话。
+
+---
 
 ## 操作步骤
 
-**Mac 用户：**
+### 第一步：下载并安装你选的工具
 
-1. 按 `Command + 空格` 打开聚焦搜索
-2. 输入 "Terminal"（或"终端"）
-3. 按回车打开
+根据上方你选择的方案，完成下载和安装。
 
-**Windows 用户：**
+- Codex：访问官网下载 App，一路默认安装
+- Claude Code：在终端运行安装命令
+- Trae：访问官网下载对应系统版本，安装即可
 
-1. 按 `Win` 键
-2. 输入 "PowerShell"
-3. 点击 "Windows PowerShell" 打开
+安装完成后继续下一步。
 
-**你会看到：** 一个黑色（或白色）的窗口，有一个闪烁的光标等待你输入。这就是终端。
+### 第二步：打开工具并完成登录
+
+打开你安装好的工具，按提示完成账号登录：
+
+- Codex：用 ChatGPT 账号登录
+- Claude Code：运行 `claude` 后按提示登录 Anthropic 账号
+- Trae：注册或登录字节跳动账号
+
+看到主界面或对话框，说明登录成功了。
+
+### 第三步：发一条消息，验证 AI 可用
+
+在工具的对话框里输入这句话，然后按回车/发送：
+
+```text
+你好！请介绍一下你自己，你能帮我做什么？
+```
+
+看到 AI 回复，就说明一切就绪了！🎉
+
+### 第四步（可选）：给 AI 装上更多技能
+
+AI 编程工具支持安装"Skill"——可以理解为给 AI 加装的专业技能包。装了对应 Skill 后，AI 在特定领域的表现会好很多。
+
+浏览和安装 Skill：[discoveraiskills.com](https://discoveraiskills.com)
+
+比如后面的设计课会用到 UI/UX 设计 Skill，部署课会用到对应的部署 Skill。现在不装也没关系，后面用到时再来装。
+
+---
 
 ## 通关条件
 
-截图已打开的终端窗口
+无论你选的哪个方案，截图展示以下内容即可：
+
+1. 你安装好的 AI 编程工具（界面截图）
+2. AI 成功回复了你的第一条消息
 
 ## 卡住了？
 
-- Mac：也可以打开"访达" → 应用程序 → 实用工具 → 终端
-- Windows：也可以右键开始菜单 → 选择 "Windows PowerShell"
+- Mac 如果提示"无法打开，因为无法验证开发者"——右键点击 App 选"打开"，再点确认即可
+- 没有 ChatGPT Plus 订阅？需要先在 https://chat.openai.com 升级到 Plus（$20/月）
+- 大陆用户付费困难？可以使用虚拟信用卡（如 WildCard https://bewildcard.com）支持支付宝充值
+- 实在搞不定？发邮件：**roach54023@qq.com**，描述你的问题和报错截图

@@ -1,16 +1,16 @@
 {
   "id": "chapter_2",
   "title": "第二章 · 工程化起步",
-  "subtitle": "从HTML文件升级到前端工程",
-  "description": "第一章的网站能用，但它是手工作坊模式。这一章把它升级成工厂模式：一套系统管理所有页面，改一次全生效。",
+  "subtitle": "从 HTML 文件升级到 React 工程，做出个人作品集并部署到 Vercel",
+  "description": "第一章的网站能用，但它是手工作坊模式。这一章把它升级成工厂模式：用 React 组件化开发，改一处全站生效；用 Vercel 连接 GitHub，推代码自动上线。最终交付物是一个有动画、有响应式、有真实内容的个人作品集网站。",
   "rank_unlocked": {
     "id": "rank_2",
-    "name": "能出活的实习生",
-    "subtitle": "老板，我做了个网页",
+    "name": "AI 前端开发者",
+    "subtitle": "能用现代工具做出真实项目",
     "salary": "¥5K/月"
   },
-  "levels": ["2-1", "2-2", "2-3", "2-4"],
-  "delivery_level": "2-4",
-  "estimated_total_minutes": 60,
-  "completion_message": "现在你手上的东西，已经比大多数前端实习生的面试作品更好看了。区别是他们学了3个月 HTML/CSS/JavaScript，而你从头到尾没有手动写过一行代码。"
+  "levels": ["2-1", "2-2", "2-3", "2-4", "2-5"],
+  "delivery_level": "2-5",
+  "estimated_total_minutes": 75,
+  "completion_message": "现在你手上的东西，已经比大多数前端实习生的面试作品更好看了。区别是他们学了 3 个月 HTML/CSS/JavaScript，而你从头到尾没有手动写过一行代码。更重要的是，你掌握了现代开发的完整工作流：写代码 → 推 GitHub → 自动部署上线。"
 }

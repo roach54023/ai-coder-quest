@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { AuthSessionProvider } from "@/components/auth/session-provider";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,14 +14,110 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+const siteUrl = "https://vibecodecamp.cn";
+
 export const metadata: Metadata = {
-  title: "AI Coder Quest - AI 时代的编程入门",
-  description: "24 关闯关挑战，从打开终端到上线全栈网站。不需要学编程语言，只需要学会驱动 AI 写代码。",
-  openGraph: {
-    title: "AI Coder Quest - 用 AI 写代码，你只需要说人话",
-    description: "24 关闯关挑战，零基础到独立开发者。完全免费开源。",
-    type: "website",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "VibeCamp - 零基础 AI 编程训练营，用 Claude Code / Trae 做出真产品",
+    template: "%s | VibeCamp",
   },
+  description:
+    "VibeCamp 是专为非程序员设计的 AI 编程训练营。26 个实战关卡，用 Claude Code、OpenAI Codex 或 Trae（国内免翻墙）写代码，从零开始做出真实可用的产品并上线。完全免费。",
+  keywords: [
+    "AI 编程教程",
+    "Vibe Coding",
+    "Claude Code 教程",
+    "Trae 教程",
+    "零基础 AI 编程",
+    "AI 编程最佳实践",
+  ],
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180" },
+    ],
+  },
+  authors: [{ name: "VibeCamp", url: siteUrl }],
+  creator: "VibeCamp",
+  publisher: "VibeCamp",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "zh_CN",
+    url: siteUrl,
+    siteName: "VibeCamp",
+    title: "VibeCamp - 零基础 AI 编程训练营",
+    description:
+      "用 Claude Code / Codex / Trae 做出真产品。26 个实战关卡，从零到独立上线。完全免费。",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "VibeCamp - 零基础 AI 编程训练营",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VibeCamp - 零基础 AI 编程训练营",
+    description: "用 Claude Code / Codex / Trae 做出真产品。26 关，从零到上线。完全免费。",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "VibeCamp AI 编程训练营",
+  description:
+    "专为非程序员设计的 AI 编程训练营，通过 26 个实战关卡学会用 Claude Code、Codex、Trae 写代码，从零开始做出真实产品并上线。",
+  provider: {
+    "@type": "Organization",
+    name: "VibeCamp",
+    url: siteUrl,
+  },
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "CNY",
+    availability: "https://schema.org/InStock",
+  },
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "online",
+    inLanguage: "zh-CN",
+  },
+  educationalLevel: "Beginner",
+  inLanguage: "zh-CN",
+  isAccessibleForFree: true,
+  url: siteUrl,
+  teaches: [
+    "Claude Code 使用方法",
+    "OpenAI Codex 使用方法",
+    "Trae AI 编程工具",
+    "vibe coding 方法论",
+    "React 前端开发",
+    "Next.js 全栈开发",
+    "Supabase 数据库",
+    "Vercel 部署上线",
+  ],
 };
 
 export default function RootLayout({
@@ -30,10 +127,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <AuthSessionProvider>
           {children}
         </AuthSessionProvider>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

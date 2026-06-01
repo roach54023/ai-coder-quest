@@ -1,114 +1,76 @@
 ---
 id: "3-5"
-title: "AI 生图素材"
-page_title: "用 AI 生成网站图片和素材"
+title: "产品级打磨"
+page_title: "打磨成一个像样的产品"
+seo_title: "AI 产品打磨教程 - 从能用到好用的关键细节"
+seo_description: "学会用 AI 打磨产品细节：加载状态、错误处理、空状态、用户反馈，让产品从"能用"变成"好用"。"
+keywords: ["AI产品优化","前端用户体验优化","loading状态处理","错误处理教程","AI产品细节"]
 chapter: "chapter_3"
 order: 5
-is_delivery: false
-verification_type: "screenshot"
+is_delivery: true
+verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 25
+estimated_minutes: 30
 ---
 
-你的网站现在功能齐全了，但图片素材还是用的占位图。这一关教你用 AI 生成专属的图片素材，让网站看起来像花了钱请设计师做的。
+最后的打磨。加入动画、SEO、性能优化——让你的网站从"学生作业"变成"产品级网站"。这一关完成后，你的前端作品就可以拿出去见人了。
 
-## 为什么需要 AI 生图？
-
-传统做法：花几百块买图库会员，或者花几千块请设计师。AI 时代的做法：用自然语言描述你想要的图片，几秒钟就能生成。
+---
 
 ## 操作步骤
 
-### 第一步：了解 AI 生图工具
+### 第一步：一次性让 AI 全站打磨
 
-目前主流的免费/低成本 AI 生图工具：
-
-| 工具 | 特点 | 适合场景 |
-|------|------|----------|
-| **Ideogram** | 免费额度，文字渲染强 | Logo、Banner、带文字的图 |
-| **Leonardo.ai** | 免费额度，风格多 | 插画、产品图、背景 |
-| **Playground AI** | 完全免费 | 快速出图、迭代 |
-| **Stable Diffusion (本地)** | 免费无限制 | 批量生成、隐私要求高 |
-| **美境 (aidesign.meituan.com)** | 美团内部 | 商业素材 |
-
-### 第二步：为网站生成 Hero 背景图
-
-对 AI 生图工具说：
+对 AI 说：
 
 ```text
-A modern abstract gradient background for a tech website, 
-dark theme with subtle purple and blue glowing orbs, 
-minimal and clean, 16:9 aspect ratio, high quality
+帮我做最后的产品化打磨，以下每一条都要做：
+
+动画效果：
+- 页面加载时元素从下往上淡入（stagger 效果，第一个元素 0s，第二个 0.1s，依次类推）
+- 滚动到可视区域时才触发动画（用 Intersection Observer）
+- 页面切换时有淡入过渡（300ms）
+
+SEO 优化：
+- 每个页面有独立的 title 和 meta description
+- 添加 Open Graph 标签（og:title, og:description, og:image）
+- 生成 sitemap.xml
+- 添加 robots.txt
+
+性能优化：
+- 图片使用懒加载
+- 检查并移除未使用的 CSS/JS
+- 确保所有图片有 width 和 height 属性（防止布局偏移）
+
+收尾细节：
+- 添加网站 favicon（如果没有的话，用首字母生成一个简单的）
+- 404 页面（设计有趣一点，有个"回到首页"按钮）
+- 确保手机上所有功能正常
 ```
 
-### 第三步：生成项目展示的 Mockup 图
+### 第二步：逐项检查清单确认
 
-```text
-A clean laptop mockup showing a modern dashboard interface, 
-dark mode UI with charts and data visualization, 
-isometric view, soft lighting, professional product photography style
-```
+完成后做最终检查：
 
-### 第四步：生成用户头像/团队照片
+1. 用浏览器开发者工具（F12）切到手机视图，逐页检查
+2. 试试所有交互：暗色切换、搜索、导航、表单
+3. 把网址发给自己的手机浏览器打开（localhost 只能在同一电脑打开，部署后才能手机看）
 
-```text
-A friendly professional avatar illustration, 
-minimal flat design style, soft pastel colors, 
-circular crop, suitable for a tech product
-```
-
-### 第五步：把生成的图片集成到项目中
-
-对你的 AI 编程工具说：
-
-```text
-帮我把这些 AI 生成的图片集成到项目中：
-
-1. 把 hero-bg.png 设为首页 Hero 区域的背景图（加上暗色遮罩）
-2. 把 mockup.png 放在"项目展示"区域
-3. 把头像图片放在"关于我"区域
-4. 所有图片使用 next/image 组件，设置合适的 width/height
-5. 添加图片加载的 blur placeholder 效果
-6. 确保图片做了 WebP 格式优化
-```
-
-### 第六步：生成 Favicon 和 OG Image
-
-```text
-帮我用 AI 生成的素材完善网站品牌：
-
-1. 用 Ideogram 生成一个简约的 Logo（我的项目叫 [你的项目名]）
-2. 把 Logo 转成 favicon（16x16, 32x32, 180x180）
-3. 生成一张 OG Image（1200x630），用于社交媒体分享时的预览图
-4. 把这些都配置到 Next.js 的 metadata 中
-```
-
-## Prompt 技巧
-
-写好 AI 生图 prompt 的关键要素：
-
-**主体** + **风格** + **色调** + **构图** + **质量词**
-
-例如：
-- ❌ "一个网站背景" （太模糊）
-- ✅ "A minimalist abstract background with flowing gradient waves, dark navy to purple color scheme, subtle particle effects, 4K resolution, suitable for a SaaS landing page"
-
-**常用质量词**：high quality, 4K, professional, clean, modern, minimal
-
-## 通关条件
-
-截图展示你的网站中至少使用了 2 张 AI 生成的图片素材（Hero 背景 + 至少一张其他用途的图）。
-
-## 卡住了？
-
-**Q: AI 生成的图片质量不好怎么办？**
-多试几次，调整 prompt。加入更具体的描述词，或者参考其他人的 prompt（去 Civitai、PromptHero 找灵感）。
-
-**Q: 图片太大影响加载速度？**
-用 `next/image` 组件会自动优化。也可以用 TinyPNG 或 Squoosh 手动压缩。
-
-**Q: 生成的图片有版权问题吗？**
-大部分 AI 生图工具生成的图片归你所有，可商用。但建议查看各工具的具体条款。
+逐一确认每项都已完成，有问题让 AI 继续修。
 
 ---
 
-遇到问题？联系 roach54023@qq.com
+## 通关条件
+
+完成全站产品化打磨，包括动画效果、SEO 优化、性能优化和收尾细节，所有页面正常运行且交互功能完整。完成上方所有操作步骤即可通关。
+
+## 本章交付物
+
+一个有暗色模式、实时搜索、联系表单、AI 生成的素材、动画效果、SEO 优化的完整前端产品。
+
+## 卡住了？
+
+- 动画卡顿？通常是用了 `margin`/`top` 做动画，对 AI 说："动画有点卡，帮我改用 transform 实现"
+- SEO 标签不知道写什么内容？对 AI 说："帮我根据网站内容生成合适的 SEO 标题和描述"
+- 404 页面不显示？对 AI 说："访问一个不存在的页面还是显示首页，帮我配置 404 路由"
+- 实在搞不定？发邮件：**roach54023@qq.com**

@@ -1,16 +1,16 @@
 {
   "id": "prologue",
   "title": "序章 · 开机",
-  "subtitle": "把AI编程需要的基础环境装好",
-  "description": "本章目标：把AI编程需要的基础环境装好。装完之后，所有事情交给AI。",
+  "subtitle": "装好 AI 助手，跑通第一个作品，创建 GitHub 仓库",
+  "description": "本章目标：装好 AI 编程助手，用它写出你人生中第一个网页，并把代码保存到 GitHub。验证"你说话，AI 写代码"的完整循环，同时建立你的代码仓库。",
   "rank_unlocked": {
     "id": "rank_0",
-    "name": "IT文盲",
-    "subtitle": "连终端都没打开过",
+    "name": "AI 新手",
+    "subtitle": "刚装好工具，跃跃欲试",
     "salary": "¥0"
   },
-  "levels": ["0-1", "0-2", "0-3"],
+  "levels": ["0-1", "0-2"],
   "delivery_level": null,
-  "estimated_total_minutes": 30,
-  "completion_message": "环境就绪。从下一关开始，你说话，AI 写代码。不需要记任何命令、任何语法。你只需要知道你想要什么。"
+  "estimated_total_minutes": 25,
+  "completion_message": "完美！你已经验证了 Vibe Coding 的核心循环：你说话，AI 写代码，浏览器看结果。你还创建了自己的第一个 GitHub 仓库——这是每个开发者的起点。从下一章开始，我们要用这个能力做出真正的作品。"
 }

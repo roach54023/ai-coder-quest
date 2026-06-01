@@ -5,8 +5,8 @@ import { RANKS } from "@/lib/content/ranks";
 import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2, Download } from "lucide-react";
 import Link from "next/link";
+import { ShareActions } from "@/components/levels/share-actions";
 
 interface SharePageProps {
   params: Promise<{ rankId: string }>;
@@ -32,10 +32,12 @@ export default async function SharePage({ params }: SharePageProps) {
     .eq("id", userId)
     .single();
 
+  const displayName = profile?.display_name || "匿名冒险者";
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">段位解锁！</h1>
+        <h1 className="text-3xl font-bold mb-2">🎖️ 段位解锁！</h1>
         <p className="text-muted-foreground">恭喜你达到了新的段位</p>
       </div>
 
@@ -55,7 +57,7 @@ export default async function SharePage({ params }: SharePageProps) {
                 color: rank.badge_color,
               }}
             >
-              {rank.order_index}
+              {rank.badge_icon}
             </div>
             <h2
               className="text-2xl font-bold mb-1"
@@ -69,24 +71,19 @@ export default async function SharePage({ params }: SharePageProps) {
             </p>
             <div className="mt-4 pt-4 border-t border-border/50">
               <p className="text-sm text-muted-foreground">
-                {profile?.display_name || "匿名冒险者"} · AI Coder Quest
+                {displayName} · AI Coder Quest
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Actions */}
-      <div className="flex gap-4 justify-center">
-        <Button variant="outline">
-          <Share2 className="w-4 h-4 mr-2" />
-          分享到社交媒体
-        </Button>
-        <Button variant="outline">
-          <Download className="w-4 h-4 mr-2" />
-          保存图片
-        </Button>
-      </div>
+      {/* Share Actions */}
+      <ShareActions
+        rankName={rank.name}
+        salary={rank.salary}
+        displayName={displayName}
+      />
 
       <div className="text-center mt-8">
         <Link href="/dashboard">

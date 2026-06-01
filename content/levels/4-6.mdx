@@ -2,13 +2,15 @@
 id: "4-6"
 title: "AI 能力集成"
 page_title: "给你的应用接入 AI 超能力"
+seo_title: "AI 功能集成教程：给 SaaS 产品接入 AI 聊天"
+seo_description: "这篇 AI 功能集成教程教你用 DeepSeek/OpenAI API 给全栈应用加上 AI 聊天：流式输出、对话历史、Rate Limiting，做出真正可商用的 AI 产品。"
+keywords: ["AI功能集成教程","DeepSeek API教程","nextjs接入AI","AI聊天功能开发","全栈AI应用教程"]
 chapter: "chapter_4"
 order: 6
 is_delivery: true
 verification_type: "composite"
 verification_config:
   checks:
-    - type: "screenshot"
     - type: "url_check"
       expected_status: 200
 estimated_minutes: 40
@@ -25,11 +27,9 @@ estimated_minutes: 40
 - **智能搜索**：语义搜索，而不是关键词匹配
 - **数据分析**：让 AI 帮用户分析数据、生成报告
 
-## 操作步骤
+这一关先实现最基础也最通用的能力——**AI 聊天**，然后在此基础上叠加更多智能功能。
 
-### 第一步：获取 AI API Key
-
-推荐方案（按性价比排序）：
+**主要 AI 服务选项：**
 
 | 服务 | 模型 | 价格 | 获取方式 |
 |------|------|------|----------|
@@ -38,11 +38,26 @@ estimated_minutes: 40
 | **OpenAI** | GPT-4o-mini | $0.15/百万token | platform.openai.com |
 | **Anthropic** | Claude 3.5 | $3/百万token | console.anthropic.com |
 
-**推荐新手**：DeepSeek（国内直连、便宜、效果好）
+**推荐新手**：DeepSeek（国内直连、便宜、效果好，且 API 格式兼容 OpenAI SDK）。
+
+---
+
+## 操作步骤
+
+### 第一步：获取 AI API Key
+
+选定你的 AI 服务提供商，注册账号并创建 API Key：
+
+- DeepSeek：访问 platform.deepseek.com → 注册 → API Keys → 创建
+- 智谱 AI：访问 open.bigmodel.cn → 注册 → API Keys
+- OpenAI：访问 platform.openai.com → API Keys
+- Anthropic：访问 console.anthropic.com → API Keys
+
+把 API Key 记下来（待会要填到代码里）。新用户通常有免费额度，够本关开发测试用。
 
 ### 第二步：创建 AI 聊天功能
 
-对 AI 说：
+钥匙有了，现在让 AI 帮你搭建完整的聊天界面。对你的 AI 编程助手说：
 
 ```text
 帮我给项目添加 AI 聊天功能：
@@ -75,37 +90,35 @@ const stream = await openai.chat.completions.create({
 });
 ```
 
+AI 写完代码后，把 `.env.local` 中的 `sk-xxx` 替换成你第一步拿到的真实 API Key。
+
+> ✅ **马上验证：** 启动项目，打开聊天页面，随便问 AI 一句话。如果能看到 AI 逐字回复，说明基础链路通了。**确认可用后再继续下一步。**
+
 ### 第三步：添加智能功能
 
-根据你的应用类型，选择合适的 AI 功能：
+聊天能跑通后，根据你应用的定位添加更具体的 AI 能力（选一个方向，或跳过直接到下一步）：
 
-**如果是内容管理系统：**
+**内容管理系统（博客/CMS）：**
+
 ```text
-帮我添加 AI 辅助写作功能：
-1. 文章编辑器旁边加一个"AI 助手"面板
-2. 功能：一键生成摘要、续写、改写、翻译成英文
-3. 选中文字后右键菜单出现"AI 润色"选项
-4. 自动生成 SEO 标题和描述
+帮我添加 AI 辅助写作功能：文章编辑器旁边加"AI 助手"面板，功能包括一键生成摘要、续写、改写、翻译成英文，选中文字后右键菜单出现"AI 润色"选项，自动生成 SEO 标题和描述。
 ```
 
-**如果是电商/产品类：**
+**电商/产品类：**
+
 ```text
-帮我添加 AI 智能推荐：
-1. 根据用户浏览历史推荐相关内容
-2. 智能搜索：用户输入自然语言，AI 理解意图后返回结果
-3. 自动生成产品描述
+帮我添加 AI 智能推荐：根据用户浏览历史推荐相关内容，智能搜索（用户输入自然语言 AI 理解意图后返回结果），自动生成产品描述。
 ```
 
-**如果是工具类应用：**
+**工具类应用：**
+
 ```text
-帮我添加 AI 数据分析功能：
-1. 用户上传 CSV/Excel 文件
-2. AI 自动分析数据特征、生成可视化图表
-3. 用自然语言提问，AI 回答关于数据的问题
-4. 生成分析报告（Markdown 格式）
+帮我添加 AI 数据分析功能：用户上传 CSV/Excel 文件，AI 自动分析数据特征、生成可视化图表，用自然语言提问 AI 回答关于数据的问题，生成 Markdown 格式分析报告。
 ```
 
 ### 第四步：添加安全防护
+
+AI 功能上线之前必须加保护，否则有人写脚本疯狂调用，一晚上就能刷掉余额：
 
 ```text
 帮我给 AI 功能添加安全措施：
@@ -116,7 +129,11 @@ const stream = await openai.chat.completions.create({
 5. 错误处理：API 超时、额度用完时的友好提示
 ```
 
+> ✅ **验证：** 试试快速连续发送 15 条消息，确认第 11 条开始被拦截并提示"请求过于频繁"。
+
 ### 第五步：优化体验
+
+最后一步让整个 AI 功能感觉"丝滑"：
 
 ```text
 帮我优化 AI 功能的用户体验：
@@ -126,6 +143,8 @@ const stream = await openai.chat.completions.create({
 4. 流式输出：逐字显示 AI 回复，不要等全部生成完
 5. 快捷指令：预设一些常用 prompt 模板
 ```
+
+做完后整体体验一遍：打开聊天页面 → 发消息 → 看到打字机效果的回复 → 快速连发验证限流 → 试试快捷指令。如果整个流程顺畅，恭喜——你的产品有 AI 了。
 
 ## 通关条件
 
@@ -152,9 +171,6 @@ const stream = await openai.chat.completions.create({
 
 **Q: API 调用费用会不会很高？**
 DeepSeek 非常便宜，日常开发测试一个月花不到 10 块钱。上线后可以通过 rate limiting 控制成本。
-
-**Q: 能不能用免费的 AI API？**
-智谱 AI（GLM-4）有免费额度，Groq 提供免费的 Llama 模型调用。足够开发和测试用。
 
 ---
 

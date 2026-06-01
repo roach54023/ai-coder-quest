@@ -5,30 +5,21 @@ export class CompositeVerifier implements Verifier {
     const { checks = [] } = config;
 
     const results: VerificationResult[] = [];
-    let hasManual = false;
 
-    for (const checkType of checks) {
+    for (const check of checks) {
+      // checks 可以是字符串数组 ["url_check", "github_url"]
+      // 或对象数组 [{"type": "url_check", ...}]
+      const checkType = typeof check === 'string' ? check : check.type;
+      const checkConfig = typeof check === 'string' ? config : { ...config, ...check };
+
       const verifier = createVerifier(checkType);
-      const result = await verifier.verify(input, config);
+      const result = await verifier.verify(input, checkConfig);
 
       if (result.passed === false) {
         return result;
       }
 
-      if (result.passed === null) {
-        hasManual = true;
-      }
-
       results.push(result);
-    }
-
-    if (hasManual) {
-      return {
-        passed: null,
-        method: 'manual',
-        message: '自动检查已通过，截图已提交人工审核',
-        details: { auto_checks_passed: results.filter((r) => r.passed === true).length },
-      };
     }
 
     return {

@@ -15,6 +15,10 @@ export interface LevelContent {
     verification_type: string;
     verification_config: Record<string, any>;
     estimated_minutes: number;
+    // SEO fields
+    seo_title?: string;
+    seo_description?: string;
+    keywords?: string[];
   };
   content: string;
 }

@@ -111,4 +111,17 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+  @keyframes stepDone {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.03); }
+    60% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+  }
+  @keyframes toastPop {
+    0% { opacity: 0; transform: translateY(6px) scale(0.95); }
+    20% { opacity: 1; transform: translateY(0) scale(1.05); }
+    40% { transform: scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 }

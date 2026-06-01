@@ -2,6 +2,9 @@
 id: "5-2"
 title: "部署到 Vercel"
 page_title: "把网站部署到互联网上"
+seo_title: "Vercel 部署教程 - 免费把网站上线到全球"
+seo_description: "用 Vercel 把你的 Next.js 项目免费部署上线，连接自定义域名，让全世界都能访问你的产品。"
+keywords: ["vercel部署教程","nextjs部署上线","免费网站部署","vercel中文教程","AI项目上线"]
 chapter: "chapter_5"
 order: 2
 is_delivery: false
@@ -28,8 +31,6 @@ estimated_minutes: 25
 
 ## 方案一：Vercel 部署（推荐）
 
-### 操作步骤
-
 1. 打开 https://vercel.com 用 **GitHub 账号**登录
 2. 点击 **"Add New → Project"**
 3. 选择你刚才推送的 GitHub 仓库
@@ -41,7 +42,7 @@ estimated_minutes: 25
 6. 等待 1-2 分钟，部署完成！
 7. 你会得到一个 `https://xxx.vercel.app` 的地址
 
-### 避坑指南
+**避坑指南**
 
 **坑1：环境变量没生效**
 
@@ -109,6 +110,36 @@ Zeabur 的优势是服务器有亚洲节点，大陆访问速度更快。
 Railway 的优势是可以在同一个平台上跑数据库 + 后端 + 前端。
 
 ---
+
+## 操作步骤
+
+### 第一步：选择部署平台并导入仓库
+
+参考上方的平台对比，选择适合你的平台（推荐 Vercel）。
+
+注册并登录平台后，选择"导入 GitHub 仓库"，找到你上一关推送的仓库并选择它。
+
+### 第二步：配置环境变量并点击部署
+
+在平台的部署配置页面，将你 `.env.local` 文件中的所有环境变量逐一填入：
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- 其他密钥（注意不要把 `.env.local` 文件本身上传）
+
+填好后点击 **Deploy**，等待 1-2 分钟构建完成。
+
+如果构建失败，把构建日志最后几行红色错误复制给 AI："帮我修这个部署报错：[粘贴错误]"
+
+### 第三步：验证线上可访问
+
+部署成功后，你会得到一个公网地址（如 `https://xxx.vercel.app`）。
+
+在浏览器打开这个地址，确认：
+- 首页能正常加载
+- 数据库连接正常（有数据显示）
+- 手机浏览器也能打开
+
+复制这个 URL，准备提交通关。
 
 ## 通关条件
 

@@ -4,28 +4,29 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScreenshotUpload } from "./screenshot-upload";
-import { Loader2, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Loader2, CheckCircle, XCircle, SkipForward } from "lucide-react";
 
 interface SubmissionFormProps {
   levelId: string;
   verificationType: string;
   verificationConfig: Record<string, any>;
+  nextLevelUrl?: string | null;
 }
 
-type SubmissionStatus = "idle" | "submitting" | "passed" | "failed" | "pending_review";
+type SubmissionStatus = "idle" | "submitting" | "passed" | "failed";
 
 export function SubmissionForm({
   levelId,
   verificationType,
   verificationConfig,
+  nextLevelUrl,
 }: SubmissionFormProps) {
   const router = useRouter();
   const [status, setStatus] = useState<SubmissionStatus>("idle");
   const [message, setMessage] = useState("");
   const [textInput, setTextInput] = useState("");
   const [urlInput, setUrlInput] = useState("");
-  const [screenshots, setScreenshots] = useState<File[]>([]);
+  const [skipping, setSkipping] = useState(false);
 
   const handleSubmit = async () => {
     setStatus("submitting");
@@ -36,7 +37,6 @@ export function SubmissionForm({
 
     if (textInput) formData.append("text_content", textInput);
     if (urlInput) formData.append("url_content", urlInput);
-    screenshots.forEach((file) => formData.append("screenshots", file));
 
     try {
       const res = await fetch("/api/submissions", {
@@ -49,20 +49,12 @@ export function SubmissionForm({
       if (data.verification.passed === true) {
         setStatus("passed");
         setMessage(data.verification.message);
-        if (data.rank_unlocked) {
-          setTimeout(() => {
-            router.push(`/share/${data.rank_unlocked.id}`);
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            router.refresh();
-          }, 1500);
-        }
+        // 验证通过后短暂展示成功状态，然后刷新页面（会显示分享引导）
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
       } else if (data.verification.passed === false) {
         setStatus("failed");
-        setMessage(data.verification.message);
-      } else {
-        setStatus("pending_review");
         setMessage(data.verification.message);
       }
     } catch {
@@ -71,13 +63,32 @@ export function SubmissionForm({
     }
   };
 
+  const handleSkip = async () => {
+    setSkipping(true);
+    try {
+      const res = await fetch("/api/progress/skip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ level_id: levelId }),
+      });
+      const data = await res.json();
+      if (data.skipped) {
+        if (nextLevelUrl) {
+          router.push(nextLevelUrl);
+        } else {
+          router.push("/dashboard");
+        }
+      }
+    } catch {
+      setSkipping(false);
+    }
+  };
+
   const needsText = verificationType === "regex" || verificationType === "composite";
   const needsUrl =
     verificationType === "url_check" ||
     verificationType === "github_url" ||
     verificationType === "composite";
-  const needsScreenshot =
-    verificationType === "screenshot" || verificationType === "composite";
 
   return (
     <div className="space-y-4 p-6 border rounded-lg bg-card">
@@ -107,14 +118,6 @@ export function SubmissionForm({
         </div>
       )}
 
-      {needsScreenshot && (
-        <ScreenshotUpload
-          files={screenshots}
-          onChange={setScreenshots}
-          maxFiles={3}
-        />
-      )}
-
       <Button
         onClick={handleSubmit}
         disabled={status === "submitting"}
@@ -139,10 +142,25 @@ export function SubmissionForm({
           <span>{message}</span>
         </div>
       )}
-      {status === "pending_review" && (
-        <div className="flex items-center gap-2 text-amber-600 bg-amber-50 dark:bg-amber-950 p-3 rounded-lg">
-          <Clock className="w-5 h-5" />
-          <span>{message}</span>
+
+      {/* 暂时跳过 */}
+      {status === "idle" && (
+        <div className="pt-3 border-t border-muted/30">
+          <button
+            onClick={handleSkip}
+            disabled={skipping}
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {skipping ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <SkipForward className="w-4 h-4" />
+            )}
+            {skipping ? "跳过中..." : "暂时跳过，稍后再来"}
+          </button>
+          <p className="text-xs text-center text-muted-foreground/60 mt-1">
+            跳过后可随时回来补交验证
+          </p>
         </div>
       )}
     </div>

@@ -2,79 +2,106 @@
 id: "4-5"
 title: "接入支付"
 page_title: "给你的应用接入支付功能"
+seo_title: "支付功能接入教程：用 AI 给产品加收款能力"
+seo_description: "这篇支付功能接入教程教你用 AI 接入 LemonSqueezy、Stripe 或支付宝，实现一次性付款和订阅制，让你的独立产品真正能赚钱。"
+keywords: ["支付功能接入教程","AI接入支付","stripe中文教程","LemonSqueezy教程","独立开发收款"]
 chapter: "chapter_4"
 order: 5
 is_delivery: false
-verification_type: "screenshot"
+verification_type: "checklist"
 verification_config: {}
 estimated_minutes: 35
 ---
 
 你的全栈应用已经有了用户系统和数据库。但如果你想靠它赚钱，就需要支付功能。这一关教你用 AI 接入支付——比你想象的简单得多。
 
-## 支付方案选择
+## 选一个支付方案
+
+先确定一个方案，然后跳到对应的注册流程：
 
 | 方案 | 适合场景 | 费率 | 难度 |
 |------|----------|------|------|
+| **LemonSqueezy**（推荐新手） | 独立开发者/数字产品 | 5% + $0.50 | 最简单 |
 | **Stripe** | 海外用户/SaaS | 2.9% + $0.30 | 简单 |
-| **LemonSqueezy** | 独立开发者/数字产品 | 5% + $0.50 | 最简单 |
 | **支付宝当面付** | 国内个人 | 0.6% | 中等 |
-| **微信支付** | 国内企业 | 0.6% | 需要企业资质 |
 
-**推荐新手方案**：LemonSqueezy（不需要企业资质，全球收款，自动处理税务）
+> 💡 **不知道选哪个？** 选 LemonSqueezy——不需要企业资质，全球收款，自动处理税务。等你真正有用户了再换也不迟。
+
+---
+
+**LemonSqueezy 注册方法：**
+
+访问 [lemonsqueezy.com](https://lemonsqueezy.com)，注册账号，创建 Store → 添加产品（如"Pro 会员 - $9.9/月"）→ Settings → API 中获取 API Key。
+
+接入时的 prompt 示例：
+
+```text
+帮我给项目接入 LemonSqueezy 支付：安装 @lemonsqueezy/lemonsqueezy.js SDK，创建 /api/checkout 接口，创建 /api/webhooks/lemonsqueezy Webhook 接口，在数据库添加 subscriptions 表，前端加"升级 Pro"按钮，支付成功后更新用户 plan 状态，添加 /pricing 定价页面。
+环境变量：LEMONSQUEEZY_API_KEY / LEMONSQUEEZY_STORE_ID / LEMONSQUEEZY_WEBHOOK_SECRET
+```
+
+测试卡号：`4242 4242 4242 4242`（任意过期日期和 CVC）
+
+---
+
+**Stripe 注册方法：**
+
+访问 [stripe.com](https://stripe.com) 注册，在 Dashboard → Developers → API Keys 获取密钥，在 Products 中创建订阅产品。
+
+接入时的 prompt 示例：
+
+```text
+帮我接入 Stripe 支付：安装 stripe 和 @stripe/stripe-js，创建 /api/create-checkout-session 接口，创建 /api/webhooks/stripe 接口，实现 Stripe Checkout 流程，处理 checkout.session.completed 事件，前端添加定价页面和"升级"按钮。
+环境变量：STRIPE_SECRET_KEY / STRIPE_PUBLISHABLE_KEY / STRIPE_WEBHOOK_SECRET
+```
+
+测试卡号同样是 `4242 4242 4242 4242`。
+
+---
+
+**支付宝当面付（国内用户）：**
+
+访问 [open.alipay.com](https://open.alipay.com) 用支付宝账号登录，创建应用获取 AppID，配置公钥/私钥。
+
+接入时的 prompt 示例：
+
+```text
+帮我接入支付宝当面付：使用 alipay-sdk 包，创建 /api/alipay/create 生成支付二维码，创建 /api/alipay/notify 接收异步通知，前端展示支付二维码并轮询状态。
+```
+
+---
 
 ## 操作步骤
 
-### 第一步：注册 LemonSqueezy
+### 第一步：注册支付平台并创建产品
 
-1. 访问 [lemonsqueezy.com](https://lemonsqueezy.com)
-2. 注册账号（支持 GitHub 登录）
-3. 创建一个 Store
-4. 添加一个产品（比如"Pro 会员 - $9.9/月"）
-5. 获取 API Key（Settings → API）
+根据你选择的方案（LemonSqueezy / Stripe / 支付宝），完成以下操作：
 
-### 第二步：让 AI 帮你接入
+1. 注册账号（上方有各方案的注册入口）
+2. 创建你的产品/价格（如"Pro 会员 $9.9/月"）
+3. 获取 API Key，记录下来（待会要填到代码里）
 
-对 AI 说：
+有了"商品"和"钥匙"，才能继续下一步。
 
-```text
-帮我给项目接入 LemonSqueezy 支付：
+### 第二步：让 AI 接入支付后端
 
-需求：
-1. 安装 @lemonsqueezy/lemonsqueezy.js SDK
-2. 创建 /api/checkout 接口，生成支付链接
-3. 创建 /api/webhooks/lemonsqueezy 接口，接收支付回调
-4. 在数据库中添加 subscriptions 表（user_id, plan, status, lemon_subscription_id）
-5. 前端添加"升级 Pro"按钮，点击后跳转到支付页面
-6. 支付成功后更新用户的 plan 状态
-7. 添加一个简单的定价页面 /pricing
+把上方对应方案的 prompt 示例复制给你的 AI 编程助手，让它帮你接入支付功能。
 
-环境变量：
-LEMONSQUEEZY_API_KEY=xxx
-LEMONSQUEEZY_STORE_ID=xxx
-LEMONSQUEEZY_WEBHOOK_SECRET=xxx
+AI 写完代码后，把 `.env.local` 里的 `xxx` 替换成你第一步拿到的真实 Key，然后重启开发服务器。
 
-注意：
-- Webhook 需要验证签名
-- 处理 subscription_created 和 subscription_cancelled 事件
-- 用 .env.local 存储密钥
-```
+### 第三步：测试支付流程（测试模式）
 
-### 第三步：测试支付流程
+用测试信用卡号 `4242 4242 4242 4242` 走一遍完整支付流程：
 
-LemonSqueezy 提供测试模式：
+1. 点击"升级"按钮，跳转到支付页
+2. 填入测试卡号，完成支付
+3. 支付完成后，去数据库查看 subscriptions 表是否多了一条记录
 
-```text
-帮我配置 LemonSqueezy 测试模式：
-1. 使用测试 API Key
-2. 创建测试产品
-3. 用测试信用卡号完成一次完整支付流程
-4. 验证 webhook 回调正确更新了数据库
-```
-
-测试信用卡号：`4242 4242 4242 4242`（任意过期日期和 CVC）
+有记录 = 支付链路通了！
 
 ### 第四步：添加付费墙
+
+对 AI 说：
 
 ```text
 帮我实现付费墙功能：
@@ -84,31 +111,7 @@ LemonSqueezy 提供测试模式：
 4. 在用户 dashboard 显示当前订阅状态
 ```
 
-## 替代方案：Stripe
-
-如果你的目标用户在海外，Stripe 是更专业的选择：
-
-```text
-帮我接入 Stripe 支付：
-1. 安装 stripe 和 @stripe/stripe-js
-2. 创建 /api/create-checkout-session 接口
-3. 创建 /api/webhooks/stripe 接口
-4. 实现 Stripe Checkout 流程（跳转到 Stripe 托管页面）
-5. 处理 checkout.session.completed 事件
-```
-
-## 国内方案：支付宝
-
-如果你的用户在国内：
-
-```text
-帮我接入支付宝当面付（个人可用）：
-1. 注册支付宝开放平台，创建应用
-2. 使用 alipay-sdk 包
-3. 创建 /api/alipay/create 生成支付二维码
-4. 创建 /api/alipay/notify 接收异步通知
-5. 前端展示支付二维码，轮询支付状态
-```
+做完这一步，你就有了一个完整的"免费试用 → 付费升级"的商业模式。
 
 ## 通关条件
 
