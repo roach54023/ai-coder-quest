@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Terminal, Map, User, Star } from "lucide-react";
+import { Map, User, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -38,7 +38,12 @@ export default async function AppLayout({
       <header className="fixed top-0 w-full z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex h-14 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-indigo-400" />
+            <svg width="24" height="24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-md flex-shrink-0" aria-hidden="true">
+              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+            </svg>
             <span className="font-bold">VibeCamp</span>
           </Link>
 

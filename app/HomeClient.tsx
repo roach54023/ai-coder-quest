@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { RANKS } from "@/lib/content/ranks";
+import { useSession, signOut } from "@/lib/auth-client";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import {
   ArrowRight,
   Terminal,
@@ -22,89 +22,16 @@ import {
   Swords,
   Star,
   Sparkles,
-  CheckCircle2,
-  MessageSquare,
-  GitBranch,
-  Repeat2,
 } from "lucide-react";
 
-// ─── 数据 ────────────────────────────────────────────────────────────────────
-
-const cases = [
-  {
-    name: "苏雨桐",
-    role: "互联网运营 · 白天上班晚上做站",
-    project: "小红书爆款选题分析工具",
-    result: "靠 SEO 自然流量，月 UV 1.2 万，Adsense 月入 ¥2,800，完全被动收入",
-    time: "3 周",
-    income: "¥2,800/月",
-    screenshot: "/cases/case-1.png",
-    tag: "工具站",
-    tagColor: "#F97316",
-    tool: "Trae",
-    level: "Lv.12",
-    xp: 1240,
-  },
-  {
-    name: "周敏",
-    role: "全职妈妈 · 孩子 3 岁",
-    project: "亲子绘本推荐工具站",
-    result: "利用孩子午睡时间做站，上线 6 周后 Adsense 月入 ¥3,200，每天维护 1 小时",
-    time: "4 周",
-    income: "¥3,200/月",
-    screenshot: "/cases/case-2.png",
-    tag: "内容工具站",
-    tagColor: "#A855F7",
-    tool: "Claude Code",
-    level: "Lv.18",
-    xp: 1820,
-  },
-  {
-    name: "李昊",
-    role: "产品经理 · 副业做独立产品",
-    project: "SaaS 竞品监控工具",
-    result: "定价 ¥39/月，上线 3 个月积累 180 个付费用户，月收入稳定在 ¥7,000+",
-    time: "5 周",
-    income: "¥7,000+/月",
-    screenshot: "/cases/case-3.png",
-    tag: "订阅 SaaS",
-    tagColor: "#0EA5E9",
-    tool: "Codex",
-    level: "Lv.26",
-    xp: 2600,
-  },
-];
-
-const bestPractices = [
-  {
-    icon: MessageSquare,
-    color: "#6366F1",
-    title: "用自然语言描述需求，而不是写代码",
-    desc: "AI 编程的核心是「说清楚你要什么」。不需要记语法，只需要像跟人说话一样描述目标：「做一个带搜索框的商品列表页，点击卡片跳转详情」。描述越具体，AI 给出的结果越准确。",
-    tip: "最佳实践：先说目标，再说约束，最后给参照物",
-  },
-  {
-    icon: GitBranch,
-    color: "#10B981",
-    title: "小步迭代，每次只改一件事",
-    desc: "不要一次让 AI 做完所有功能。先做出能跑的最小版本，确认没问题再加下一个功能。每次改动后立刻在浏览器里看效果，出了问题马上修，不要积累。",
-    tip: "最佳实践：每完成一个功能就提交一次 Git，方便回滚",
-  },
-  {
-    icon: Repeat2,
-    color: "#F59E0B",
-    title: "读懂 AI 给的代码，而不是盲目复制",
-    desc: "AI 给出代码后，让它解释关键部分的逻辑。你不需要能默写，但要知道「这段代码在做什么」。这样遇到 bug 时你能准确描述问题，AI 才能精准修复。",
-    tip: "最佳实践：遇到不懂的代码，直接问 AI「这段是什么意思」",
-  },
-];
+// ─── 闯关地图数据 ────────────────────────────────────────────────────────────
 
 const journey = [
   {
     chapter: "序章",
     chapterEn: "PROLOGUE",
     title: "认识 AI 编程工具",
-    desc: "安装 Claude Code / Codex / Trae，跑通第一个 AI 生成的页面。验证「你说话，AI 写代码」的完整循环。",
+    desc: "安装 Claude Code / Codex / Trae，跑通第一个 AI 生成的页面。",
     icon: Terminal,
     levelStart: "0-1",
     chapterId: "prologue",
@@ -118,7 +45,7 @@ const journey = [
     chapter: "第一章",
     chapterEn: "CHAPTER 1",
     title: "做出第一个静态网站",
-    desc: "学会写 Prompt，用 AI 做出个人名片、作品集，发布到互联网。这一章结束，你就有一个真实的 URL 可以分享。",
+    desc: "学会写 Prompt，用 AI 做出个人名片、作品集，发布到互联网。",
     icon: Code2,
     levelStart: "1-1",
     chapterId: "chapter_1",
@@ -133,7 +60,7 @@ const journey = [
     chapter: "第二章",
     chapterEn: "CHAPTER 2",
     title: "工程化：React + Tailwind",
-    desc: "从 HTML 文件升级到前端工程。组件化开发，响应式布局，改一处全生效。这是做工具站的基础。",
+    desc: "从 HTML 文件升级到前端工程。组件化开发，响应式布局，做工具站的基础。",
     icon: Zap,
     levelStart: "2-1",
     chapterId: "chapter_2",
@@ -149,7 +76,7 @@ const journey = [
     chapter: "第三章",
     chapterEn: "CHAPTER 3",
     title: "接入 AI 能力",
-    desc: "调用 OpenAI API、生图 API，把 AI 能力嵌进自己的产品。做出来的东西，别人用 AI 工具做不到。",
+    desc: "调用 OpenAI API、生图 API，把 AI 能力嵌进自己的产品。",
     icon: Layers,
     levelStart: "3-1",
     chapterId: "chapter_3",
@@ -164,7 +91,7 @@ const journey = [
     chapter: "第四章",
     chapterEn: "CHAPTER 4",
     title: "全栈：后端 + 数据库 + 支付",
-    desc: "Next.js API、Supabase 数据库、用户登录、Stripe 支付。做完这章，你能做出一个完整的 SaaS 产品。",
+    desc: "Next.js API、Supabase 数据库、用户登录、Stripe 支付。做完这章能做完整 SaaS。",
     icon: Database,
     levelStart: "4-1",
     chapterId: "chapter_4",
@@ -180,7 +107,7 @@ const journey = [
     chapter: "第五章",
     chapterEn: "CHAPTER 5",
     title: "上线，让全世界用",
-    desc: "GitHub 管理代码、Vercel 部署、SEO 优化。把产品真正推到用户面前，开始获取自然流量。",
+    desc: "GitHub 管理代码、Vercel 部署、SEO 优化。把产品真正推到用户面前。",
     icon: Globe,
     levelStart: "5-1",
     chapterId: "chapter_5",
@@ -204,21 +131,20 @@ const faqs = [
   },
   {
     q: "有编程基础，可以跳过前几关吗？",
-    a: "完全可以。每一关都是独立的，你可以直接从任意章节开始。段位系统基于累计 XP 计算，完成任意关卡都能获得 XP 并晋升，跳关入场完全不影响。",
-  },
-  {
-    q: "需要什么设备？",
-    a: "一台能上网的电脑就行，Windows 或 Mac 都可以。不需要高配置，不需要买任何软件，所有工具都是免费的。",
+    a: "完全可以。每一关都是独立的，你可以直接从任意章节开始。段位系统基于累计 XP 计算，跳关入场完全不影响。",
   },
   {
     q: "这个课程要收费吗？",
-    a: "核心关卡内容完全免费开放。我们通过游戏化互动让学习更有趣，你可以按自己的节奏闯关，没有任何强制付费墙。",
+    a: "核心关卡内容完全免费开放。游戏化互动让学习更有趣，你可以按自己的节奏闯关，没有任何强制付费墙。",
   },
 ];
 
 // ─── 组件 ────────────────────────────────────────────────────────────────────
 
 export default function HomeClient() {
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
 
@@ -239,31 +165,70 @@ export default function HomeClient() {
       <header className="fixed top-0 w-full z-50 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-              <Terminal className="h-3.5 w-3.5 text-indigo-400" aria-hidden="true" />
-            </div>
+            <svg width="28" height="28" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0" aria-hidden="true">
+              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+            </svg>
             <span className="font-bold text-base tracking-tight text-white">VibeCamp</span>
             <span className="hidden sm:inline-block text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full ml-1">
               BETA
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400" aria-label="主导航">
-            <Link href="#what-is" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="#best-practices" className="hover:text-white transition-colors">最佳实践</Link>
+            <Link href="/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
+            <Link href="/projects" className="hover:text-white transition-colors">实战项目</Link>
             <Link href="#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="#faq" className="hover:text-white transition-colors">常见问题</Link>
+            <Link href="/stories" className="hover:text-white transition-colors">学员案例</Link>
           </nav>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" asChild>
-              <a href="/login">登录</a>
-            </Button>
-            <Button
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5 shadow-lg shadow-indigo-500/20"
-              asChild
-            >
-              <a href="/register">开始闯关 →</a>
-            </Button>
+            {isPending ? (
+              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+            ) : user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  <div className="w-7 h-7 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-300">
+                    {user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? "U"}
+                  </div>
+                  <span className="hidden sm:inline">{user.name ?? user.email}</span>
+                </Link>
+                <Button
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-4 shadow-lg shadow-indigo-500/20 gap-1.5"
+                  asChild
+                >
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    我的闯关
+                  </Link>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-500 hover:text-white px-2"
+                  onClick={() => signOut()}
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" asChild>
+                  <a href="/login">登录</a>
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5 shadow-lg shadow-indigo-500/20"
+                  asChild
+                >
+                  <a href="/register">开始闯关 →</a>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -292,7 +257,6 @@ export default function HomeClient() {
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
           </div>
 
-          {/* H1：主打「AI 编程教程」核心词 */}
           <h1
             id="hero-h1"
             className="text-5xl md:text-7xl font-black tracking-tight mb-4 leading-[1.05]"
@@ -308,9 +272,8 @@ export default function HomeClient() {
             零基础做出真产品
           </h1>
 
-          {/* 副标题：解释 Vibe Coding */}
           <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Vibe Coding（AI 编程）是 2025 年最重要的新技能——
+            Vibe Coding 是 2025 年最重要的新技能——
             <br className="hidden md:block" />
             不学编程语言，用自然语言指挥 Claude Code / Trae 写代码，
             <br className="hidden md:block" />
@@ -334,7 +297,7 @@ export default function HomeClient() {
               className="rounded-full text-base px-8 h-13 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-white/5 hover:bg-white/10 transition-all"
               asChild
             >
-              <Link href="#what-is">什么是 AI 编程？</Link>
+              <Link href="/about">什么是 AI 编程？</Link>
             </Button>
           </div>
 
@@ -351,133 +314,27 @@ export default function HomeClient() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── 什么是 AI 编程 / Vibe Coding ── */}
-      <section id="what-is" className="py-24 px-6 border-t border-white/[0.05]" aria-labelledby="what-is-h2">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-12 text-center">
-            <p className="text-xs text-indigo-400 uppercase tracking-widest mb-3 font-medium">What is Vibe Coding</p>
-            <h2 id="what-is-h2" className="text-4xl md:text-5xl font-black text-white mb-4">
-              什么是 AI 编程（Vibe Coding）？
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
-              传统编程要背语法、记 API、调 bug，门槛极高。AI 编程完全不同——
-              你只需要用中文描述你想要什么，AI 帮你写出代码。
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            {/* 传统编程 */}
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
-              <div className="text-sm font-bold text-red-400 mb-4 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center text-xs">✕</span>
-                传统编程
-              </div>
-              <ul className="space-y-3 text-sm text-gray-400">
-                {["先学 HTML / CSS / JavaScript，至少 3 个月", "记住几百个 API 和语法规则", "一个 bug 可能卡你几天", "从入门到做出产品，1-2 年起步"].map(t => (
-                  <li key={t} className="flex items-start gap-2">
-                    <span className="text-red-500/60 mt-0.5 shrink-0">✕</span>
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* AI 编程 */}
-            <div className="bg-indigo-500/[0.05] border border-indigo-500/20 rounded-2xl p-6">
-              <div className="text-sm font-bold text-indigo-400 mb-4 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center text-xs">✓</span>
-                AI 编程（Vibe Coding）
-              </div>
-              <ul className="space-y-3 text-sm text-gray-300">
-                {["用中文描述需求，AI 立刻生成代码", "不需要记语法，专注于「想做什么」", "遇到 bug 直接告诉 AI，秒级修复", "零基础 3-5 周做出可上线的真实产品"].map(t => (
-                  <li key={t} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-indigo-400 mt-0.5 shrink-0" />
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* 工具介绍 */}
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-4">主流 AI 编程工具对比</h3>
-            <div className="grid sm:grid-cols-3 gap-4 text-sm">
-              {[
-                { name: "Trae", tag: "国内推荐", color: "#6366F1", desc: "字节跳动出品，国内直连无需翻墙，有图形界面，零基础首选" },
-                { name: "Claude Code", tag: "代码最强", color: "#10B981", desc: "Anthropic 出品，代码理解力最强，适合有一定基础的开发者" },
-                { name: "Codex", tag: "OpenAI 出品", color: "#F59E0B", desc: "OpenAI 旗下，与 GitHub Copilot 同源，生态最完善" },
-              ].map(tool => (
-                <div key={tool.name} className="rounded-xl p-4 border border-white/[0.06]" style={{ background: tool.color + "08" }}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-bold text-white">{tool.name}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: tool.color + "20", color: tool.color }}>{tool.tag}</span>
-                  </div>
-                  <p className="text-gray-400 text-xs leading-relaxed">{tool.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── AI 编程最佳实践 ── */}
-      <section id="best-practices" className="py-24 px-6 border-t border-white/[0.05]" aria-labelledby="best-practices-h2">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-12 text-center">
-            <p className="text-xs text-indigo-400 uppercase tracking-widest mb-3 font-medium">Best Practices</p>
-            <h2 id="best-practices-h2" className="text-4xl md:text-5xl font-black text-white mb-4">
-              AI 编程最佳实践
-            </h2>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              90% 的初学者踩的坑，都能用这三条原则避开。
-              VibeCamp 的每个关卡都围绕这些实践设计。
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {bestPractices.map((p, i) => (
-              <div
-                key={p.title}
-                className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 hover:border-white/10 transition-all"
-                style={{ boxShadow: `0 0 40px -20px ${p.color}20` }}
+          {/* 快速入口卡片 */}
+          <div className="mt-14 grid sm:grid-cols-3 gap-4 text-left">
+            {[
+              { href: "/stories", emoji: "🏆", label: "学员案例", sub: "零基础 3-5 周做出有收入的产品" },
+              { href: "/projects", emoji: "🚀", label: "实战项目库", sub: "6 个真实可上线的项目模板" },
+              { href: "/about", emoji: "💡", label: "什么是 AI 编程", sub: "Vibe Coding 与传统编程的区别" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex items-center gap-4 bg-white/[0.03] border border-white/[0.07] rounded-2xl px-5 py-4 hover:border-indigo-500/30 hover:bg-indigo-500/[0.05] transition-all"
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ background: p.color + "20", border: `1px solid ${p.color}30` }}
-                  >
-                    <p.icon className="h-5 w-5" style={{ color: p.color }} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-xs font-bold text-gray-600 font-mono">0{i + 1}</span>
-                      <h3 className="font-bold text-white text-base">{p.title}</h3>
-                    </div>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-3">{p.desc}</p>
-                    <div
-                      className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
-                      style={{ background: p.color + "15", color: p.color, border: `1px solid ${p.color}25` }}
-                    >
-                      <CheckCircle2 className="h-3 w-3" />
-                      {p.tip}
-                    </div>
-                  </div>
+                <span className="text-2xl">{item.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-white group-hover:text-indigo-200 transition-colors">{item.label}</div>
+                  <div className="text-xs text-gray-500 mt-0.5 truncate">{item.sub}</div>
                 </div>
-              </div>
+                <ArrowRight className="h-4 w-4 text-gray-600 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+              </Link>
             ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <Link href="/levels/chapter_1/1-1">
-              <Button className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-8 gap-2">
-                从 Prompt 技巧开始练习
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
@@ -564,177 +421,6 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* ── 学员案例 ── */}
-      <section id="cases" className="py-24 px-6 border-t border-white/[0.06]" aria-labelledby="cases-h2">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <p className="text-xs text-indigo-400 uppercase tracking-widest mb-3 font-medium">Player Stories</p>
-            <h2 id="cases-h2" className="text-4xl md:text-5xl font-black text-white mb-4">
-              零基础，3–5 周，做出有收入的产品
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cases.map((c) => (
-              <article
-                key={c.name}
-                className="group flex flex-col bg-white/[0.02] border border-white/[0.06] rounded-3xl overflow-hidden hover:border-white/[0.14] transition-all"
-                style={{ boxShadow: `0 0 60px -20px ${c.tagColor}20` }}
-              >
-                <div className="relative h-52 overflow-hidden" style={{ background: `linear-gradient(135deg, ${c.tagColor}18 0%, #0d0d1a 60%)` }}>
-                  <div className="absolute inset-0 flex flex-col" aria-hidden="true">
-                    <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/5 bg-black/20">
-                      <div className="w-2 h-2 rounded-full bg-red-500/40" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-500/40" />
-                      <div className="w-2 h-2 rounded-full bg-green-500/40" />
-                      <div className="flex-1 mx-3 bg-white/5 rounded-md h-4 flex items-center px-2">
-                        <span className="text-[8px] text-gray-600 truncate">vibecamp.app/{c.project.slice(0,8)}</span>
-                      </div>
-                    </div>
-                    <div className="flex-1 p-3 flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ background: c.tagColor + '40' }} />
-                        <div className="w-2/3 h-2.5 rounded-full bg-white/10" />
-                      </div>
-                      <div className="w-1/2 h-2 rounded-full bg-white/5" />
-                      <div className="mt-1 grid grid-cols-2 gap-1.5 flex-1">
-                        {[1,2,3,4].map(n => (
-                          <div key={n} className="rounded-lg p-2 border border-white/5 flex flex-col gap-1" style={{ background: c.tagColor + '08' }}>
-                            <div className="w-full h-1.5 rounded-full bg-white/10" />
-                            <div className="w-2/3 h-1 rounded-full bg-white/5" />
-                            <div className="mt-auto w-1/2 h-1 rounded-full" style={{ background: c.tagColor + '50' }} />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="px-2.5 py-1 rounded-full text-[9px] font-bold" style={{ background: c.tagColor, color: '#fff' }}>
-                          {c.income}
-                        </div>
-                        <div className="text-[9px] text-gray-500">月收入</div>
-                        <div className="ml-auto flex items-center gap-1">
-                          <Star className="h-2.5 w-2.5" style={{ color: c.tagColor }} />
-                          <span className="text-[9px]" style={{ color: c.tagColor }}>{c.xp} XP</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <Image
-                    src={c.screenshot}
-                    alt={`${c.name}的项目截图：${c.project}`}
-                    fill
-                    className="object-cover object-top z-10 mix-blend-luminosity opacity-75"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
-                  />
-                  <div
-                    className="absolute inset-0 z-[15] pointer-events-none"
-                    style={{ background: `linear-gradient(160deg, ${c.tagColor}28 0%, transparent 50%, #0d0d1a70 100%)` }}
-                    aria-hidden="true"
-                  />
-                  <div className="absolute top-0 left-0 right-0 h-[2px] z-20" style={{ background: `linear-gradient(90deg, transparent, ${c.tagColor}, transparent)` }} />
-                  <div className="absolute bottom-0 left-0 right-0 h-16 z-20" style={{ background: 'linear-gradient(to top, #0d0d1a, transparent)' }} />
-                  <div className="absolute top-3 right-3 z-30 text-xs font-bold text-white/70 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1">
-                    <Trophy className="h-3 w-3" style={{ color: c.tagColor }} />
-                    {c.level}
-                  </div>
-                </div>
-
-                <div className="flex-1 flex flex-col p-5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span
-                      className="text-xs font-bold px-2.5 py-0.5 rounded-full"
-                      style={{ backgroundColor: c.tagColor + "20", color: c.tagColor, border: `1px solid ${c.tagColor}30` }}
-                    >
-                      {c.tag}
-                    </span>
-                    <span className="text-xs text-gray-500 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
-                      {c.tool}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-bold text-white mb-2 leading-snug">{c.project}</h3>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4 flex-1">{c.result}</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                      <Clock className="h-3.5 w-3.5" />
-                      <span>学了 {c.time}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm font-black" style={{ color: c.tagColor }}>
-                      <TrendingUp className="h-3.5 w-3.5" />
-                      <span>{c.income}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-white/5">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
-                      style={{ background: c.tagColor + "30", color: c.tagColor, border: `1px solid ${c.tagColor}40` }}
-                    >
-                      {c.name[0]}
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-white">{c.name}</div>
-                      <div className="text-[11px] text-gray-500">{c.role}</div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 段位系统 ── */}
-      <section id="ranks" className="py-24 px-6 relative border-t border-white/[0.06]" aria-labelledby="ranks-h2">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center, rgba(99,102,241,0.06) 0%, transparent 70%)" }}
-          aria-hidden="true"
-        />
-        <div className="relative max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <p className="text-xs text-indigo-400 uppercase tracking-widest mb-3 font-medium">Rank System</p>
-            <h2 id="ranks-h2" className="text-4xl md:text-5xl font-black text-white mb-4">
-              学到哪，能做什么
-            </h2>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              每个段位对应真实的开发能力。完成关卡获得 XP，XP 累计自动晋升。
-            </p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-            {RANKS.map((rank) => (
-              <div
-                key={rank.id}
-                className="relative bg-white/[0.02] border rounded-2xl p-5 text-center hover:bg-white/[0.05] transition-all overflow-hidden flex flex-col items-center justify-center min-h-[180px] cursor-pointer group"
-                style={{
-                  borderColor: rank.badge_color + '30',
-                  boxShadow: `0 0 30px -10px ${rank.badge_color}20`,
-                }}
-              >
-                <div
-                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-10 blur-xl opacity-40 group-hover:opacity-60 transition-opacity"
-                  style={{ background: rank.badge_color }}
-                  aria-hidden="true"
-                />
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-[2px]"
-                  style={{ background: `linear-gradient(90deg, transparent, ${rank.badge_color}, transparent)` }}
-                />
-                <div
-                  className="relative w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform"
-                  style={{ background: rank.badge_color + '18', border: `1.5px solid ${rank.badge_color}40` }}
-                >
-                  {rank.badge_icon}
-                </div>
-                <div className="relative text-sm font-bold text-white mb-1 leading-tight">{rank.name}</div>
-                <div className="relative text-xs text-gray-500 mb-2 leading-snug text-center px-1">{rank.subtitle}</div>
-                <div className="relative text-xs font-bold mt-auto" style={{ color: rank.badge_color }}>
-                  {rank.salary}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── FAQ ── */}
       <section id="faq" className="py-24 px-6 border-t border-white/[0.06]" aria-labelledby="faq-h2">
         <div className="max-w-2xl mx-auto">
@@ -803,7 +489,12 @@ export default function HomeClient() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Terminal className="h-4 w-4 text-indigo-400" aria-hidden="true" />
+                <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0" aria-hidden="true">
+                  <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+                  <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+                </svg>
                 <span className="font-bold text-white">VibeCamp</span>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed">
@@ -822,13 +513,12 @@ export default function HomeClient() {
               </nav>
             </div>
             <div>
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">热门教程</div>
-              <nav className="space-y-2.5" aria-label="教程导航">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">探索</div>
+              <nav className="space-y-2.5" aria-label="探索导航">
+                <Link href="/stories" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">学员案例</Link>
+                <Link href="/projects" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">实战项目库</Link>
+                <Link href="/about" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
                 <Link href="/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">AI 编程工具安装</Link>
-                <Link href="/levels/chapter_1/1-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">AI 编程 Prompt 技巧</Link>
-                <Link href="/levels/chapter_2/2-3" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">Tailwind CSS 教程</Link>
-                <Link href="/levels/chapter_4/4-2" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">Supabase 数据库教程</Link>
-                <Link href="/stories" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">学员故事</Link>
               </nav>
             </div>
             <div>

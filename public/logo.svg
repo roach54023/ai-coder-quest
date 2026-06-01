@@ -1,12 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#1e1b4b"/>
-  <rect width="32" height="32" rx="8" fill="url(#grad)" opacity="0.8"/>
-  <path d="M8 16 L14 10 L14 13 L20 13 L20 10 L26 16 L20 22 L20 19 L14 19 L14 22 Z" fill="none" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
-  <circle cx="16" cy="16" r="2.5" fill="#6366f1"/>
-  <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#4f46e5"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 纯紫色底，圆角同参考图比例 -->
+  <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+
+  <!-- </> 三件套，整体居中，笔画粗壮 -->
+  <!-- 左 < -->
+  <path d="M 168 148 L 80 256 L 168 364"
+        fill="none" stroke="white" stroke-width="52"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 右 > -->
+  <path d="M 344 148 L 432 256 L 344 364"
+        fill="none" stroke="white" stroke-width="52"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 中间斜线 / -->
+  <line x1="296" y1="136" x2="216" y2="376"
+        stroke="white" stroke-width="52"
+        stroke-linecap="round"/>
 </svg>

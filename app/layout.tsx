@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-const siteUrl = "https://vibecodecamp.cn";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

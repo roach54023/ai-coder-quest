@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Claude Code 教程",
     "Trae 教程",
     "零基础编程",
-    "AI 编程最佳实践",
+    "AI 编程实战项目",
     "AI 编程工具",
     "独立开发",
     "副业变现",
