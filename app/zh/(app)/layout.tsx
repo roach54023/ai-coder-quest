@@ -18,7 +18,7 @@ export default async function AppLayout({
   });
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/zh/login");
   }
 
   // 读取用户 XP 和段位
@@ -48,12 +48,12 @@ export default async function AppLayout({
           </Link>
 
           <nav className="flex items-center gap-1">
-            <Link href="/dashboard">
+            <Link href="/zh/dashboard">
               <Button variant="ghost" size="sm">
                 <Map className="h-4 w-4 mr-1" /> 闯关地图
               </Button>
             </Link>
-            <Link href="/profile">
+            <Link href="/zh/profile">
               <Button variant="ghost" size="sm">
                 <User className="h-4 w-4 mr-1" /> 个人
               </Button>
@@ -63,7 +63,7 @@ export default async function AppLayout({
           {/* XP + 段位展示 */}
           <div className="flex items-center gap-3">
             <Link
-              href="/profile"
+              href="/zh/profile"
               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
             >
               {/* 段位图标 */}

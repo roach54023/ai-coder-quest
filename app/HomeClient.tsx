@@ -177,10 +177,10 @@ export default function HomeClient() {
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400" aria-label="主导航">
-            <Link href="/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="/projects" className="hover:text-white transition-colors">实战项目</Link>
+            <Link href="/zh/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
+            <Link href="/zh/projects" className="hover:text-white transition-colors">实战项目</Link>
             <Link href="#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="/stories" className="hover:text-white transition-colors">学员案例</Link>
+            <Link href="/zh/stories" className="hover:text-white transition-colors">学员案例</Link>
           </nav>
           <div className="flex items-center gap-3">
             {isPending ? (
@@ -188,7 +188,7 @@ export default function HomeClient() {
             ) : user ? (
               <>
                 <Link
-                  href="/dashboard"
+                  href="/zh/dashboard"
                   className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors"
                 >
                   <div className="w-7 h-7 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-300">
@@ -201,7 +201,7 @@ export default function HomeClient() {
                   className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-4 shadow-lg shadow-indigo-500/20 gap-1.5"
                   asChild
                 >
-                  <Link href="/dashboard">
+                  <Link href="/zh/dashboard">
                     <LayoutDashboard className="h-3.5 w-3.5" />
                     我的闯关
                   </Link>
@@ -218,14 +218,14 @@ export default function HomeClient() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" asChild>
-                  <a href="/login">登录</a>
+                  <a href="/zh/login">登录</a>
                 </Button>
                 <Button
                   size="sm"
                   className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5 shadow-lg shadow-indigo-500/20"
                   asChild
                 >
-                  <a href="/register">开始闯关 →</a>
+                  <a href="/zh/register">开始闯关 →</a>
                 </Button>
               </>
             )}
@@ -286,7 +286,7 @@ export default function HomeClient() {
               className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full text-base px-8 h-13 shadow-xl shadow-indigo-500/30 transition-all hover:shadow-indigo-500/50 hover:-translate-y-0.5"
               asChild
             >
-              <a href="/register">
+              <a href="/zh/register">
                 <Swords className="mr-2 h-4 w-4" />
                 免费开始闯关
               </a>
@@ -297,7 +297,7 @@ export default function HomeClient() {
               className="rounded-full text-base px-8 h-13 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-white/5 hover:bg-white/10 transition-all"
               asChild
             >
-              <Link href="/about">什么是 AI 编程？</Link>
+              <Link href="/zh/about">什么是 AI 编程？</Link>
             </Button>
           </div>
 
@@ -467,7 +467,7 @@ export default function HomeClient() {
               style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)' }}
               asChild
             >
-              <a href="/register">
+              <a href="/zh/register">
                 开始闯关 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </Button>
@@ -504,21 +504,21 @@ export default function HomeClient() {
             <div>
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">课程地图</div>
               <nav className="space-y-2.5" aria-label="课程导航">
-                <Link href="/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">序章 · 装好工具</Link>
-                <Link href="/levels/chapter_1/1-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第一章 · 静态网站</Link>
-                <Link href="/levels/chapter_2/2-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第二章 · 工程化</Link>
-                <Link href="/levels/chapter_3/3-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第三章 · 接入 AI</Link>
-                <Link href="/levels/chapter_4/4-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第四章 · 全栈</Link>
-                <Link href="/levels/chapter_5/5-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第五章 · 上线</Link>
+                <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">序章 · 装好工具</Link>
+                <Link href="/zh/levels/chapter_1/1-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第一章 · 静态网站</Link>
+                <Link href="/zh/levels/chapter_2/2-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第二章 · 工程化</Link>
+                <Link href="/zh/levels/chapter_3/3-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第三章 · 接入 AI</Link>
+                <Link href="/zh/levels/chapter_4/4-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第四章 · 全栈</Link>
+                <Link href="/zh/levels/chapter_5/5-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第五章 · 上线</Link>
               </nav>
             </div>
             <div>
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">探索</div>
               <nav className="space-y-2.5" aria-label="探索导航">
-                <Link href="/stories" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">学员案例</Link>
-                <Link href="/projects" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">实战项目库</Link>
-                <Link href="/about" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
-                <Link href="/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">AI 编程工具安装</Link>
+                <Link href="/zh/stories" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">学员案例</Link>
+                <Link href="/zh/projects" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">实战项目库</Link>
+                <Link href="/zh/about" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
+                <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">AI 编程工具安装</Link>
               </nav>
             </div>
             <div>

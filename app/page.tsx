@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "AI 编程教程 | Vibe Coding 零基础训练营",
     description:
       "不学编程语言，用自然语言指挥 AI 写代码。26 个实战关卡，零基础 3-5 周做出可上线的真实产品。",
-    url: "https://vibecamp.app",
+    url: "https://vibecamps.org/zh",
     siteName: "VibeCamp",
     locale: "zh_CN",
     type: "website",
@@ -33,7 +33,10 @@ export const metadata: Metadata = {
       "不学编程语言，用自然语言指挥 AI 写代码。26 个实战关卡，零基础 3-5 周做出可上线的真实产品。",
   },
   alternates: {
-    canonical: "https://vibecamp.app",
+    canonical: "https://vibecamps.org/zh",
+    languages: {
+      "zh-CN": "https://vibecamps.org/zh",
+    },
   },
 };
 

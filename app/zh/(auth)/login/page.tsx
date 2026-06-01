@@ -140,7 +140,7 @@ function LoginForm() {
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             还没有账号？{" "}
-            <Link href="/register" className="text-primary hover:underline">
+            <Link href="/zh/register" className="text-primary hover:underline">
               注册
             </Link>
           </p>

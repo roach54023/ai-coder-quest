@@ -86,7 +86,7 @@ export default async function SharePage({ params }: SharePageProps) {
       />
 
       <div className="text-center mt-8">
-        <Link href="/dashboard">
+        <Link href="/zh/dashboard">
           <Button>继续闯关</Button>
         </Link>
       </div>

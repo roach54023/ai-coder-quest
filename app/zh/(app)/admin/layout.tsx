@@ -16,7 +16,7 @@ export default async function AdminLayout({
   });
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/zh/login");
   }
 
   const supabase = createAdminClient();
@@ -30,7 +30,7 @@ export default async function AdminLayout({
     .single();
 
   if (!profile?.is_admin) {
-    redirect("/dashboard");
+    redirect("/zh/dashboard");
   }
 
   return (
@@ -43,19 +43,19 @@ export default async function AdminLayout({
         </div>
         <nav className="flex gap-1">
           <Link
-            href="/admin"
+            href="/zh/admin"
             className="px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
           >
             概览
           </Link>
           <Link
-            href="/admin/submissions"
+            href="/zh/admin/submissions"
             className="px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
           >
             审核提交
           </Link>
           <Link
-            href="/admin/users"
+            href="/zh/admin/users"
             className="px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
           >
             用户管理

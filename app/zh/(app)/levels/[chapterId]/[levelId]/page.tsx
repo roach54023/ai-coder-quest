@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: LevelPageProps): Promise<Meta
   const title = meta.seo_title ?? meta.page_title ?? meta.title;
   const description = meta.seo_description ?? `VibeCamp 第 ${levelId} 关：${meta.title}，预计 ${meta.estimated_minutes} 分钟完成。`;
   const keywords = meta.keywords ?? [];
-  const canonicalUrl = `${siteUrl}/levels/${chapterId}/${levelId}`;
+  const canonicalUrl = `${siteUrl}/zh/levels/${chapterId}/${levelId}`;
 
   return {
     title: `${title} | VibeCamp`,
@@ -143,14 +143,14 @@ export default async function LevelPage({ params }: LevelPageProps) {
 
           <nav className="flex items-center gap-1">
             {isLoggedIn && (
-              <Link href="/dashboard">
+              <Link href="/zh/dashboard">
                 <Button variant="ghost" size="sm">
                   <Map className="h-4 w-4 mr-1" /> 闯关地图
                 </Button>
               </Link>
             )}
             {isLoggedIn && (
-              <Link href="/profile">
+              <Link href="/zh/profile">
                 <Button variant="ghost" size="sm">
                   <User className="h-4 w-4 mr-1" /> 个人
                 </Button>
@@ -162,7 +162,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
             {isLoggedIn ? (
               <>
                 <Link
-                  href="/profile"
+                  href="/zh/profile"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
                 >
                   <span className="text-base leading-none">{currentRank.badge_icon}</span>
@@ -182,7 +182,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
                 <SignOutButton />
               </>
             ) : (
-              <Link href={`/login?next=/levels/${chapterId}/${levelId}`}>
+              <Link href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}>
                 <Button size="sm" variant="outline" className="gap-1.5">
                   <LogIn className="h-4 w-4" />
                   登录
@@ -206,7 +206,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
               <span>{levelContent.meta.title}</span>
             </div>
             {prevLevel && (
-              <Link href={`/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
+              <Link href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
                 <Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground hover:text-foreground">
                   <ChevronLeft className="h-3.5 w-3.5" />
                   上一关
@@ -240,7 +240,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
           {isCompleted && (
             <SharePrompt
               levelTitle={levelContent.meta.title}
-              nextLevelUrl={nextLevel ? `/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
+              nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
             />
           )}
 
@@ -258,7 +258,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
             steps={steps}
             isSimpleLevel={isLoggedIn ? isSimpleLevel : false}
             isLevelCompleted={isCompleted}
-            nextLevelUrl={nextLevel ? `/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
+            nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
           />
 
           {/* 未登录 CTA */}
@@ -269,13 +269,13 @@ export default async function LevelPage({ params }: LevelPageProps) {
                 保存学习进度、提交作品并获得 XP。完全免费。
               </p>
               <div className="flex items-center justify-center gap-3">
-                <Link href={`/login?next=/levels/${chapterId}/${levelId}`}>
+                <Link href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}>
                   <Button size="lg" className="gap-2">
                     <LogIn className="h-4 w-4" />
                     登录后开始
                   </Button>
                 </Link>
-                <Link href={`/register?next=/levels/${chapterId}/${levelId}`}>
+                <Link href={`/zh/register?next=/zh/levels/${chapterId}/${levelId}`}>
                   <Button size="lg" variant="outline">
                     免费注册
                   </Button>
@@ -290,7 +290,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
               levelId={levelId}
               verificationType={level.verification_type}
               verificationConfig={level.verification_config as Record<string, any>}
-              nextLevelUrl={nextLevel ? `/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
+              nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
             />
           )}
 
@@ -305,7 +305,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
                 {siblingContents.map((s) => (
                   <Link
                     key={s.levelId}
-                    href={`/levels/${s.chapterId}/${s.levelId}`}
+                    href={`/zh/levels/${s.chapterId}/${s.levelId}`}
                     className="flex items-start gap-2 p-3 rounded-lg border border-border/40 bg-card/20 hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all group text-sm"
                   >
                     <ChevronRight className="h-4 w-4 text-indigo-400 mt-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
@@ -318,7 +318,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
               {nextChapterContent && nextChapterFirst && (
                 <div className="mt-3">
                   <Link
-                    href={`/levels/${nextChapterFirst.chapterId}/${nextChapterFirst.levelId}`}
+                    href={`/zh/levels/${nextChapterFirst.chapterId}/${nextChapterFirst.levelId}`}
                     className="flex items-center gap-2 p-3 rounded-lg border border-indigo-500/20 bg-indigo-500/5 hover:bg-indigo-500/10 transition-all group text-sm"
                   >
                     <ArrowRight className="h-4 w-4 text-indigo-400 shrink-0" />
@@ -332,7 +332,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
           {/* Navigation footer */}
           <div className="mt-8 pt-6 border-t flex items-center justify-between">
             {prevLevel ? (
-              <Link href={`/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
+              <Link href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
                 <Button variant="ghost" size="sm" className="gap-1">
                   <ChevronLeft className="h-4 w-4" />
                   上一关
@@ -343,20 +343,20 @@ export default async function LevelPage({ params }: LevelPageProps) {
             )}
 
             {(isCompleted || isSkipped) && nextLevel ? (
-              <Link href={`/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
+              <Link href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
                 <Button className="gap-1">
                   下一关
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             ) : isCompleted && !nextLevel ? (
-              <Link href="/dashboard">
+              <Link href="/zh/dashboard">
                 <Button className="gap-1">
                   🎉 恭喜通关全部关卡！
                 </Button>
               </Link>
             ) : nextLevel && !isLoggedIn ? (
-              <Link href={`/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
+              <Link href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
                 <Button variant="outline" className="gap-1">
                   下一关
                   <ArrowRight className="h-4 w-4" />

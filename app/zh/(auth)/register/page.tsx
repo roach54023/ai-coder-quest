@@ -32,14 +32,14 @@ export default function RegisterPage() {
       email,
       password,
       name: displayName || email.split("@")[0],
-      callbackURL: "/dashboard",
+      callbackURL: "/zh/dashboard",
     });
 
     if (signUpError) {
       setError(signUpError.message || "注册失败");
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      router.push("/zh/dashboard");
       router.refresh();
     }
   };
@@ -48,7 +48,7 @@ export default function RegisterPage() {
   const handleGitHubLogin = async () => {
     await signIn.social({
       provider: "github",
-      callbackURL: "/dashboard",
+      callbackURL: "/zh/dashboard",
     });
   };
 
@@ -129,7 +129,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             已有账号？{" "}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link href="/zh/login" className="text-primary hover:underline">
               登录
             </Link>
           </p>

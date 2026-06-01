@@ -205,7 +205,7 @@ export default async function DashboardPage() {
           const xp = LEVEL_XP[nextLevelId] ?? 100;
           return (
             <Link
-              href={`/levels/${ch.id}/${nextLevelId}`}
+              href={`/zh/levels/${ch.id}/${nextLevelId}`}
               className="flex items-center gap-4 p-4 rounded-2xl border border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-all mb-8 group"
             >
               <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
@@ -291,7 +291,7 @@ export default async function DashboardPage() {
                     const isCompleted = completedIds.has(level.id);
                     const isSkipped = skippedIds.has(level.id);
                     const xp = LEVEL_XP[level.id] ?? 100;
-                    const levelUrl = `/levels/${chapter.id}/${level.id}`;
+                    const levelUrl = `/zh/levels/${chapter.id}/${level.id}`;
 
                     return (
                       <Link

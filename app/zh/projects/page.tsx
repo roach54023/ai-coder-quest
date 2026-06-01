@@ -122,13 +122,13 @@ export default function ProjectsPage() {
             <span className="font-bold text-base tracking-tight text-white">VibeCamp</span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400">
-            <Link href="/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="/projects" className="text-white">实战项目</Link>
+            <Link href="/zh/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
+            <Link href="/zh/projects" className="text-white">实战项目</Link>
             <Link href="/#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="/stories" className="hover:text-white transition-colors">学员案例</Link>
+            <Link href="/zh/stories" className="hover:text-white transition-colors">学员案例</Link>
           </nav>
           <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5" asChild>
-            <a href="/register">开始闯关 →</a>
+            <a href="/zh/register">开始闯关 →</a>
           </Button>
         </div>
       </header>
@@ -166,7 +166,7 @@ export default function ProjectsPage() {
             {projects.map((p) => (
               <Link
                 key={p.title}
-                href={`/levels/${p.chapterId}/${p.levelId}`}
+                href={`/zh/levels/${p.chapterId}/${p.levelId}`}
                 className="group flex flex-col bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 hover:border-white/[0.14] hover:bg-white/[0.04] transition-all"
                 style={{ boxShadow: `0 0 40px -20px ${p.color}15` }}
               >
@@ -228,7 +228,7 @@ export default function ProjectsPage() {
                 className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-8"
                 asChild
               >
-                <a href="/register">免费开始闯关 →</a>
+                <a href="/zh/register">免费开始闯关 →</a>
               </Button>
               <Button
                 variant="outline"
@@ -252,8 +252,8 @@ export default function ProjectsPage() {
             <span className="text-xs text-gray-600">· AI 编程教程训练营</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/stories" className="hover:text-gray-200 transition-colors">学员案例</Link>
-            <Link href="/about" className="hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
+            <Link href="/zh/stories" className="hover:text-gray-200 transition-colors">学员案例</Link>
+            <Link href="/zh/about" className="hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
             <Link href="https://github.com/roach54023/ai-coder-quest" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-gray-200 transition-colors">
               <ExternalLink className="h-3 w-3" />GitHub
             </Link>
