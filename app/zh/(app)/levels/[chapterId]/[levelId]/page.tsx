@@ -255,6 +255,8 @@ export default async function LevelPage({ params }: LevelPageProps) {
           <LevelContent
             content={levelContent.content}
             levelId={levelId}
+            chapterId={chapterId}
+            levelTitle={levelContent.meta.title}
             steps={steps}
             isSimpleLevel={isLoggedIn ? isSimpleLevel : false}
             isLevelCompleted={isCompleted}

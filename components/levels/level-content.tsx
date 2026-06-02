@@ -9,11 +9,14 @@ import { Copy, Check, CheckCircle2, Circle, ArrowRight, Rocket, Users, Loader2 }
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { type StepItem } from "@/lib/content/steps";
+import { trackLevelView, trackStepComplete, trackLevelComplete } from "@/lib/analytics";
 
 // --- Main component ---
 interface LevelContentProps {
   content: string;
   levelId: string;
+  chapterId: string;
+  levelTitle: string;
   steps: StepItem[] | null;
   isSimpleLevel?: boolean;
   isLevelCompleted?: boolean;
@@ -23,6 +26,8 @@ interface LevelContentProps {
 export function LevelContent({
   content,
   levelId,
+  chapterId,
+  levelTitle,
   steps,
   isSimpleLevel = false,
   isLevelCompleted = false,
@@ -58,6 +63,10 @@ export function LevelContent({
       }
     }
     setMounted(true);
+
+    // 埋点：用户进入关卡页面
+    trackLevelView(levelId, chapterId, levelTitle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLevelCompleted, steps, storageKey]);
 
   useEffect(() => {
@@ -78,6 +87,8 @@ export function LevelContent({
       });
       const data = await res.json();
       if (data.level_completed) {
+        // 埋点：关卡通关
+        trackLevelComplete(levelId, chapterId, levelTitle);
         toast.success("通关成功！");
         // Navigate to next level or dashboard
         if (nextLevelUrl) {
@@ -93,7 +104,7 @@ export function LevelContent({
       toast.error("网络错误，请重试");
       setCompleting(false);
     }
-  }, [isSimpleLevel, completing, isLevelCompleted, levelId, nextLevelUrl, router]);
+  }, [isSimpleLevel, completing, isLevelCompleted, levelId, chapterId, levelTitle, nextLevelUrl, router]);
 
   const handleStepComplete = useCallback(
     (step: StepItem) => {
@@ -103,12 +114,16 @@ export function LevelContent({
       setJustCompletedStepId(step.id);
       setTimeout(() => setJustCompletedStepId(null), 2800);
 
+      // 埋点：步骤完成
+      const stepIndex = steps ? steps.findIndex((s) => s.id === step.id) + 1 : 0;
+      trackStepComplete(levelId, step.id, step.label, stepIndex);
+
       // If last step completed → scroll to the completion button (user clicks manually)
       if (steps && newCompleted.length === steps.length) {
         // Don't auto-complete; let user see the big button and click it
       }
     },
-    [completedSteps, steps, isSimpleLevel, autoComplete]
+    [completedSteps, steps, isSimpleLevel, autoComplete, levelId]
   );
 
   const progress =
