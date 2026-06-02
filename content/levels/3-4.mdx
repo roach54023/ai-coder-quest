@@ -1,97 +1,84 @@
 ---
 id: "3-4"
-title: "AI 生图素材"
-page_title: "用 AI 生成网站图片和素材"
-seo_title: "AI 生图 API 教程 - 在网站里生成图片"
-seo_description: "调用 AI 生图 API（DALL-E / Stable Diffusion），让用户在你的网站里输入描述就能生成图片。"
-keywords: ["AI生图API教程","dall-e api接入","AI图片生成网站","stable diffusion api","AI生图功能开发"]
+title: "响应式适配"
+page_title: "手机上也好看：让网站完美适配各种屏幕"
+seo_title: "响应式设计教程 - 让网站在手机上完美显示"
+seo_description: "用 AI 给作品集网站做响应式适配，让网站在手机、平板、电脑上都有完美的显示效果。"
+keywords: ["响应式设计教程", "移动端适配", "AI做响应式", "tailwind响应式", "手机端网站"]
 chapter: "chapter_3"
 order: 4
 is_delivery: false
 verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 25
+estimated_minutes: 20
 ---
 
-你的网站功能齐全了，但图片素材还是占位图。这一关教你用 AI 生成专属的图片素材——让网站看起来像花了钱请设计师做的。
+你的网站在电脑上很好看，但用手机打开一看——文字挤在一起，按钮点不到，图片溢出屏幕。
 
-传统做法：花几百块买图库会员，或者花几千块请设计师。AI 时代：用自然语言描述你想要的图片，几秒钟就能生成。
-
----
-
-## 选一个 AI 生图工具
-
-| 工具 | 特点 | 费用 |
-|------|------|------|
-| **ChatGPT（DALL-E）** | 直接在对话里生成 | ChatGPT Plus 已包含 |
-| **Ideogram** | 文字渲染强，适合 Logo/Banner | 免费额度 |
-| **Leonardo.ai** | 风格丰富，质量高 | 免费额度 |
-| **Playground AI** | 完全免费，快速出图 | 免费 |
-
-**最简单的方式：** 如果你有 ChatGPT Plus，直接在 ChatGPT 对话里说"帮我画一张..."就行。
-
----
+现在超过 60% 的网页浏览来自手机。这一关让你的网站在任何屏幕上都好看。
 
 ## 操作步骤
 
-### 第一步：打开你选的工具，生成 Hero 背景图
+### 第一步：检查现有问题
 
-打开上方表格里你选定的 AI 生图工具，输入这段 prompt：
+先用浏览器的开发者工具模拟手机屏幕，看看现在有哪些问题。
 
-```text
-A modern abstract gradient background for a personal portfolio website. 
-Dark theme, subtle purple and blue glowing orbs floating on black. 
-Minimal and clean, 16:9 aspect ratio, high resolution.
-No text, no people, just abstract shapes and light.
-```
+按 `F12` 打开开发者工具，点击工具栏里的手机图标（或按 `Ctrl+Shift+M`），选择 iPhone 12 Pro 尺寸，刷新页面。
 
-> 生图 prompt 的公式：**主体 + 风格 + 色调 + 构图 + 排除项**。末尾的"No text, no people"是告诉 AI 不要加的东西，很有用。
-
-看到满意的效果后下载保存，命名为 `hero-bg.png`。
-
-### 第二步：生成 Mockup 图和个人 Logo/头像
-
-继续用同一工具生成剩余两类素材。先生成作品展示 Mockup：
+把你看到的问题截图或者描述给 AI：
 
 ```text
-A clean laptop mockup displaying a modern dark-mode dashboard interface.
-Isometric view, soft ambient lighting, minimal background.
-Professional product photography style, 4K quality.
+我用手机模式查看网站，发现以下问题：
+[描述你看到的具体问题，比如：导航栏文字太小、作品卡片排成一列但太窄、首页标题文字溢出屏幕等]
+
+请帮我修复这些响应式问题。
 ```
 
-保存为 `mockup.png`。然后生成你的个人 Logo 或头像：
+---
+
+### 第二步：优化导航栏
+
+对 AI 说：
 
 ```text
-A minimal geometric logo mark, letter "[你名字的首字母]", 
-modern tech company style, gradient from blue to purple,
-simple shapes, vector art quality, transparent background.
+优化导航栏的移动端体验：
+
+- 手机屏幕（宽度小于 768px）时，隐藏导航链接，显示汉堡菜单按钮（三条横线图标）
+- 点击汉堡菜单，导航链接从顶部滑下来，显示为垂直列表
+- 点击任意链接或点击菜单外部区域，菜单收起
+- 菜单展开时，汉堡图标变成关闭图标（X）
 ```
 
-保存为 `logo.png`。
+在手机模式下测试导航菜单的开关。
 
-### 第三步：把 AI 图片集成到项目中
+---
 
-把三张图片放到项目的 `public/images/` 文件夹，然后对你的 AI 编程助手说：
+### 第三步：全面响应式检查
+
+对 AI 说：
 
 ```text
-帮我把 public/images/ 里的图片集成到网站中：
+帮我全面检查并修复网站的响应式问题：
 
-1. hero-bg.png 作为首页 Hero 区域的背景图，加暗色半透明遮罩
-2. mockup.png 放在作品卡片中作为第一个项目的封面
-3. logo.png 放在导航栏左侧作为网站 Logo
-4. 所有图片做懒加载和 WebP 格式优化
-5. 加载时先显示一个模糊的占位效果（blur placeholder）
+1. 首页：标题文字在手机上适当缩小，按钮不要太小（至少 44px 高）
+2. 作品页：卡片在手机上单列显示，平板上两列，电脑上三列
+3. 关于页：如果有左右布局，手机上改为上下布局
+4. 联系页：表单在手机上全宽显示，左右两栏改为上下排列
+5. 所有页面：内容区域左右有适当的内边距，不要贴边
+
+使用 Tailwind 的响应式前缀（sm: md: lg:）来实现。
 ```
-
-等 AI 完成后，刷新浏览器查看效果。
 
 ## 通关条件
 
-使用 AI 生成至少 2 张图片素材（Hero 背景 + 至少一张其他），并成功集成到网站项目中。完成上方所有操作步骤即可通关。
+完成以下三步即可通关：
+
+1. 导航栏在手机上有汉堡菜单，可以正常开关
+2. 作品卡片在手机上单列显示
+3. 整体页面在手机上没有横向滚动条
 
 ## 卡住了？
 
-- AI 生成的图片效果不好？多试几次，或者加更具体的描述。"high quality, 4K, professional" 这些质量词可以提升效果
-- 不知道怎么写英文 prompt？直接用中文对 ChatGPT 说"帮我生成一张..."
-- 图片太大加载慢？对 AI 编程助手说："帮我把图片压缩到 200KB 以内"
-- 实在搞不定？先跳过这关也行，用渐变色占位也能通过下一关的交付
+- 汉堡菜单不工作？让 AI 检查点击事件是否绑定正确，状态变量是否控制了菜单显示
+- 某个元素在手机上溢出？告诉 AI 具体是哪个元素，让它加上 `overflow-hidden` 或调整宽度
+- Tailwind 响应式前缀不生效？确认 Tailwind 配置文件里的 `content` 路径包含了你的文件

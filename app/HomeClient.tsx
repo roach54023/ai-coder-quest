@@ -3,120 +3,268 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "@/lib/auth-client";
-import { LayoutDashboard, LogOut } from "lucide-react";
-import {
-  ArrowRight,
-  Terminal,
-  Code2,
-  Layers,
-  ExternalLink,
-  Mail,
-  Zap,
-  Globe,
-  Database,
-  ChevronRight,
-  TrendingUp,
-  Clock,
-  Trophy,
-  Flame,
-  Swords,
-  Star,
-  Sparkles,
-} from "lucide-react";
+import { LayoutDashboard, LogOut, ArrowRight, ExternalLink, Mail } from "lucide-react";
 
-// ─── 闯关地图数据 ────────────────────────────────────────────────────────────
+// ─── 数据 ─────────────────────────────────────────────────────────────────────
+
+// 每个章节的 SVG 插图（主题化图形）
+const chapterIllustrations: Record<string, React.ReactNode> = {
+  prologue: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#EEF2FF"/>
+      {/* 终端窗口 */}
+      <rect x="24" y="20" width="152" height="100" rx="8" fill="#1E1B4B"/>
+      <circle cx="40" cy="34" r="4" fill="#EF4444"/>
+      <circle cx="54" cy="34" r="4" fill="#F59E0B"/>
+      <circle cx="68" cy="34" r="4" fill="#10B981"/>
+      {/* 代码行 */}
+      <rect x="36" y="50" width="60" height="6" rx="3" fill="#6366F1"/>
+      <rect x="36" y="64" width="90" height="6" rx="3" fill="#4F46E5" opacity="0.6"/>
+      <rect x="36" y="78" width="40" height="6" rx="3" fill="#818CF8"/>
+      <rect x="36" y="92" width="70" height="6" rx="3" fill="#4F46E5" opacity="0.4"/>
+      {/* 光标 */}
+      <rect x="110" y="92" width="6" height="6" rx="1" fill="#A5B4FC"/>
+      {/* AI 标签 */}
+      <rect x="130" y="78" width="34" height="16" rx="4" fill="#6366F1"/>
+      <text x="147" y="90" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">AI</text>
+    </svg>
+  ),
+  chapter_1: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#ECFDF5"/>
+      {/* 浏览器窗口 */}
+      <rect x="20" y="16" width="160" height="108" rx="8" fill="white" stroke="#D1FAE5" strokeWidth="1.5"/>
+      <rect x="20" y="16" width="160" height="28" rx="8" fill="#F0FDF4"/>
+      <rect x="20" y="36" width="160" height="8" fill="#F0FDF4"/>
+      <circle cx="36" cy="30" r="4" fill="#FCA5A5"/>
+      <circle cx="50" cy="30" r="4" fill="#FCD34D"/>
+      <circle cx="64" cy="30" r="4" fill="#6EE7B7"/>
+      <rect x="80" y="24" width="80" height="12" rx="6" fill="#D1FAE5"/>
+      {/* 网页内容 */}
+      <rect x="36" y="56" width="128" height="10" rx="5" fill="#10B981"/>
+      <rect x="36" y="74" width="90" height="6" rx="3" fill="#D1FAE5"/>
+      <rect x="36" y="86" width="110" height="6" rx="3" fill="#D1FAE5"/>
+      <rect x="36" y="98" width="70" height="6" rx="3" fill="#D1FAE5"/>
+      {/* 头像占位 */}
+      <circle cx="152" cy="88" r="18" fill="#A7F3D0"/>
+      <circle cx="152" cy="83" r="7" fill="#10B981"/>
+      <path d="M138 102 Q152 94 166 102" fill="#10B981"/>
+    </svg>
+  ),
+  chapter_2: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#FFFBEB"/>
+      {/* 组件积木 */}
+      <rect x="20" y="20" width="72" height="44" rx="8" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1.5"/>
+      <rect x="108" y="20" width="72" height="44" rx="8" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1.5"/>
+      <rect x="20" y="76" width="72" height="44" rx="8" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1.5"/>
+      <rect x="108" y="76" width="72" height="44" rx="8" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1.5"/>
+      {/* 组件内容 */}
+      <rect x="30" y="32" width="52" height="6" rx="3" fill="#F59E0B"/>
+      <rect x="30" y="44" width="36" height="4" rx="2" fill="#FCD34D"/>
+      <rect x="118" y="32" width="52" height="6" rx="3" fill="#F59E0B"/>
+      <rect x="118" y="44" width="36" height="4" rx="2" fill="#FCD34D"/>
+      <rect x="30" y="88" width="52" height="6" rx="3" fill="#F59E0B"/>
+      <rect x="30" y="100" width="36" height="4" rx="2" fill="#FCD34D"/>
+      <rect x="118" y="88" width="52" height="6" rx="3" fill="#F59E0B"/>
+      <rect x="118" y="100" width="36" height="4" rx="2" fill="#FCD34D"/>
+      {/* 连接线 */}
+      <line x1="92" y1="42" x2="108" y2="42" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 2"/>
+      <line x1="92" y1="98" x2="108" y2="98" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 2"/>
+      <line x1="56" y1="64" x2="56" y2="76" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 2"/>
+      <line x1="144" y1="64" x2="144" y2="76" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 2"/>
+    </svg>
+  ),
+  chapter_3: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#FDF2F8"/>
+      {/* 对话气泡 */}
+      <rect x="20" y="20" width="110" height="36" rx="10" fill="#FCE7F3" stroke="#EC4899" strokeWidth="1.5"/>
+      <polygon points="30,56 20,68 44,56" fill="#FCE7F3" stroke="#EC4899" strokeWidth="1.5" strokeLinejoin="round"/>
+      <rect x="70" y="72" width="110" height="36" rx="10" fill="#EC4899"/>
+      <polygon points="170,108 180,120 156,108" fill="#EC4899"/>
+      {/* 文字行 */}
+      <rect x="30" y="32" width="70" height="5" rx="2.5" fill="#EC4899" opacity="0.5"/>
+      <rect x="30" y="43" width="50" height="5" rx="2.5" fill="#EC4899" opacity="0.3"/>
+      <rect x="80" y="84" width="70" height="5" rx="2.5" fill="white" opacity="0.8"/>
+      <rect x="80" y="95" width="50" height="5" rx="2.5" fill="white" opacity="0.5"/>
+      {/* AI 图标 */}
+      <circle cx="162" cy="38" r="18" fill="#EC4899"/>
+      <text x="162" y="44" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">AI</text>
+      {/* 闪光 */}
+      <path d="M148 22 L150 16 L152 22 L158 24 L152 26 L150 32 L148 26 L142 24 Z" fill="#F9A8D4"/>
+    </svg>
+  ),
+  chapter_4: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#F0F9FF"/>
+      {/* 服务器/数据库堆叠 */}
+      <rect x="60" y="16" width="80" height="22" rx="6" fill="#BAE6FD" stroke="#0EA5E9" strokeWidth="1.5"/>
+      <rect x="60" y="44" width="80" height="22" rx="6" fill="#7DD3FC" stroke="#0EA5E9" strokeWidth="1.5"/>
+      <rect x="60" y="72" width="80" height="22" rx="6" fill="#38BDF8" stroke="#0EA5E9" strokeWidth="1.5"/>
+      {/* 连接线 */}
+      <line x1="100" y1="38" x2="100" y2="44" stroke="#0EA5E9" strokeWidth="2"/>
+      <line x1="100" y1="66" x2="100" y2="72" stroke="#0EA5E9" strokeWidth="2"/>
+      {/* 标签 */}
+      <circle cx="76" cy="27" r="5" fill="#0EA5E9"/>
+      <circle cx="76" cy="55" r="5" fill="#0284C7"/>
+      <circle cx="76" cy="83" r="5" fill="#0369A1"/>
+      <rect x="86" y="24" width="40" height="6" rx="3" fill="#0EA5E9" opacity="0.4"/>
+      <rect x="86" y="52" width="40" height="6" rx="3" fill="#0EA5E9" opacity="0.4"/>
+      <rect x="86" y="80" width="40" height="6" rx="3" fill="#0EA5E9" opacity="0.4"/>
+      {/* 支付卡 */}
+      <rect x="30" y="104" width="140" height="24" rx="6" fill="#0EA5E9"/>
+      <rect x="38" y="110" width="28" height="12" rx="3" fill="#BAE6FD"/>
+      <rect x="80" y="113" width="50" height="5" rx="2.5" fill="white" opacity="0.5"/>
+      <rect x="140" y="113" width="22" height="5" rx="2.5" fill="white" opacity="0.5"/>
+    </svg>
+  ),
+  chapter_5: (
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect width="200" height="140" rx="12" fill="#FFF7ED"/>
+      {/* 地球/全球 */}
+      <circle cx="100" cy="70" r="50" fill="#FED7AA" stroke="#F97316" strokeWidth="1.5"/>
+      <ellipse cx="100" cy="70" rx="20" ry="50" fill="none" stroke="#F97316" strokeWidth="1.5"/>
+      <line x1="50" y1="70" x2="150" y2="70" stroke="#F97316" strokeWidth="1.5"/>
+      <path d="M58 46 Q100 36 142 46" fill="none" stroke="#F97316" strokeWidth="1.5"/>
+      <path d="M58 94 Q100 104 142 94" fill="none" stroke="#F97316" strokeWidth="1.5"/>
+      {/* 火箭 */}
+      <path d="M148 28 L158 18 L168 28 L163 38 L153 38 Z" fill="#F97316"/>
+      <path d="M153 38 L148 48 L158 44 Z" fill="#FED7AA"/>
+      <path d="M163 38 L168 48 L158 44 Z" fill="#FED7AA"/>
+      <circle cx="158" cy="28" r="4" fill="#FFF7ED"/>
+      {/* 轨迹 */}
+      <path d="M148 48 Q130 70 110 80" stroke="#F97316" strokeWidth="1.5" strokeDasharray="4 3" fill="none"/>
+    </svg>
+  ),
+};
 
 const journey = [
   {
-    chapter: "序章",
     chapterEn: "PROLOGUE",
+    chapterLabel: "序章",
     title: "认识 AI 编程工具",
-    desc: "安装 Claude Code / Codex / Trae，跑通第一个 AI 生成的页面。",
-    icon: Terminal,
-    levelStart: "0-1",
+    tagline: "装好工具，\n跑通第一行代码。",
+    desc: "安装 Claude Code / Trae，10 分钟内让 AI 帮你写出第一个网页。",
     chapterId: "prologue",
+    levelStart: "0-1",
     color: "#6366F1",
     levels: [
-      { id: "0-1", title: "安装 AI 编程助手", desc: "10 分钟装好 Claude Code 或 Trae", xp: 50, unlocked: true },
-      { id: "0-2", title: "第一个 AI 生成的页面", desc: "用自然语言让 AI 写出你的第一个网页", xp: 100, unlocked: true },
+      { id: "0-1", title: "安装 AI 编程助手", desc: "10 分钟装好 Claude Code 或 Trae", xp: 50 },
+      { id: "0-2", title: "第一个 AI 生成的页面", desc: "用自然语言让 AI 写出你的第一个网页", xp: 100 },
     ],
   },
   {
-    chapter: "第一章",
     chapterEn: "CHAPTER 1",
+    chapterLabel: "第一章",
     title: "做出第一个静态网站",
+    tagline: "会打字，\n就能做网站。",
     desc: "学会写 Prompt，用 AI 做出个人名片、作品集，发布到互联网。",
-    icon: Code2,
-    levelStart: "1-1",
     chapterId: "chapter_1",
+    levelStart: "1-1",
     color: "#10B981",
     levels: [
-      { id: "1-1", title: "Prompt 核心技巧", desc: "学会下指令，让 AI 精确理解你的需求", xp: 120, unlocked: true },
-      { id: "1-2", title: "个人名片页", desc: "做一个可以发给别人的自我介绍页面", xp: 150, unlocked: false },
-      { id: "1-3", title: "多页作品集", desc: "把多个页面组合成完整网站", xp: 200, unlocked: false },
+      { id: "1-1", title: "Prompt 核心技巧", desc: "学会下指令，让 AI 精确理解你的需求", xp: 120 },
+      { id: "1-2", title: "个人名片页", desc: "做一个可以发给别人的自我介绍页面", xp: 150 },
+      { id: "1-3", title: "多页作品集", desc: "把多个页面组合成完整网站", xp: 200 },
     ],
   },
   {
-    chapter: "第二章",
     chapterEn: "CHAPTER 2",
+    chapterLabel: "第二章",
     title: "工程化：React + Tailwind",
+    tagline: "从网页，\n升级到工程。",
     desc: "从 HTML 文件升级到前端工程。组件化开发，响应式布局，做工具站的基础。",
-    icon: Zap,
-    levelStart: "2-1",
     chapterId: "chapter_2",
+    levelStart: "2-1",
     color: "#F59E0B",
     levels: [
-      { id: "2-1", title: "搭建 Next.js 项目", desc: "用 AI 初始化一个真正的前端工程", xp: 200, unlocked: false },
-      { id: "2-2", title: "组件化思维", desc: "把页面拆成可复用的积木", xp: 250, unlocked: false },
-      { id: "2-3", title: "响应式布局", desc: "手机和电脑都好看", xp: 200, unlocked: false },
-      { id: "2-4", title: "部署上线", desc: "免费发布到 Vercel，全球可访问", xp: 300, unlocked: false },
+      { id: "2-1", title: "搭建 Next.js 项目", desc: "用 AI 初始化一个真正的前端工程", xp: 200 },
+      { id: "2-2", title: "组件化思维", desc: "把页面拆成可复用的积木", xp: 250 },
+      { id: "2-3", title: "响应式布局", desc: "手机和电脑都好看", xp: 200 },
+      { id: "2-4", title: "部署上线", desc: "免费发布到 Vercel，全球可访问", xp: 300 },
     ],
   },
   {
-    chapter: "第三章",
     chapterEn: "CHAPTER 3",
+    chapterLabel: "第三章",
     title: "接入 AI 能力",
+    tagline: "把 AI，\n装进你的产品。",
     desc: "调用 OpenAI API、生图 API，把 AI 能力嵌进自己的产品。",
-    icon: Layers,
-    levelStart: "3-1",
     chapterId: "chapter_3",
+    levelStart: "3-1",
     color: "#EC4899",
     levels: [
-      { id: "3-1", title: "调用 OpenAI API", desc: "给你的网站加上对话能力", xp: 350, unlocked: false },
-      { id: "3-2", title: "流式输出", desc: "像 ChatGPT 一样逐字显示", xp: 400, unlocked: false },
-      { id: "3-3", title: "接入生图 API", desc: "文字生成图片，嵌入你的产品", xp: 450, unlocked: false },
+      { id: "3-1", title: "调用 OpenAI API", desc: "给你的网站加上对话能力", xp: 350 },
+      { id: "3-2", title: "流式输出", desc: "像 ChatGPT 一样逐字显示", xp: 400 },
+      { id: "3-3", title: "接入生图 API", desc: "文字生成图片，嵌入你的产品", xp: 450 },
     ],
   },
   {
-    chapter: "第四章",
     chapterEn: "CHAPTER 4",
+    chapterLabel: "第四章",
     title: "全栈：后端 + 数据库 + 支付",
+    tagline: "一个人，\n就是一支团队。",
     desc: "Next.js API、Supabase 数据库、用户登录、Stripe 支付。做完这章能做完整 SaaS。",
-    icon: Database,
-    levelStart: "4-1",
     chapterId: "chapter_4",
+    levelStart: "4-1",
     color: "#0EA5E9",
     levels: [
-      { id: "4-1", title: "API 路由", desc: "写后端接口，处理数据", xp: 500, unlocked: false },
-      { id: "4-2", title: "Supabase 数据库", desc: "存储用户数据，读写自如", xp: 550, unlocked: false },
-      { id: "4-3", title: "用户登录系统", desc: "注册、登录、权限控制", xp: 600, unlocked: false },
-      { id: "4-4", title: "Stripe 支付", desc: "接入支付，开始收钱", xp: 700, unlocked: false },
+      { id: "4-1", title: "API 路由", desc: "写后端接口，处理数据", xp: 500 },
+      { id: "4-2", title: "Supabase 数据库", desc: "存储用户数据，读写自如", xp: 550 },
+      { id: "4-3", title: "用户登录系统", desc: "注册、登录、权限控制", xp: 600 },
+      { id: "4-4", title: "Stripe 支付", desc: "接入支付，开始收钱", xp: 700 },
     ],
   },
   {
-    chapter: "第五章",
     chapterEn: "CHAPTER 5",
+    chapterLabel: "第五章",
     title: "上线，让全世界用",
+    tagline: "做完，\n就要让人用到。",
     desc: "GitHub 管理代码、Vercel 部署、SEO 优化。把产品真正推到用户面前。",
-    icon: Globe,
-    levelStart: "5-1",
     chapterId: "chapter_5",
+    levelStart: "5-1",
     color: "#F97316",
     levels: [
-      { id: "5-1", title: "GitHub 版本管理", desc: "代码不丢失，多人协作", xp: 600, unlocked: false },
-      { id: "5-2", title: "Vercel 生产部署", desc: "自定义域名，HTTPS，全球 CDN", xp: 650, unlocked: false },
-      { id: "5-3", title: "SEO 基础优化", desc: "让 Google 找到你的产品", xp: 700, unlocked: false },
+      { id: "5-1", title: "GitHub 版本管理", desc: "代码不丢失，多人协作", xp: 600 },
+      { id: "5-2", title: "Vercel 生产部署", desc: "自定义域名，HTTPS，全球 CDN", xp: 650 },
+      { id: "5-3", title: "SEO 基础优化", desc: "让 Google 找到你的产品", xp: 700 },
     ],
+  },
+];
+
+const userCases = [
+  {
+    emoji: "🎓",
+    name: "大二学生",
+    tag: "在校生",
+    story: "期末考试周，我偷偷用 AI 造了个「校园闲鱼」",
+    desc: "完全没有编程基础，用 Claude Code 花了 3 天做出二手交易平台，上线第一周就有 200 个用户。",
+    result: "3 天上线 · 200 用户",
+  },
+  {
+    emoji: "👩‍💼",
+    name: "产品经理",
+    tag: "转型",
+    story: "我用 AI 把自己的 PRD 直接变成了可以演示的产品",
+    desc: "做了 5 年产品，第一次不用求开发。用 Trae 把需求文档直接变成了可点击的原型，老板当场拍板立项。",
+    result: "2 周 · 从 PRD 到上线",
+  },
+  {
+    emoji: "🏪",
+    name: "小店老板",
+    tag: "副业",
+    story: "我给自己的奶茶店做了个点单小程序",
+    desc: "高中学历，完全不懂代码。跟着第四章教程，用 AI 做出了带数据库的点单系统，省下了 2 万外包费。",
+    result: "省下 2 万外包费",
+  },
+  {
+    emoji: "👨‍🏫",
+    name: "高中信息技术老师",
+    tag: "教育",
+    story: "我把 AI 编程带进了课堂，学生比我学得还快",
+    desc: "用这套课程给学生上了一门公选课，期末每个学生都做出了自己的第一个网站，家长群炸了。",
+    result: "全班 40 人都上线了作品",
   },
 ];
 
@@ -139,92 +287,58 @@ const faqs = [
   },
 ];
 
-// ─── 组件 ────────────────────────────────────────────────────────────────────
+// ─── 组件 ─────────────────────────────────────────────────────────────────────
 
 export default function HomeClient() {
   const { data: session, isPending } = useSession();
   const user = session?.user;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
-
-      {/* ── 背景网格纹理 ── */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "48px 48px",
-        }}
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
 
       {/* ── Header ── */}
-      <header className="fixed top-0 w-full z-50 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
             </svg>
-            <span className="font-bold text-base tracking-tight text-white">VibeCamp</span>
-            <span className="hidden sm:inline-block text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full ml-1">
-              BETA
-            </span>
+            <span className="font-bold text-base text-gray-900">VibeCamp</span>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400" aria-label="主导航">
-            <Link href="/zh/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="/zh/projects" className="hover:text-white transition-colors">实战项目</Link>
-            <Link href="#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="/zh/stories" className="hover:text-white transition-colors">学员案例</Link>
+
+          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            <Link href="#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="#cases" className="hover:text-gray-900 transition-colors">学员案例</Link>
           </nav>
+
           <div className="flex items-center gap-3">
             {isPending ? (
-              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+              <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
             ) : user ? (
               <>
-                <Link
-                  href="/zh/dashboard"
-                  className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-300">
+                <Link href="/zh/dashboard" className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
                     {user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? "U"}
                   </div>
-                  <span className="hidden sm:inline">{user.name ?? user.email}</span>
+                  <span className="hidden sm:inline text-sm">{user.name ?? user.email}</span>
                 </Link>
-                <Button
-                  size="sm"
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-4 shadow-lg shadow-indigo-500/20 gap-1.5"
-                  asChild
-                >
-                  <Link href="/zh/dashboard">
-                    <LayoutDashboard className="h-3.5 w-3.5" />
-                    我的闯关
-                  </Link>
+                <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-4 text-xs gap-1.5" asChild>
+                  <Link href="/zh/dashboard"><LayoutDashboard className="h-3.5 w-3.5" />我的闯关</Link>
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-500 hover:text-white px-2"
-                  onClick={() => signOut()}
-                >
+                <button className="text-gray-400 hover:text-gray-700 transition-colors p-1" onClick={() => signOut()}>
                   <LogOut className="h-4 w-4" />
-                </Button>
+                </button>
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" asChild>
+                <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-900 text-sm" asChild>
                   <a href="/zh/login">登录</a>
                 </Button>
-                <Button
-                  size="sm"
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5 shadow-lg shadow-indigo-500/20"
-                  asChild
-                >
+                <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
                   <a href="/zh/register">开始闯关 →</a>
                 </Button>
               </>
@@ -234,314 +348,237 @@ export default function HomeClient() {
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative pt-36 pb-28 px-6 text-center" aria-labelledby="hero-h1">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-          <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px]"
-            style={{ background: "radial-gradient(ellipse at center top, rgba(99,102,241,0.18) 0%, transparent 65%)" }}
-          />
-          <div
-            className="absolute top-20 left-1/4 w-[400px] h-[400px] blur-3xl opacity-20"
-            style={{ background: "radial-gradient(circle, rgba(139,92,246,0.6) 0%, transparent 70%)" }}
-          />
-          <div
-            className="absolute top-20 right-1/4 w-[300px] h-[300px] blur-3xl opacity-15"
-            style={{ background: "radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)" }}
-          />
+      <section className="pt-44 pb-36 px-6 text-center">
+        {/* 标签 */}
+        <div className="inline-block text-sm text-gray-400 border border-gray-200 rounded-full px-4 py-1.5 mb-10 tracking-wide">
+          AI 编程教程 · 零基础做出真产品
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 rounded-full px-4 py-1.5 mb-8 text-sm text-indigo-300">
-            <Flame className="h-3.5 w-3.5 text-orange-400" />
-            <span>Vibe Coding · 游戏化 AI 编程训练营</span>
-            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-          </div>
+        {/* 主标题 */}
+        <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[1.0] mb-8 text-gray-900">
+          Vibe Coding
+          <br />
+          <span className="text-indigo-600">游戏化</span> AI 编程训练营
+        </h1>
 
-          <h1
-            id="hero-h1"
-            className="text-5xl md:text-7xl font-black tracking-tight mb-4 leading-[1.05]"
-            style={{
-              background: "linear-gradient(135deg, #ffffff 0%, #c7d2fe 40%, #818cf8 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+        <p className="text-xl text-gray-400 mb-14 max-w-lg mx-auto leading-relaxed">
+          不学编程语言，用自然语言指挥 AI 写代码。
+          <br />
+          26 个实战关卡，每关都有可上线的真实产出。
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/zh/register"
+            className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-700 text-white rounded-full text-base px-10 py-4 font-semibold transition-colors"
           >
-            AI 编程教程
-            <br />
-            零基础做出真产品
-          </h1>
+            免费开始闯关 <ArrowRight className="h-4 w-4" />
+          </a>
+          <Link
+            href="#journey"
+            className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 rounded-full text-base px-10 py-4 font-medium transition-colors"
+          >
+            查看课程地图
+          </Link>
+        </div>
 
-          <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Vibe Coding 是 2025 年最重要的新技能——
-            <br className="hidden md:block" />
-            不学编程语言，用自然语言指挥 Claude Code / Trae 写代码，
-            <br className="hidden md:block" />
-            26 个实战关卡，每关都有可上线的真实产出。
+      </section>
+
+      <div className="border-t border-gray-100" />
+
+      {/* ── 学员案例 ── */}
+      <section id="cases" className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-6">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">User Cases</p>
+            <h2 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight">
+              看见每一个
+              <br />
+              <span className="text-gray-300">闪亮的你</span>
+            </h2>
+          </div>
+          <p className="text-lg text-gray-400 mb-16 max-w-md">
+            加入他们，分享你的 vibe coding 故事
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full text-base px-8 h-13 shadow-xl shadow-indigo-500/30 transition-all hover:shadow-indigo-500/50 hover:-translate-y-0.5"
-              asChild
-            >
-              <a href="/zh/register">
-                <Swords className="mr-2 h-4 w-4" />
-                免费开始闯关
-              </a>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full text-base px-8 h-13 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-white/5 hover:bg-white/10 transition-all"
-              asChild
-            >
-              <Link href="/zh/about">什么是 AI 编程？</Link>
-            </Button>
-          </div>
-
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {[
-              { icon: Code2, text: "零基础可学" },
-              { icon: Zap, text: "每关有产出" },
-              { icon: Globe, text: "学完能上线" },
-              { icon: TrendingUp, text: "副业变现路径" },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-1.5 text-sm text-gray-400 bg-white/[0.04] border border-white/[0.07] rounded-full px-4 py-1.5">
-                <Icon className="h-3.5 w-3.5 text-indigo-400" />
-                <span>{text}</span>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {userCases.map((c, i) => (
+              <div key={i} className="border border-gray-100 rounded-2xl p-7 hover:border-gray-300 transition-all group">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl">
+                    {c.emoji}
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900 text-sm">{c.name}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{c.tag}</div>
+                  </div>
+                </div>
+                <h3 className="font-bold text-gray-900 text-base mb-3 leading-snug group-hover:text-indigo-600 transition-colors">
+                  {c.story}
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-5">{c.desc}</p>
+                <div className="inline-block text-xs font-bold text-indigo-600 bg-indigo-50 rounded-full px-3 py-1">
+                  {c.result}
+                </div>
               </div>
             ))}
           </div>
 
-          {/* 快速入口卡片 */}
-          <div className="mt-14 grid sm:grid-cols-3 gap-4 text-left">
-            {[
-              { href: "/stories", emoji: "🏆", label: "学员案例", sub: "零基础 3-5 周做出有收入的产品" },
-              { href: "/projects", emoji: "🚀", label: "实战项目库", sub: "6 个真实可上线的项目模板" },
-              { href: "/about", emoji: "💡", label: "什么是 AI 编程", sub: "Vibe Coding 与传统编程的区别" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group flex items-center gap-4 bg-white/[0.03] border border-white/[0.07] rounded-2xl px-5 py-4 hover:border-indigo-500/30 hover:bg-indigo-500/[0.05] transition-all"
-              >
-                <span className="text-2xl">{item.emoji}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-white group-hover:text-indigo-200 transition-colors">{item.label}</div>
-                  <div className="text-xs text-gray-500 mt-0.5 truncate">{item.sub}</div>
-                </div>
-                <ArrowRight className="h-4 w-4 text-gray-600 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </Link>
-            ))}
+          <div className="mt-10 text-center">
+            <Link
+              href="/zh/stories"
+              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors border border-gray-200 hover:border-gray-400 rounded-full px-6 py-3"
+            >
+              查看更多学员故事 <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── 互动闯关地图 ── */}
-      <section id="journey" className="py-24 px-6 border-t border-white/[0.06]" aria-labelledby="journey-h2">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <p className="text-xs text-indigo-400 uppercase tracking-widest mb-3 font-medium">Quest Map</p>
-            <h2 id="journey-h2" className="text-4xl md:text-5xl font-black text-white mb-4">
-              互动闯关地图：从零到独立开发
+      <div className="border-t border-gray-100" />
+
+      {/* ── 课程地图 ── */}
+      <section id="journey" className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-20">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">Course Map</p>
+            <h2 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight">
+              从零到独立开发
+              <br />
+              <span className="text-gray-300">每关都有真实产出</span>
             </h2>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              26 个关卡，每关结束都有可以展示的产出。有基础可以直接跳到感兴趣的章节。
-            </p>
           </div>
 
           <div className="space-y-5">
             {journey.map((stage) => (
               <div
-                key={stage.chapter}
-                className="bg-white/[0.02] border border-white/[0.06] rounded-3xl overflow-hidden hover:border-white/10 transition-all"
-                style={{ boxShadow: `0 0 40px -15px ${stage.color}15` }}
+                key={stage.chapterId}
+                className="rounded-2xl border border-gray-100 overflow-hidden hover:border-gray-200 transition-all"
+                style={{ boxShadow: `0 2px 20px -8px ${stage.color}18` }}
               >
-                <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 border-b border-white/5">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: stage.color + "20", border: `1px solid ${stage.color}30` }}
-                  >
-                    <stage.icon className="h-5 w-5" style={{ color: stage.color }} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-bold tracking-widest" style={{ color: stage.color }}>
-                        {stage.chapterEn}
-                      </span>
-                      <span className="text-xs text-gray-600">·</span>
-                      <span className="text-xs text-gray-500">{stage.levels.length} 个关卡</span>
+                <div className="flex flex-col md:flex-row">
+                  {/* 左侧插图 */}
+                  <div className="md:w-56 shrink-0 relative overflow-hidden" style={{ minHeight: "180px" }}>
+                    <div className="absolute inset-0">
+                      {chapterIllustrations[stage.chapterId]}
                     </div>
-                    <h3 className="text-lg font-bold text-white">{stage.title}</h3>
-                  </div>
-                  <p className="text-sm text-gray-400 max-w-sm leading-relaxed hidden md:block">{stage.desc}</p>
-                  <Link
-                    href={`/levels/${stage.chapterId}/${stage.levelStart}`}
-                    className="shrink-0 text-sm font-medium px-4 py-2 rounded-full border transition-all hover:text-white hover:brightness-110"
-                    style={{
-                      borderColor: stage.color + "40",
-                      color: stage.color,
-                      backgroundColor: stage.color + "10",
-                    }}
-                  >
-                    进入章节 →
-                  </Link>
-                </div>
-
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.03]">
-                  {stage.levels.map((level) => (
-                    <Link
-                      key={level.id}
-                      href={`/levels/${stage.chapterId}/${level.id}`}
-                      className="group bg-[#0A0A0F] p-5 hover:bg-white/[0.04] transition-all"
+                    <div
+                      className="absolute top-3 left-3 text-xs font-black px-2.5 py-1 rounded-full"
+                      style={{ background: stage.color, color: "white" }}
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <div
-                          className="font-mono px-2.5 py-1 rounded-md text-xs font-bold"
-                          style={{ background: stage.color + "22", color: stage.color }}
+                      {stage.chapterLabel}
+                    </div>
+                  </div>
+
+                  {/* 右侧内容 */}
+                  <div className="flex-1 p-6 flex flex-col md:flex-row gap-6">
+                    {/* 章节简介 */}
+                    <div className="md:w-52 shrink-0">
+                      <div className="text-[10px] text-gray-400 font-bold tracking-widest mb-2 uppercase">{stage.chapterEn}</div>
+                      <h3 className="text-xl font-black text-gray-900 mb-2 leading-tight whitespace-pre-line">
+                        {stage.tagline}
+                      </h3>
+                      <p className="text-xs text-gray-400 leading-relaxed mb-4">{stage.desc}</p>
+                      <Link
+                        href={`/zh/levels/${stage.chapterId}/${stage.levelStart}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
+                      >
+                        进入{stage.chapterLabel} <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+
+                    {/* 关卡列表 */}
+                    <div className="flex-1 grid sm:grid-cols-2 gap-2 content-start">
+                      {stage.levels.map((level) => (
+                        <Link
+                          key={level.id}
+                          href={`/zh/levels/${stage.chapterId}/${level.id}`}
+                          className="group/card flex items-start gap-3 rounded-xl p-3 hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100"
                         >
-                          {level.id}
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-300 group-hover:translate-x-0.5 transition-all" />
-                      </div>
-                      <div className="font-bold text-gray-100 text-sm mb-1.5 group-hover:text-white transition-colors leading-snug">{level.title}</div>
-                      <div className="text-xs text-gray-500 leading-relaxed mb-3">{level.desc}</div>
-                      <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3" style={{ color: stage.color }} />
-                        <span className="text-[11px] font-bold" style={{ color: stage.color + 'cc' }}>+{level.xp} XP</span>
-                      </div>
-                    </Link>
-                  ))}
+                          <div
+                            className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black mt-0.5"
+                            style={{ background: stage.color + "15", color: stage.color }}
+                          >
+                            {level.id.split("-")[1]}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-semibold text-gray-900 text-sm leading-snug group-hover/card:text-indigo-600 transition-colors">
+                              {level.title}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-0.5 leading-relaxed">{level.desc}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      <div className="border-t border-gray-100" />
 
       {/* ── FAQ ── */}
-      <section id="faq" className="py-24 px-6 border-t border-white/[0.06]" aria-labelledby="faq-h2">
+      <section className="py-28 px-6">
         <div className="max-w-2xl mx-auto">
-          <div className="mb-12">
-            <p className="text-xs text-gray-500 uppercase tracking-widest mb-3">FAQ</p>
-            <h2 id="faq-h2" className="text-4xl font-bold text-white">常见问题</h2>
+          <div className="mb-14">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">FAQ</p>
+            <h2 className="text-5xl font-black text-gray-900">常见问题</h2>
           </div>
-          <div className="space-y-0">
-            {faqs.map((faq, index) => (
-              <div key={index} className="py-6 border-b border-white/[0.06] last:border-0">
-                <h3 className="font-semibold text-gray-100 mb-2">{faq.q}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{faq.a}</p>
+          <div>
+            {faqs.map((faq, i) => (
+              <div key={i} className="py-7 border-b border-gray-100 last:border-0">
+                <h3 className="font-bold text-gray-900 mb-3">{faq.q}</h3>
+                <p className="text-gray-500 leading-relaxed text-sm">{faq.a}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-32 px-6 text-center relative overflow-hidden border-t border-white/[0.06]" aria-labelledby="cta-h2">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
-          <div className="w-[700px] h-[700px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)' }} />
-          <div className="absolute w-[400px] h-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative max-w-3xl mx-auto">
-          <p className="text-xs text-purple-400 uppercase tracking-widest mb-6">Start Building</p>
-          <h2
-            id="cta-h2"
-            className="text-5xl md:text-7xl font-black text-white mb-4 leading-[1.05] tracking-tight"
-          >
-            从第一关开始，
-            <br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #A78BFA 0%, #60A5FA 100%)' }}>
-              或者直接跳关。
-            </span>
-          </h2>
-          <p className="text-gray-400 mb-10 max-w-md mx-auto">
-            不用从头来，有基础的直接选章节入场。
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="text-white rounded-full text-base px-10 h-12 font-semibold shadow-lg shadow-purple-500/20"
-              style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)' }}
-              asChild
-            >
-              <a href="/zh/register">
-                开始闯关 <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full text-base px-8 h-12 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-transparent"
-              asChild
-            >
-              <Link href="#journey">查看课程地图</Link>
-            </Button>
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 px-6 border-t border-white/[0.06]" role="contentinfo">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0" aria-hidden="true">
-                  <rect width="512" height="512" rx="115" fill="#6C47FF"/>
-                  <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
-                </svg>
-                <span className="font-bold text-white">VibeCamp</span>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                AI 编程教程训练营。<br />游戏化学习，做出真产品。
-              </p>
+      <footer className="py-12 px-6 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0">
+                <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+                <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+              </svg>
+              <span className="font-bold text-gray-900">VibeCamp</span>
             </div>
-            <div>
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">课程地图</div>
-              <nav className="space-y-2.5" aria-label="课程导航">
-                <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">序章 · 装好工具</Link>
-                <Link href="/zh/levels/chapter_1/1-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第一章 · 静态网站</Link>
-                <Link href="/zh/levels/chapter_2/2-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第二章 · 工程化</Link>
-                <Link href="/zh/levels/chapter_3/3-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第三章 · 接入 AI</Link>
-                <Link href="/zh/levels/chapter_4/4-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第四章 · 全栈</Link>
-                <Link href="/zh/levels/chapter_5/5-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">第五章 · 上线</Link>
-              </nav>
-            </div>
-            <div>
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">探索</div>
-              <nav className="space-y-2.5" aria-label="探索导航">
-                <Link href="/zh/stories" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">学员案例</Link>
-                <Link href="/zh/projects" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">实战项目库</Link>
-                <Link href="/zh/about" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
-                <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-200 transition-colors">AI 编程工具安装</Link>
-              </nav>
-            </div>
-            <div>
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">关于</div>
-              <nav className="space-y-2.5" aria-label="关于导航">
-                <Link
-                  href="https://github.com/roach54023/ai-coder-quest"
-                  className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-200 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                  GitHub 开源
-                </Link>
-                <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-200 transition-colors">
-                  <Mail className="h-3 w-3" aria-hidden="true" />
-                  联系我们
-                </Link>
-              </nav>
-            </div>
+            <p className="text-sm text-gray-400">AI 编程教程训练营 · 游戏化学习，做出真产品</p>
           </div>
-          <div className="pt-8 border-t border-white/[0.06] text-xs text-gray-600">
-            © 2025 VibeCamp · AI 编程教程训练营
+
+          <div className="flex flex-wrap gap-x-12 gap-y-6">
+            <nav className="space-y-2.5">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">课程</div>
+              <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">序章 · 装好工具</Link>
+              <Link href="/zh/levels/chapter_1/1-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">第一章 · 静态网站</Link>
+              <Link href="/zh/levels/chapter_2/2-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">第二章 · 工程化</Link>
+              <Link href="/zh/levels/chapter_3/3-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">第三章 · 接入 AI</Link>
+              <Link href="/zh/levels/chapter_4/4-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">第四章 · 全栈</Link>
+              <Link href="/zh/levels/chapter_5/5-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">第五章 · 上线</Link>
+            </nav>
+            <nav className="space-y-2.5">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">探索</div>
+              <Link href="/zh/stories" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">学员案例</Link>
+              <Link href="/zh/projects" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">实战项目库</Link>
+              <Link href="/zh/about" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            </nav>
+            <nav className="space-y-2.5">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">关于</div>
+              <Link href="https://github.com/roach54023/ai-coder-quest" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors" target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-3 w-3" />GitHub 开源
+              </Link>
+              <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                <Mail className="h-3 w-3" />联系我们
+              </Link>
+            </nav>
           </div>
         </div>
       </footer>

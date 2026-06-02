@@ -1,114 +1,69 @@
 ---
 id: "0-2"
-title: "第一次对话 + 创建 GitHub 仓库"
-page_title: "让 AI 写出第一个网页，并保存到 GitHub"
-seo_title: "用 AI 写第一个网页 + GitHub 入门 - Vibe Coding 序章"
-seo_description: "不写一行代码，用自然语言告诉 AI 你要什么，10 分钟做出第一个网页，并学会用 GitHub 保存你的代码。"
-keywords: ["AI写网页教程", "GitHub入门教程", "不写代码做网站", "vibe coding hello world", "AI生成HTML", "零基础做网页"]
+title: "第一个网页"
+page_title: "用 AI 做出你的第一个网页"
+seo_title: "用 AI 写出第一个网页 - Vibe Coding 零基础入门"
+seo_description: "不需要学任何代码，用 AI 编程助手生成你的第一个 HTML 网页，亲身体验 Vibe Coding 的核心循环。"
+keywords: ["AI写网页", "第一个html", "vibe coding入门", "AI编程零基础", "claude code教程"]
 chapter: "prologue"
 order: 2
 is_delivery: false
 verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 15
+estimated_minutes: 10
 ---
 
-上一关你把 AI 助手装好了。这一关做两件事：**让 AI 帮你写出第一个网页**，然后**把代码保存到 GitHub**。
+工具装好了。现在来体验一次"说话→出网页"的完整循环。
 
-GitHub 是全球最大的代码托管平台，你以后所有的项目都会放在这里。现在就开始用，后面每一章都会用到。
+这一关你不需要学任何东西，只需要跟着做一遍，感受一下这个过程。
+
+## 操作步骤
+
+### 第一步：新建一个项目文件夹
+
+在桌面新建一个文件夹，命名为 `my-first-site`。
+
+然后在你的 AI 工具里，把这个文件夹作为工作目录打开：
+
+- **Codex / Trae**：点击"打开文件夹"或"Open Folder"，选择刚才新建的文件夹
+- **Claude Code**：打开终端，输入 `cd ~/Desktop/my-first-site`，然后输入 `claude` 启动
 
 ---
 
-## 第一部分：让 AI 写出第一个网页
+### 第二步：让 AI 生成第一个网页
 
-### 第一步：新建项目文件夹
-
-先在桌面上建一个文件夹来放你的项目。
-
-**Mac：** 打开"访达"，在桌面右键 → 新建文件夹，命名为 `hello-world`
-
-**Windows：** 在桌面右键 → 新建 → 文件夹，命名为 `hello-world`
-
-然后在 AI 工具里选中这个文件夹作为工作目录（Codex 点左上角选文件夹，Trae 点"打开文件夹"）。
-
-### 第二步：让 AI 帮你写一个网页
-
-在对话框输入：
+在 AI 对话框里，把下面这段话复制进去，然后发送：
 
 ```text
-帮我创建一个 index.html 文件，内容是一个好看的个人欢迎页面，显示"Hello World! 我的 AI 编程之旅开始了"，背景用渐变色，文字居中，有一点动画效果。
+在当前目录创建一个 index.html 文件，做一个全屏欢迎页面：
+- 正中间大字写"Hello World"
+- 下面一行小字写"我的第一个网页"
+- 深色背景，白色文字
+- 字体好看，内容居中
 ```
 
-等 AI 写完后，它会在你的项目文件夹里生成一个 `index.html` 文件。
-
-> 🎯 注意看 AI 是怎么工作的：它理解你的需求 → 写出代码 → 保存到文件。你全程不用写一行代码。
-
-### 第三步：在浏览器里打开看效果
-
-找到项目文件夹里的 `index.html`，双击用浏览器打开。
-
-你应该能看到一个带渐变背景、文字居中、有动画效果的页面。如果不满意，可以继续跟 AI 说：
-
-```text
-把背景换成深色系的，加一个打字机动画效果
-```
-
-AI 会帮你修改，刷新浏览器就能看到新效果。
-
-> ✨ 恭喜！你已经完成了第一次"说话→出活"的完整循环。
+等 AI 完成，它会在你的文件夹里生成一个 `index.html` 文件。
 
 ---
 
-## 第二部分：把代码保存到 GitHub
+### 第三步：在浏览器里打开，看到效果
 
-你的代码现在只在你的电脑上。GitHub 是程序员的"云端硬盘"——把代码放上去，换电脑也不怕丢，还能和别人协作。
+打开文件管理器（Mac 是 Finder，Windows 是资源管理器），找到 `my-first-site` 文件夹里的 `index.html`，**双击打开**。
 
-### 第四步：注册 GitHub 账号
+浏览器会显示你的第一个网页。
 
-打开 [github.com](https://github.com)，点右上角 **Sign up**，用邮箱注册一个免费账号。
-
-> 💡 GitHub 账号是程序员的"身份证"，后面部署网站、展示作品都要用到，现在就注册好。
-
-### 第五步：创建你的第一个仓库
-
-登录后，点右上角的 **「+」** → **「New repository」**，填写：
-
-- **Repository name：** `hello-world`（仓库名，就是项目名）
-- **Description：** 我的第一个 AI 网页（可选）
-- 选 **Public**（公开，别人能看到你的作品）
-- **不要**勾选 "Add a README file"
-
-点 **「Create repository」**，仓库创建成功！
-
-### 第六步：让 AI 帮你把代码推送到 GitHub
-
-回到 AI 对话，输入：
-
-```text
-帮我把这个项目初始化 git 仓库，并推送到 GitHub。
-我的 GitHub 用户名是：[你的用户名]
-仓库名是：hello-world
-```
-
-AI 会给你一系列 git 命令，按照它的指引在终端里执行。
-
-> 💡 **什么是终端？** Mac 叫"Terminal"（在应用程序 → 实用工具里），Windows 叫"PowerShell"（在开始菜单搜索）。如果你用 Trae，它内置了终端，直接在里面执行就行。
-
-执行完成后，刷新你的 GitHub 仓库页面，应该能看到 `index.html` 文件出现了。
-
----
+> 如果看到的是一堆代码文字而不是网页：右键文件 → 打开方式 → 选择 Chrome 或 Safari
 
 ## 通关条件
 
-完成以下两件事即可通关：
+完成以下三步即可通关：
 
-1. 在浏览器里看到你的 Hello World 网页
-2. 在 GitHub 上看到你的 `hello-world` 仓库里有 `index.html` 文件
+1. 新建项目文件夹并在 AI 工具中打开
+2. 让 AI 帮你生成 index.html
+3. 在浏览器打开 index.html，看到效果
 
 ## 卡住了？
 
-- 如果 Codex 不让你选文件夹——确认文件夹已经创建好，重启 Codex 再试
-- 如果 AI 生成的文件找不到——在 AI 里问"帮我确认一下 index.html 的完整路径"
-- 双击 html 文件打不开？右键 → 打开方式 → 选 Chrome/Safari/Edge
-- git 命令报错"Permission denied"？让 AI 帮你配置 SSH Key 或者用 HTTPS 方式推送
-- 实在搞不定？发邮件：**roach54023@qq.com**，描述你的问题和报错截图
+- AI 没有创建文件？检查你是否正确打开了文件夹。可以问 AI："你现在的工作目录是哪里？"
+- 双击文件打开的是记事本？右键 → 打开方式 → 选择浏览器
+- 页面是空白的？让 AI 检查一下文件内容有没有问题

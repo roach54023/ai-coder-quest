@@ -1,66 +1,81 @@
 ---
 id: "5-1"
-title: "推送到 GitHub"
-page_title: "把代码推送到 GitHub"
-seo_title: "GitHub 代码管理教程 - 用 AI 搞定 Git 推送"
-seo_description: "用 AI 帮你完成 git init、创建 .gitignore、推送到 GitHub，不用记命令，让 AI 帮你操作。"
-keywords: ["github使用教程零基础","git push教程","AI帮我用git","github入门","git零基础教程"]
+title: "用户登录"
+page_title: "让用户登录：给网站加上身份认证"
+seo_title: "Next.js 用户认证教程 - Supabase Auth 实现登录注册"
+seo_description: "用 Supabase Auth 给 Next.js 网站加上用户登录注册功能，保护后台管理页面。"
+keywords: ["nextjs用户认证", "supabase auth教程", "登录注册功能", "AI做用户系统", "后台权限控制"]
 chapter: "chapter_5"
 order: 1
 is_delivery: false
-verification_type: "github_url"
-verification_config:
-  must_have_files: ["package.json", "README.md"]
-estimated_minutes: 15
+verification_type: "checklist"
+verification_config: {}
+estimated_minutes: 25
 ---
 
-你的代码现在只在你的电脑上。把它推到 GitHub 上，一方面是备份，另一方面后面部署要用。
+现在任何人都能访问你的 `/admin` 后台。这不安全。
+
+这一关加上用户登录，让后台只有你能进。
 
 ## 操作步骤
 
-### 第一步：git init 并创建 .gitignore
+### 第一步：开启 Supabase 认证
 
-打开 https://github.com 注册账号（如果还没有）。
+Supabase 内置了完整的用户认证系统，不需要自己写。
 
-然后对 AI 说：
+1. 打开 Supabase 项目，点击左侧 "Authentication"
+2. 点击 "Providers"，确认 "Email" 已开启
+3. 点击 "Users"，点击 "Invite user"，输入你的邮箱，发送邀请
+4. 去邮箱点击邀请链接，设置密码
 
-```text
-帮我把这个项目初始化 Git 仓库并准备好推送：
+---
 
-1. 初始化 git 仓库
-2. 创建 .gitignore（忽略 node_modules、.env 等）
-3. 创建一个 README.md，简单介绍这个项目
-4. 做第一次 commit
-```
+### 第二步：做登录页面
 
-等 AI 完成后，你的代码就有了版本记录，可以准备推送了。
-
-### 第二步：创建 GitHub 仓库
-
-按 AI 的指引在 GitHub 网站上创建一个新仓库：
-
-1. 登录 https://github.com，点击右上角 "+" → "New repository"
-2. 给仓库起个名字（如 `my-fullstack-app`）
-3. 选择 Public（公开）或 Private（私有）
-4. 不要勾选任何初始化选项（README、.gitignore 等），因为你本地已经有了
-5. 点击 "Create repository"，复制页面上显示的仓库地址
-
-### 第三步：推送代码到 GitHub
-
-把 GitHub 仓库地址告诉 AI，让它帮你推送：
+对 AI 说：
 
 ```text
-帮我把本地代码推送到 GitHub 仓库：
-仓库地址：[粘贴你的仓库地址，如 https://github.com/yourname/my-fullstack-app.git]
+帮我给网站加上用户登录功能：
+
+1. 安装 @supabase/ssr：npm install @supabase/ssr
+2. 创建登录页面 /admin/login：
+   - 简洁的居中卡片布局
+   - 邮箱和密码输入框
+   - 登录按钮
+   - 登录失败时显示错误提示
+3. 登录成功后跳转到 /admin/works
+4. 创建 app/api/auth/login/route.ts 处理登录请求
+
+参考 Supabase 官方的 Next.js Auth 文档实现。
 ```
 
-执行完推送命令后，刷新 GitHub 页面，确认代码已经上去了。截图 GitHub 仓库页面，准备提交通关。
+---
+
+### 第三步：保护后台路由
+
+对 AI 说：
+
+```text
+保护所有 /admin 路由，未登录时自动跳转到登录页：
+
+1. 创建 middleware.ts，检查用户是否已登录
+2. 访问 /admin/* 路径时，如果未登录，重定向到 /admin/login
+3. 已登录时访问 /admin/login，重定向到 /admin/works
+4. 在后台页面的右上角加上"退出登录"按钮，点击后清除登录状态并跳转到首页
+```
+
+退出登录后，尝试直接访问 `/admin/works`，确认会被重定向到登录页。
 
 ## 通关条件
 
-粘贴你的 GitHub 仓库地址（如 `https://github.com/yourname/my-fullstack-app`）
+完成以下三步即可通关：
+
+1. 登录页面可以正常访问
+2. 用你的邮箱和密码可以成功登录
+3. 未登录时访问 `/admin/works` 会跳转到登录页
 
 ## 卡住了？
 
-- 如果推送时要求输入密码，需要设置 SSH key 或使用 Personal Access Token
-- 让 AI 帮你："帮我设置 GitHub SSH key"
+- 登录后还是跳回登录页？让 AI 检查 middleware.ts 里的 session 读取逻辑
+- 邮件没收到？检查垃圾邮件文件夹，或者在 Supabase Authentication → Users 里直接修改密码
+- 退出登录不生效？让 AI 确认退出时清除了 Supabase 的 session cookie

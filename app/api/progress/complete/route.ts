@@ -6,8 +6,9 @@ import { awardLevelXP } from "@/lib/xp";
 
 /**
  * POST /api/progress/complete
- * 简单关卡通过操作清单直接通关（checklist 类型）
- * 完成后自动授予 XP 并更新段位
+ * 通关接口，支持两种类型：
+ * - checklist：操作清单全勾完直接通关
+ * - url_submit：交付关，提交作品 URL 后通关（URL 保存到 submissions 表）
  */
 export async function POST(request: NextRequest) {
   const session = await auth.api.getSession({
@@ -19,7 +20,8 @@ export async function POST(request: NextRequest) {
   }
 
   const userId = session.user.id;
-  const { level_id } = await request.json();
+  const body = await request.json();
+  const { level_id, url } = body;
 
   if (!level_id) {
     return NextResponse.json({ error: "Missing level_id" }, { status: 400 });
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
 
   const supabase = createAdminClient();
 
-  // Check level exists and is a checklist level
+  // Check level exists
   const { data: level } = await supabase
     .from("levels")
     .select("id, verification_type")
@@ -38,12 +40,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Level not found" }, { status: 404 });
   }
 
-  // Only allow checklist completion for checklist-type levels
-  if (level.verification_type !== "checklist") {
+  // Validate type
+  if (level.verification_type !== "checklist" && level.verification_type !== "url_submit") {
     return NextResponse.json(
       { error: "This level requires a formal submission" },
       { status: 403 }
     );
+  }
+
+  // url_submit 必须提供 URL
+  if (level.verification_type === "url_submit") {
+    if (!url || typeof url !== "string" || !url.startsWith("http")) {
+      return NextResponse.json({ error: "Valid URL required" }, { status: 400 });
+    }
   }
 
   // Check existing progress
@@ -65,6 +74,18 @@ export async function POST(request: NextRequest) {
       level_completed: true,
       xp_earned: 0,
       total_xp: profile?.total_xp ?? 0,
+    });
+  }
+
+  // 如果是 url_submit，先保存到 submissions 表
+  if (level.verification_type === "url_submit" && url) {
+    await supabase.from("submissions").insert({
+      user_id: userId,
+      level_id: level_id,
+      submission_type: "url_submit",
+      url_content: url,
+      status: "auto_passed",
+      auto_verification_result: { passed: true, message: "用户提交了作品链接" },
     });
   }
 

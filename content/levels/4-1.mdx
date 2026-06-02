@@ -1,101 +1,91 @@
 ---
 id: "4-1"
-title: "后端 API 初体验"
-page_title: "创建你的第一个后端 API"
-seo_title: "Next.js API 路由教程 - 零基础创建第一个后端接口"
-seo_description: "用 AI + Next.js 创建你的第一个后端 API，理解前后端通信原理，10 分钟跑通前后端数据流。"
-keywords: ["nextjs api路由教程","后端api零基础","nextjs入门教程","AI写后端","前后端通信教程"]
+title: "API 路由入门"
+page_title: "让网站有后端：用 Next.js API 路由处理真实请求"
+seo_title: "Next.js API 路由教程 - 前后端一体化开发"
+seo_description: "学习 Next.js API 路由，让你的作品集网站有真正的后端能力，处理表单提交和数据请求。"
+keywords: ["nextjs api路由", "前后端一体化", "serverless函数", "API接口教程", "AI做后端"]
 chapter: "chapter_4"
 order: 1
 is_delivery: false
-verification_type: "url_check"
-verification_config:
-  expected_status: 200
+verification_type: "checklist"
+verification_config: {}
 estimated_minutes: 20
 ---
 
-前三章你做的所有东西都在"前端"——用户直接看到和操作的部分。但它有一个大问题：**数据存不住。** 刷新页面，用户填的信息就没了；换一台电脑，什么都看不到。
+到目前为止，你的网站是纯前端的——所有数据都写死在代码里，表单提交也只是模拟。
 
-"后端"就是解决这个问题的——它是网站背后的大脑和仓库，负责存数据、处理逻辑、对接各种服务。
-
----
-
-## 关于你之前的项目
-
-第二三章做的作品集网站先放一放——它已经是一个完整的前端作品了。这一章我们在**新项目**里学全栈能力（前端 + 后端 + 数据库），学完之后你有能力把作品集也升级成全栈应用。
-
-为什么要新建项目？因为我们要换一个更适合全栈开发的框架（Next.js），它把前端和后端合在了一起，比之前分开管理更方便。
-
----
-
-## 快速起步（推荐）
-
-如果你想直接从一个配好认证和数据库的项目开始：
-
-1. 打开 [fullstack-starter 模板](https://github.com/roach54023/fullstack-starter)
-2. 点击 **"Use this template"** → Create a new repository
-3. 克隆到本地，按 README 配置环境变量
-4. `npm install && npm run dev`
-
-> 这个模板已经包含了 Better Auth + Supabase 的完整配置，你可以直接在上面开发。
-
----
+Next.js 有一个强大的功能：**API 路由**。你可以在同一个项目里写后端接口，不需要单独搭服务器。这一关来理解并用上它。
 
 ## 操作步骤
 
-### 第一步：创建后端 API 接口
+### 第一步：理解 API 路由
 
-选择以下任一方式创建项目，然后创建你的第一个 API 接口：
+在 Next.js 里，`app/api/` 目录下的文件会自动变成 API 接口。
 
-**方式 A：使用模板（推荐）**
-
-参考上方"快速起步"部分，克隆模板仓库并启动。
-
-**方式 B：从零创建**
+比如 `app/api/hello/route.ts` 就对应 `/api/hello` 这个接口。
 
 对 AI 说：
 
 ```text
-帮我创建一个 Next.js 全栈项目（用 App Router）。
-然后创建一个 API 路由 /api/hello，返回 JSON：
-{ "message": "Hello from my API!", "timestamp": "当前时间" }
+帮我创建一个最简单的 API 路由来理解它的工作方式：
+
+创建 app/api/hello/route.ts，返回一个 JSON：
+{
+  "message": "Hello from API!",
+  "time": "当前时间"
+}
+
+然后在首页加一个按钮"测试 API"，点击后调用这个接口，把返回的 message 显示在按钮旁边。
 ```
 
-AI 会初始化项目并创建 API 路由。启动开发服务器后，在浏览器访问 `http://localhost:3000/api/hello`，看到 JSON 数据说明 API 创建成功。
+点击按钮，看看是否能显示 API 返回的内容。
 
-### 第二步：前端 fetch 调通数据
+---
 
-API 能返回数据了，现在让前端页面也能取到它。对 AI 说：
+### 第二步：让联系表单真正发邮件
+
+上一章的联系表单只是模拟提交。现在让它真的能发邮件。
+
+对 AI 说：
 
 ```text
-帮我在首页创建一个组件，用 fetch 请求 /api/hello 接口，
-并把返回的 message 和 timestamp 显示在页面上。
+帮我用 Resend 服务让联系表单真正发送邮件：
+
+1. 安装 resend 包：npm install resend
+2. 创建 app/api/contact/route.ts，接收表单数据（姓名、邮箱、主题、消息），用 Resend 发送邮件到我的邮箱
+3. 更新联系表单，把提交请求改为调用 /api/contact 接口
+4. 在 .env.local 里添加 RESEND_API_KEY 变量（我需要去 resend.com 注册获取）
+
+注意：先用 console.log 打印接收到的数据，确认接口正常工作后再接入 Resend。
 ```
 
-刷新页面，看到 API 返回的内容显示在前端，说明前后端通了。
+> **获取 Resend API Key**：访问 [resend.com](https://resend.com)，注册免费账号，在 Dashboard 里创建 API Key，复制到 `.env.local` 文件里。
 
-### 第三步：加 loading 骨架屏
+---
 
-数据在加载中时，页面不能一片空白。对 AI 说：
+### 第三步：测试接口
+
+对 AI 说：
 
 ```text
-帮我给 API 数据加载加上状态处理：
-1. 加载时显示骨架屏（灰色占位块，有呼吸动画效果）
-2. 加载成功时显示真实数据
-3. 加载失败时显示错误提示，有一个重试按钮
+帮我在联系页面加上接口测试功能：
+
+- 提交表单后，如果接口返回错误，在表单上方显示具体的错误信息
+- 在浏览器控制台打印接口的完整响应，方便调试
+- 如果 RESEND_API_KEY 没有配置，接口返回友好的错误提示而不是崩溃
 ```
-
-### 第四步：截图 JSON 和前端
-
-分别截图两样东西，准备提交通关：
-1. 浏览器访问 `http://localhost:3000/api/hello` 看到的 JSON 数据
-2. 前端页面显示从 API 获取的数据（带骨架屏/成功状态）
 
 ## 通关条件
 
-粘贴你的 API 地址（如 `http://localhost:3000/api/hello`）
+完成以下三步即可通关：
+
+1. `/api/hello` 接口可以访问，返回 JSON 数据
+2. 联系表单调用真实的 API 路由（不再是 setTimeout 模拟）
+3. 接口有错误处理，不会因为缺少配置而崩溃
 
 ## 卡住了？
 
-- 如果看到 404，检查文件路径是否正确：`app/api/hello/route.ts`
-- Next.js API 路由必须导出 GET/POST 等函数
+- 接口返回 404？检查文件路径是否是 `app/api/xxx/route.ts`，函数名是否是 `GET` 或 `POST`
+- 跨域报错？API 路由和前端在同一个 Next.js 项目里，不存在跨域问题，让 AI 检查请求 URL 是否正确
+- Resend 发送失败？先确认 API Key 是否正确配置，再让 AI 查看错误信息

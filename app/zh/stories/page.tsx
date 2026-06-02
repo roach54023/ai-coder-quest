@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Terminal, ArrowRight, Clock, TrendingUp, Trophy, Star, ExternalLink, Mail } from "lucide-react";
+import { ArrowRight, Clock, TrendingUp, Trophy, Star, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
@@ -63,7 +63,7 @@ const moreStories = [
     result: "用 AI 辅助开发了一个配送路线规划工具，根据订单地址自动计算最短路径，每天能多送 5-8 单。",
     quote: "我连 Excel 都不太会用，但现在我有了自己写的工具，同事都来找我要。",
     time: "3 天",
-    avatarColor: "#60A5FA",
+    avatarColor: "#6366F1",
   },
   {
     name: "小李",
@@ -73,7 +73,7 @@ const moreStories = [
     result: "为班上 40 个学生做了一个在线答题系统，支持随机出题、计时作答、自动批改和错题统计。",
     quote: "孩子们现在抢着做练习题，家长都问我这个 App 在哪下载的。",
     time: "5 天",
-    avatarColor: "#34D399",
+    avatarColor: "#10B981",
   },
   {
     name: "老张",
@@ -103,7 +103,7 @@ const moreStories = [
     result: "把写了半年的 PRD 直接变成了可运行的产品原型，带用户注册、数据看板和付费功能。投资人当场拍板。",
     quote: "以前求着开发排期，现在我自己就能出 demo。融到了种子轮，200 万。",
     time: "5 天",
-    avatarColor: "#A78BFA",
+    avatarColor: "#8B5CF6",
   },
   {
     name: "小刘",
@@ -113,132 +113,101 @@ const moreStories = [
     result: "通关后接了外包项目，3 个月做了 3 个企业官网，从设计到部署全用 AI 完成。现在月入 $3K 稳定接单。",
     quote: "40 岁转行听起来疯狂，但 AI 让我 3 天就能交付一个以前要 3 周的项目。",
     time: "1 周",
-    avatarColor: "#14B8A6",
+    avatarColor: "#0EA5E9",
   },
 ];
 
 export default function StoriesPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
-
-      {/* 背景网格 */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "48px 48px",
-        }}
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
 
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-              <Terminal className="h-3.5 w-3.5 text-indigo-400" />
-            </div>
-            <span className="font-bold text-base tracking-tight text-white">VibeCamp</span>
+            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
+              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+            </svg>
+            <span className="font-bold text-base text-gray-900">VibeCamp</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400">
-            <Link href="/zh/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="/zh/projects" className="hover:text-white transition-colors">实战项目</Link>
-            <Link href="/#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="/zh/stories" className="text-white">学员案例</Link>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            <Link href="/#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="/zh/stories" className="text-gray-900 font-medium">学员案例</Link>
           </nav>
-          <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5" asChild>
+          <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
             <a href="/zh/register">开始闯关 →</a>
           </Button>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="relative pt-36 pb-16 px-6 text-center">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center top, rgba(99,102,241,0.15) 0%, transparent 65%)" }}
-          aria-hidden="true"
-        />
-        <div className="relative max-w-3xl mx-auto">
-          <p className="text-xs text-indigo-400 uppercase tracking-widest mb-4 font-medium">Player Stories</p>
-          <h1
-            className="text-4xl md:text-6xl font-black tracking-tight mb-5 leading-[1.05]"
-            style={{
-              background: "linear-gradient(135deg, #ffffff 0%, #c7d2fe 40%, #818cf8 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+      <section className="pt-36 pb-20 px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">Player Stories</p>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
             零基础，3–5 周，
-            <br />做出有收入的产品
+            <br />
+            <span className="text-indigo-600">做出有收入的产品</span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-400 text-xl max-w-xl mx-auto leading-relaxed">
             这些人没有任何编程背景，只是学会了「如何让 AI 帮自己写代码」——然后一切都不一样了。
           </p>
         </div>
       </section>
 
-      {/* 数据统计 */}
-      <section className="py-10 px-6 border-t border-white/[0.05]">
-        <div className="max-w-2xl mx-auto grid grid-cols-3 gap-8 text-center">
-          {[
-            { num: "94%", label: "通关率" },
-            { num: "~6h", label: "平均通关时长" },
-            { num: "73%", label: "通关后有商业产出" },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="text-3xl font-black text-indigo-400 mb-1">{s.num}</div>
-              <div className="text-sm text-gray-500">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="border-t border-gray-100" />
 
-      {/* 精选案例（带截图） */}
-      <section className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-black text-white mb-8">精选案例</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 精选案例 */}
+      <section className="py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-10">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">Featured Cases</p>
+            <h2 className="text-3xl font-black text-gray-900">精选案例</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {cases.map((c) => (
               <article
                 key={c.name}
-                className="group flex flex-col bg-white/[0.02] border border-white/[0.06] rounded-3xl overflow-hidden hover:border-white/[0.14] transition-all"
-                style={{ boxShadow: `0 0 60px -20px ${c.tagColor}20` }}
+                className="group flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:border-gray-200 hover:shadow-sm transition-all"
               >
-                <div className="relative h-52 overflow-hidden" style={{ background: `linear-gradient(135deg, ${c.tagColor}18 0%, #0d0d1a 60%)` }}>
+                {/* 模拟截图区 */}
+                <div
+                  className="relative h-44 overflow-hidden"
+                  style={{ background: `linear-gradient(135deg, ${c.tagColor}12 0%, #f8f9fa 60%)` }}
+                >
                   <div className="absolute inset-0 flex flex-col" aria-hidden="true">
-                    <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/5 bg-black/20">
-                      <div className="w-2 h-2 rounded-full bg-red-500/40" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-500/40" />
-                      <div className="w-2 h-2 rounded-full bg-green-500/40" />
-                      <div className="flex-1 mx-3 bg-white/5 rounded-md h-4 flex items-center px-2">
-                        <span className="text-[8px] text-gray-600 truncate">vibecamp.app/{c.project.slice(0, 8)}</span>
+                    <div className="flex items-center gap-1.5 px-3 py-2 border-b border-gray-100 bg-white/60">
+                      <div className="w-2 h-2 rounded-full bg-red-300" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-300" />
+                      <div className="w-2 h-2 rounded-full bg-green-300" />
+                      <div className="flex-1 mx-3 bg-gray-100 rounded-md h-4 flex items-center px-2">
+                        <span className="text-[8px] text-gray-400 truncate">vibecamp.app/{c.project.slice(0, 8)}</span>
                       </div>
                     </div>
                     <div className="flex-1 p-3 flex flex-col gap-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ background: c.tagColor + "40" }} />
-                        <div className="w-2/3 h-2.5 rounded-full bg-white/10" />
+                        <div className="w-4 h-4 rounded" style={{ background: c.tagColor + "30" }} />
+                        <div className="w-2/3 h-2.5 rounded-full bg-gray-200" />
                       </div>
-                      <div className="w-1/2 h-2 rounded-full bg-white/5" />
+                      <div className="w-1/2 h-2 rounded-full bg-gray-100" />
                       <div className="mt-1 grid grid-cols-2 gap-1.5 flex-1">
                         {[1, 2, 3, 4].map((n) => (
-                          <div key={n} className="rounded-lg p-2 border border-white/5 flex flex-col gap-1" style={{ background: c.tagColor + "08" }}>
-                            <div className="w-full h-1.5 rounded-full bg-white/10" />
-                            <div className="w-2/3 h-1 rounded-full bg-white/5" />
+                          <div key={n} className="rounded-lg p-2 border border-gray-100 flex flex-col gap-1 bg-white/80">
+                            <div className="w-full h-1.5 rounded-full bg-gray-100" />
+                            <div className="w-2/3 h-1 rounded-full bg-gray-50" />
                             <div className="mt-auto w-1/2 h-1 rounded-full" style={{ background: c.tagColor + "50" }} />
                           </div>
                         ))}
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <div className="px-2.5 py-1 rounded-full text-[9px] font-bold" style={{ background: c.tagColor, color: "#fff" }}>
+                        <div className="px-2.5 py-1 rounded-full text-[9px] font-bold text-white" style={{ background: c.tagColor }}>
                           {c.income}
                         </div>
-                        <div className="text-[9px] text-gray-500">月收入</div>
+                        <div className="text-[9px] text-gray-400">月收入</div>
                         <div className="ml-auto flex items-center gap-1">
                           <Star className="h-2.5 w-2.5" style={{ color: c.tagColor }} />
                           <span className="text-[9px]" style={{ color: c.tagColor }}>{c.xp} XP</span>
@@ -250,17 +219,10 @@ export default function StoriesPage() {
                     src={c.screenshot}
                     alt={`${c.name}的项目截图：${c.project}`}
                     fill
-                    className="object-cover object-top z-10 mix-blend-luminosity opacity-75"
+                    className="object-cover object-top z-10 mix-blend-multiply opacity-20"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div
-                    className="absolute inset-0 z-[15] pointer-events-none"
-                    style={{ background: `linear-gradient(160deg, ${c.tagColor}28 0%, transparent 50%, #0d0d1a70 100%)` }}
-                    aria-hidden="true"
-                  />
-                  <div className="absolute top-0 left-0 right-0 h-[2px] z-20" style={{ background: `linear-gradient(90deg, transparent, ${c.tagColor}, transparent)` }} />
-                  <div className="absolute bottom-0 left-0 right-0 h-16 z-20" style={{ background: "linear-gradient(to top, #0d0d1a, transparent)" }} />
-                  <div className="absolute top-3 right-3 z-30 text-xs font-bold text-white/70 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1">
+                  <div className="absolute top-3 right-3 z-20 text-xs font-bold text-gray-600 bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-gray-100 flex items-center gap-1">
                     <Trophy className="h-3 w-3" style={{ color: c.tagColor }} />
                     {c.level}
                   </div>
@@ -268,17 +230,20 @@ export default function StoriesPage() {
 
                 <div className="flex-1 flex flex-col p-5">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-full" style={{ backgroundColor: c.tagColor + "20", color: c.tagColor, border: `1px solid ${c.tagColor}30` }}>
+                    <span
+                      className="text-xs font-bold px-2.5 py-0.5 rounded-full"
+                      style={{ backgroundColor: c.tagColor + "15", color: c.tagColor }}
+                    >
                       {c.tag}
                     </span>
-                    <span className="text-xs text-gray-500 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
+                    <span className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-full">
                       {c.tool}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white mb-2 leading-snug">{c.project}</h3>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4 flex-1">{c.result}</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug">{c.project}</h3>
+                  <p className="text-gray-500 text-xs leading-relaxed mb-4 flex-1">{c.result}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-1.5 text-xs text-gray-400">
                       <Clock className="h-3.5 w-3.5" />
                       <span>学了 {c.time}</span>
                     </div>
@@ -287,16 +252,16 @@ export default function StoriesPage() {
                       <span>{c.income}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-gray-100">
                     <div
                       className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
-                      style={{ background: c.tagColor + "30", color: c.tagColor, border: `1px solid ${c.tagColor}40` }}
+                      style={{ background: c.tagColor + "18", color: c.tagColor }}
                     >
                       {c.name[0]}
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-white">{c.name}</div>
-                      <div className="text-[11px] text-gray-500">{c.role}</div>
+                      <div className="text-xs font-semibold text-gray-900">{c.name}</div>
+                      <div className="text-[11px] text-gray-400">{c.role}</div>
                     </div>
                   </div>
                 </div>
@@ -306,37 +271,42 @@ export default function StoriesPage() {
         </div>
       </section>
 
+      <div className="border-t border-gray-100" />
+
       {/* 更多故事 */}
-      <section className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-black text-white mb-8">更多学员故事</h2>
+      <section className="py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-10">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">More Stories</p>
+            <h2 className="text-3xl font-black text-gray-900">更多学员故事</h2>
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {moreStories.map((s) => (
               <div
                 key={s.name}
-                className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 hover:border-white/[0.10] transition-all"
+                className="border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-sm transition-all"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black shrink-0"
-                    style={{ background: s.avatarColor + "20", color: s.avatarColor, border: `1px solid ${s.avatarColor}30` }}
+                    style={{ background: s.avatarColor + "15", color: s.avatarColor }}
                   >
                     {s.name[1]}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-gray-900">
                       {s.name}
-                      <span className="text-gray-500 font-normal ml-1 text-xs">{s.age} 岁</span>
+                      <span className="text-gray-400 font-normal ml-1 text-xs">{s.age} 岁</span>
                     </div>
-                    <div className="text-xs text-gray-500">{s.role}</div>
+                    <div className="text-xs text-gray-400">{s.role}</div>
                   </div>
                 </div>
                 <div className="text-xs font-semibold mb-2" style={{ color: s.avatarColor }}>{s.project}</div>
-                <p className="text-sm text-gray-400 leading-relaxed mb-4">{s.result}</p>
-                <div className="bg-white/[0.03] border border-white/[0.05] rounded-xl p-3 mb-4">
-                  <p className="text-xs text-gray-400 italic leading-relaxed">「{s.quote}」</p>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">{s.result}</p>
+                <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 mb-4">
+                  <p className="text-xs text-gray-500 italic leading-relaxed">「{s.quote}」</p>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                <div className="flex items-center gap-1.5 text-xs text-gray-400">
                   <Clock className="h-3 w-3" />
                   <span>用时 {s.time}</span>
                 </div>
@@ -346,50 +316,28 @@ export default function StoriesPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-6 border-t border-white/[0.06] text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">下一个故事，由你书写</h2>
-          <p className="text-gray-400 mb-10 max-w-md mx-auto">
-            不需要任何编程基础。你只需要一个想法，和学会跟 AI 对话的决心。
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="text-white rounded-full text-base px-10 h-12 font-semibold shadow-lg shadow-indigo-500/20 bg-indigo-600 hover:bg-indigo-500"
-              asChild
-            >
-              <a href="/zh/register">
-                开始我的闯关之旅 <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full text-base px-8 h-12 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-transparent"
-              asChild
-            >
-              <Link href="/zh/projects">查看实战项目</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer className="py-10 px-6 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Terminal className="h-4 w-4 text-indigo-400" />
-            <span className="font-bold text-white text-sm">VibeCamp</span>
-            <span className="text-xs text-gray-600">· AI 编程教程训练营</span>
+      <footer className="py-12 px-6 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0">
+                <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+                <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+              </svg>
+              <span className="font-bold text-gray-900">VibeCamp</span>
+            </div>
+            <p className="text-sm text-gray-400">AI 编程教程训练营 · 游戏化学习，做出真产品</p>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/zh/projects" className="hover:text-gray-200 transition-colors">实战项目库</Link>
-            <Link href="/zh/about" className="hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
-            <Link href="https://github.com/roach54023/ai-coder-quest" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-gray-200 transition-colors">
+            <Link href="/zh/projects" className="hover:text-gray-900 transition-colors">实战项目库</Link>
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            <Link href="https://github.com/roach54023/ai-coder-quest" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-gray-900 transition-colors">
               <ExternalLink className="h-3 w-3" />GitHub
             </Link>
-            <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1 hover:text-gray-200 transition-colors">
+            <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1 hover:text-gray-900 transition-colors">
               <Mail className="h-3 w-3" />联系
             </Link>
           </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Terminal, ArrowRight, CheckCircle2, Wrench, Bot, Newspaper, ShoppingBag, BarChart3, CreditCard, ExternalLink, Mail } from "lucide-react";
+import { ArrowRight, CheckCircle2, Wrench, Bot, Newspaper, ShoppingBag, BarChart3, CreditCard, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
@@ -97,119 +97,99 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
-
-      {/* 背景网格 */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "48px 48px",
-        }}
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
 
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-              <Terminal className="h-3.5 w-3.5 text-indigo-400" />
-            </div>
-            <span className="font-bold text-base tracking-tight text-white">VibeCamp</span>
+            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
+              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+            </svg>
+            <span className="font-bold text-base text-gray-900">VibeCamp</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400">
-            <Link href="/zh/about" className="hover:text-white transition-colors">什么是 AI 编程</Link>
-            <Link href="/zh/projects" className="text-white">实战项目</Link>
-            <Link href="/#journey" className="hover:text-white transition-colors">闯关地图</Link>
-            <Link href="/zh/stories" className="hover:text-white transition-colors">学员案例</Link>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            <Link href="/zh/projects" className="text-gray-900 font-medium">实战项目</Link>
+            <Link href="/#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="/zh/stories" className="hover:text-gray-900 transition-colors">学员案例</Link>
           </nav>
-          <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5" asChild>
+          <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
             <a href="/zh/register">开始闯关 →</a>
           </Button>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="relative pt-36 pb-16 px-6 text-center">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center top, rgba(99,102,241,0.15) 0%, transparent 65%)" }}
-          aria-hidden="true"
-        />
-        <div className="relative max-w-3xl mx-auto">
-          <p className="text-xs text-indigo-400 uppercase tracking-widest mb-4 font-medium">Project Library</p>
-          <h1
-            className="text-4xl md:text-6xl font-black tracking-tight mb-5 leading-[1.05]"
-            style={{
-              background: "linear-gradient(135deg, #ffffff 0%, #c7d2fe 40%, #818cf8 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            跟着做，做完能上线
+      <section className="pt-36 pb-20 px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">Project Library</p>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
+            跟着做，
+            <br />
+            <span className="text-indigo-600">做完能上线</span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-400 text-xl max-w-xl mx-auto leading-relaxed">
             这些都是真实可做的项目，不是练习题。每个项目学完对应章节就能开始做，做完直接上线变现。
           </p>
         </div>
       </section>
 
+      <div className="border-t border-gray-100" />
+
       {/* 项目网格 */}
-      <section className="py-12 px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-6 pb-28">
+        <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.map((p) => (
               <Link
                 key={p.title}
                 href={`/zh/levels/${p.chapterId}/${p.levelId}`}
-                className="group flex flex-col bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 hover:border-white/[0.14] hover:bg-white/[0.04] transition-all"
-                style={{ boxShadow: `0 0 40px -20px ${p.color}15` }}
+                className="group flex flex-col border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-sm transition-all"
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-5">
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: p.color + "20", border: `1px solid ${p.color}30` }}
+                    style={{ background: p.color + "15", border: `1px solid ${p.color}20` }}
                   >
                     <p.icon className="h-5 w-5" style={{ color: p.color }} />
                   </div>
                   <div className="flex items-center gap-2">
                     <span
                       className="text-xs font-bold px-2.5 py-1 rounded-full"
-                      style={{ background: p.difficultyColor + "18", color: p.difficultyColor }}
+                      style={{ background: p.difficultyColor + "12", color: p.difficultyColor }}
                     >
                       {p.difficulty}
                     </span>
                     <span
                       className="text-xs px-2.5 py-1 rounded-full"
-                      style={{ background: p.color + "15", color: p.color }}
+                      style={{ background: p.color + "10", color: p.color }}
                     >
                       {p.tag}
                     </span>
                   </div>
                 </div>
 
-                <h2 className="font-bold text-white text-base mb-2 group-hover:text-indigo-200 transition-colors leading-snug">
+                <h2 className="font-bold text-gray-900 text-base mb-2 group-hover:text-indigo-600 transition-colors leading-snug">
                   {p.title}
                 </h2>
                 <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-5">{p.desc}</p>
 
                 <div className="flex flex-wrap gap-1.5 mb-5">
                   {p.stack.map((s) => (
-                    <span key={s} className="text-xs text-gray-500 bg-white/[0.05] border border-white/[0.07] px-2 py-0.5 rounded-md">
+                    <span key={s} className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md">
                       {s}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="h-3.5 w-3.5" style={{ color: p.color }} />
-                    <span className="text-xs text-gray-400">{p.output}</span>
+                    <span className="text-xs text-gray-500">{p.output}</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs font-medium group-hover:gap-2 transition-all" style={{ color: p.color }}>
                     <span>开始做</span>
@@ -221,43 +201,47 @@ export default function ProjectsPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <p className="text-gray-500 text-sm mb-6">还没开始闯关？先从序章入手，装好工具再来做项目。</p>
+            <p className="text-gray-400 text-sm mb-6">还没开始闯关？先从序章入手，装好工具再来做项目。</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-8"
-                asChild
+              <a
+                href="/zh/register"
+                className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-700 text-white rounded-full text-base px-10 py-4 font-semibold transition-colors"
               >
-                <a href="/zh/register">免费开始闯关 →</a>
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-full px-8 border-white/10 text-gray-300 hover:border-white/30 hover:text-white bg-transparent"
-                asChild
+                免费开始闯关 <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link
+                href="/#journey"
+                className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 rounded-full text-base px-10 py-4 font-medium transition-colors"
               >
-                <Link href="/#journey">查看课程地图</Link>
-              </Button>
+                查看课程地图
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-10 px-6 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Terminal className="h-4 w-4 text-indigo-400" />
-            <span className="font-bold text-white text-sm">VibeCamp</span>
-            <span className="text-xs text-gray-600">· AI 编程教程训练营</span>
+      <footer className="py-12 px-6 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0">
+                <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+                <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+              </svg>
+              <span className="font-bold text-gray-900">VibeCamp</span>
+            </div>
+            <p className="text-sm text-gray-400">AI 编程教程训练营 · 游戏化学习，做出真产品</p>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/zh/stories" className="hover:text-gray-200 transition-colors">学员案例</Link>
-            <Link href="/zh/about" className="hover:text-gray-200 transition-colors">什么是 AI 编程</Link>
-            <Link href="https://github.com/roach54023/ai-coder-quest" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-gray-200 transition-colors">
+            <Link href="/zh/stories" className="hover:text-gray-900 transition-colors">学员案例</Link>
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
+            <Link href="https://github.com/roach54023/ai-coder-quest" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-gray-900 transition-colors">
               <ExternalLink className="h-3 w-3" />GitHub
             </Link>
-            <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1 hover:text-gray-200 transition-colors">
+            <Link href="mailto:roach54023@qq.com" className="flex items-center gap-1 hover:text-gray-900 transition-colors">
               <Mail className="h-3 w-3" />联系
             </Link>
           </div>

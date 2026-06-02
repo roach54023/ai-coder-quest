@@ -15,6 +15,8 @@ export interface LevelContent {
     verification_type: string;
     verification_config: Record<string, any>;
     estimated_minutes: number;
+    // delivery
+    delivery_prompt?: string;
     // SEO fields
     seo_title?: string;
     seo_description?: string;

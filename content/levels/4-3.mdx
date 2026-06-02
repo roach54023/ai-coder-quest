@@ -1,75 +1,93 @@
 ---
 id: "4-3"
-title: "用户系统"
-page_title: "实现用户注册登录"
-seo_title: "用户登录注册功能教程 - AI 帮你实现完整认证系统"
-seo_description: "用 AI + Better Auth 实现用户注册、登录、会话管理，给你的产品加上完整的用户系统。"
-keywords: ["用户登录功能实现","nextjs认证教程","AI实现登录注册","better auth教程","用户系统开发"]
+title: "后台管理"
+page_title: "自己管理内容：做一个简单的后台管理页面"
+seo_title: "Next.js 后台管理教程 - CRUD 操作实现"
+seo_description: "用 AI 给作品集网站做一个后台管理页面，实现作品的增删改查，不再需要改代码来更新内容。"
+keywords: ["nextjs后台管理", "CRUD教程", "内容管理系统", "AI做后台", "作品管理页面"]
 chapter: "chapter_4"
 order: 3
 is_delivery: false
 verification_type: "checklist"
 verification_config: {}
-estimated_minutes: 30
+estimated_minutes: 25
 ---
 
-有了数据库，下一步是让不同用户有自己的数据。这一关实现完整的用户注册/登录系统。
+每次想更新作品，都要去 Supabase 手动改数据库，太麻烦了。
+
+这一关做一个简单的后台管理页面，让你可以直接在网站里添加、编辑、删除作品。
 
 ## 操作步骤
 
-### 第一步：做登录页面
+### 第一步：做作品管理页面
 
-在 Supabase 控制台中，进入 Authentication → Providers，确认 Email 已启用。
-
-然后对 AI 说：
+对 AI 说：
 
 ```text
-帮我实现用户认证系统：
+创建一个后台管理页面 /admin/works：
 
-1. 使用 Supabase Auth
-2. 注册页面（/register）：邮箱 + 密码
-3. 登录页面（/login）：邮箱 + 密码
-4. 登录后跳转到 /dashboard
+- 显示所有作品的列表（表格形式）
+- 每行显示：封面缩略图、标题、标签、操作按钮（编辑、删除）
+- 右上角有"添加作品"按钮
+- 页面顶部有简单的标题"作品管理"
+
+暂时不需要登录验证，先把功能做出来。
 ```
 
-完成后，在浏览器访问 `/register`，注册一个测试账号，完成邮件确认（如果有）后尝试登录。
+---
 
-### 第二步：导航栏登录态切换
+### 第二步：做添加和编辑表单
 
-继续对 AI 说：
+对 AI 说：
 
 ```text
-帮我完善登录状态的显示：
+给作品管理页面加上添加和编辑功能：
 
-5. 导航栏显示当前用户邮箱，有退出按钮
-6. 未登录用户访问 /dashboard 自动跳转到 /login
-7. 加入 GitHub OAuth 登录（可选）
+1. 点击"添加作品"，弹出一个模态框（Modal），里面有表单：
+   - 作品标题（必填）
+   - 作品描述（多行文本）
+   - 标签（可以输入多个，用逗号分隔）
+   - 封面图片链接
+   - 项目链接
+   - GitHub 链接
+
+2. 点击某个作品的"编辑"按钮，弹出同样的模态框，但预填了该作品的数据
+
+3. 表单提交后：
+   - 添加：调用 POST /api/works 接口
+   - 编辑：调用 PUT /api/works/[id] 接口
+   - 成功后关闭模态框，刷新作品列表
+
+4. 更新 API 路由，支持 PUT 方法（更新作品）
 ```
 
-测试完整流程：注册 → 登录 → 看到导航栏显示邮箱 → 点退出 → 重新登录。
+---
 
-### 第三步：权限控制 /admin
+### 第三步：实现删除功能
 
-让每个用户只能看到自己的数据。对 AI 说：
+对 AI 说：
 
 ```text
-帮我加入数据权限控制：
+给作品管理页面加上删除功能：
 
-8. posts 表加一个 user_id 字段，关联到当前登录用户
-9. 查询时只返回当前用户的文章
-10. 在 Supabase 中设置 RLS（行级安全策略）：用户只能读写自己的数据
+1. 点击"删除"按钮，弹出确认对话框："确定要删除《作品名称》吗？此操作不可撤销。"
+2. 确认后调用 DELETE /api/works/[id] 接口
+3. 删除成功后，从列表中移除该作品（不需要刷新整个页面）
+4. 更新 API 路由，支持 DELETE 方法
+
+5. 在 API 路由里创建 app/api/works/[id]/route.ts，处理单个作品的 GET、PUT、DELETE 请求
 ```
-
-截图登录后的 Dashboard 页面（显示用户信息），准备提交通关。
 
 ## 通关条件
 
-截图登录后的 Dashboard 页面（显示用户信息）
+完成以下三步即可通关：
+
+1. `/admin/works` 页面可以正常访问，显示作品列表
+2. 可以通过表单添加新作品，添加后列表更新
+3. 可以删除作品，删除后列表更新
 
 ## 卡住了？
 
-- 注册后没收到确认邮件？→ Supabase 免费版默认开启邮件确认，可以在 Authentication → Settings → 关闭 "Enable email confirmations" 来简化测试
-- 如果登录后跳转不生效，检查是否正确监听了 `onAuthStateChange` 事件
-- 如果 GitHub OAuth 配置失败，先跳过，用邮箱登录完成本关，OAuth 是可选的
-- 如果报 `User already registered`，说明邮箱已注册过，直接去登录页
-- 实在搞不定？发邮件给我：**roach54023@qq.com**
+- 模态框不显示？让 AI 检查控制显示的状态变量是否正确
+- API 返回 405 Method Not Allowed？检查 route.ts 里是否导出了对应的 HTTP 方法函数（GET/POST/PUT/DELETE）
+- 删除后列表没更新？让 AI 在删除成功后重新调用获取列表的函数

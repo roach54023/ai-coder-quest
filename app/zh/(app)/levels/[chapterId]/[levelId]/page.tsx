@@ -8,10 +8,8 @@ import { notFound } from "next/navigation";
 import { LevelContent } from "@/components/levels/level-content";
 import { SubmissionForm } from "@/components/levels/submission-form";
 import { SharePrompt } from "@/components/levels/share-prompt";
-import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, BookOpen, Terminal, Map, User, Star, LogIn } from "lucide-react";
+import { Clock, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, BookOpen, Star, LogIn } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { getRankByXP } from "@/lib/content/ranks";
 import type { Metadata } from "next";
@@ -107,10 +105,14 @@ export default async function LevelPage({ params }: LevelPageProps) {
   const isCompleted = progress?.status === "completed";
   const isSkipped = progress?.status === "skipped";
 
-  // checklist 类型 → 操作清单做完即通关，不需要额外提交验证
+  // checklist / url_submit 类型 → 操作清单做完即可通关（url_submit 还需填链接）
   const isSimpleLevel =
     level != null &&
-    level.verification_type === "checklist";
+    (level.verification_type === "checklist" || level.verification_type === "url_submit");
+
+  // url_submit 类型 → 交付关，需要提交作品链接
+  const isDeliveryLevel =
+    level != null && level.verification_type === "url_submit";
 
   // Steps data
   const steps = getStepsByLevelId(levelId);
@@ -132,61 +134,67 @@ export default async function LevelPage({ params }: LevelPageProps) {
   const nextChapterContent = nextChapterFirst ? getLevelContent(nextChapterFirst.levelId) : null;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Top nav */}
-      <header className="fixed top-0 w-full z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex h-14 items-center justify-between px-4">
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-indigo-400" />
-            <span className="font-bold">VibeCamp</span>
+            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
+              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
+              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
+            </svg>
+            <span className="font-bold text-gray-900">VibeCamp</span>
           </Link>
 
-          <nav className="flex items-center gap-1">
+          {/* 中间导航 */}
+          <nav className="hidden md:flex items-center gap-1">
             {isLoggedIn && (
-              <Link href="/zh/dashboard">
-                <Button variant="ghost" size="sm">
-                  <Map className="h-4 w-4 mr-1" /> 闯关地图
-                </Button>
+              <Link
+                href="/zh/dashboard"
+                className="text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 px-4 py-2 rounded-full transition-colors"
+              >
+                闯关地图
               </Link>
             )}
             {isLoggedIn && (
-              <Link href="/zh/profile">
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4 mr-1" /> 个人
-                </Button>
+              <Link
+                href="/zh/profile"
+                className="text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 px-4 py-2 rounded-full transition-colors"
+              >
+                我的主页
               </Link>
             )}
           </nav>
 
+          {/* 右侧 */}
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
               <>
                 <Link
                   href="/zh/profile"
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-100 hover:border-gray-200 bg-gray-50 hover:bg-gray-100 transition-all"
                 >
-                  <span className="text-base leading-none">{currentRank.badge_icon}</span>
-                  <div className="flex flex-col items-start leading-none">
-                    <span
-                      className="text-xs font-bold"
-                      style={{ color: currentRank.badge_color }}
-                    >
-                      {currentRank.name}
-                    </span>
-                    <span className="flex items-center gap-0.5 text-[10px] text-gray-500 mt-0.5">
-                      <Star className="h-2.5 w-2.5 text-amber-400" />
-                      {totalXP.toLocaleString()} XP
-                    </span>
-                  </div>
+                  <span className="text-sm leading-none">{currentRank.badge_icon}</span>
+                  <span className="text-xs font-bold" style={{ color: currentRank.badge_color }}>
+                    {currentRank.name}
+                  </span>
+                  <span className="flex items-center gap-0.5 text-[11px] text-gray-400">
+                    <Star className="h-2.5 w-2.5 text-amber-400" />
+                    {totalXP.toLocaleString()}
+                  </span>
                 </Link>
                 <SignOutButton />
               </>
             ) : (
-              <Link href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}>
-                <Button size="sm" variant="outline" className="gap-1.5">
-                  <LogIn className="h-4 w-4" />
-                  登录
-                </Button>
+              <Link
+                href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}
+                className="inline-flex items-center gap-1.5 h-9 px-5 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                登录
               </Link>
             )}
           </div>
@@ -194,44 +202,53 @@ export default async function LevelPage({ params }: LevelPageProps) {
       </header>
 
       <main className="pt-14">
-        <div className="container mx-auto px-4 py-8 max-w-3xl">
-          {/* Breadcrumb + quick nav */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link href={isLoggedIn ? "/dashboard" : "/"} className="hover:text-foreground flex items-center gap-1">
-                <ArrowLeft className="h-4 w-4" />
+        <div className="max-w-3xl mx-auto px-6 py-10">
+
+          {/* ── 面包屑 + 上一关 ── */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <Link
+                href={isLoggedIn ? "/zh/dashboard" : "/"}
+                className="flex items-center gap-1 hover:text-gray-700 transition-colors"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
                 {isLoggedIn ? "闯关地图" : "首页"}
               </Link>
-              <span>/</span>
-              <span>{levelContent.meta.title}</span>
+              <span className="text-gray-200">/</span>
+              <span className="text-gray-500 truncate max-w-[200px]">{levelContent.meta.title}</span>
             </div>
             {prevLevel && (
-              <Link href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
-                <Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground hover:text-foreground">
-                  <ChevronLeft className="h-3.5 w-3.5" />
-                  上一关
-                </Button>
+              <Link
+                href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}
+                className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 px-3 py-1.5 rounded-full border border-gray-100 hover:border-gray-200 transition-all"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+                上一关
               </Link>
             )}
           </div>
 
-          {/* Header */}
+          {/* ── 关卡标题区 ── */}
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold">{levelContent.meta.page_title || levelContent.meta.title}</h1>
+            <div className="flex items-start gap-3 mb-3">
+              <h1 className="text-3xl font-black text-gray-900 leading-tight">
+                {levelContent.meta.page_title || levelContent.meta.title}
+              </h1>
               {levelContent.meta.is_delivery && (
-                <Badge variant="secondary">🎯 交付关</Badge>
+                <span className="mt-1.5 shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
+                  🎯 交付关
+                </span>
               )}
             </div>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
+            <div className="flex items-center gap-4 text-sm text-gray-400">
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5" />
                 预计 {levelContent.meta.estimated_minutes} 分钟
               </span>
               {isCompleted && (
-                <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
+                <span className="flex items-center gap-1 text-emerald-600 font-medium text-xs px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
                   ✓ 已通关
-                </Badge>
+                </span>
               )}
             </div>
           </div>
@@ -244,10 +261,11 @@ export default async function LevelPage({ params }: LevelPageProps) {
             />
           )}
 
-          {/* Skipped banner */}
+          {/* ── 跳过横幅 ── */}
           {isSkipped && (
-            <div className="mb-6 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
-              <span className="text-sm text-amber-600 font-medium">⏭ 已跳过，可随时补交验证</span>
+            <div className="mb-6 px-5 py-4 rounded-2xl bg-amber-50 border border-amber-100 flex items-center gap-3">
+              <span className="text-amber-500 text-base">⏭</span>
+              <span className="text-sm text-amber-700 font-medium">已跳过，可随时补交验证</span>
             </div>
           )}
 
@@ -259,34 +277,41 @@ export default async function LevelPage({ params }: LevelPageProps) {
             levelTitle={levelContent.meta.title}
             steps={steps}
             isSimpleLevel={isLoggedIn ? isSimpleLevel : false}
+            isDeliveryLevel={isLoggedIn ? isDeliveryLevel : false}
+            deliveryPrompt={levelContent.meta.delivery_prompt}
             isLevelCompleted={isCompleted}
             nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
           />
 
-          {/* 未登录 CTA */}
+          {/* ── 未登录 CTA ── */}
           {!isLoggedIn && (
-            <div className="mt-10 p-6 rounded-2xl border border-indigo-500/30 bg-indigo-500/5 text-center">
-              <h3 className="text-lg font-bold mb-2">登录后继续闯关</h3>
-              <p className="text-sm text-muted-foreground mb-5">
+            <div className="mt-10 px-8 py-8 rounded-2xl border border-gray-100 bg-gray-50 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto mb-4">
+                <LogIn className="h-5 w-5 text-indigo-500" />
+              </div>
+              <h3 className="text-lg font-black text-gray-900 mb-2">登录后继续闯关</h3>
+              <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto leading-relaxed">
                 保存学习进度、提交作品并获得 XP。完全免费。
               </p>
               <div className="flex items-center justify-center gap-3">
-                <Link href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}>
-                  <Button size="lg" className="gap-2">
-                    <LogIn className="h-4 w-4" />
-                    登录后开始
-                  </Button>
+                <Link
+                  href={`/zh/login?next=/zh/levels/${chapterId}/${levelId}`}
+                  className="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
+                >
+                  <LogIn className="h-3.5 w-3.5" />
+                  登录后开始
                 </Link>
-                <Link href={`/zh/register?next=/zh/levels/${chapterId}/${levelId}`}>
-                  <Button size="lg" variant="outline">
-                    免费注册
-                  </Button>
+                <Link
+                  href={`/zh/register?next=/zh/levels/${chapterId}/${levelId}`}
+                  className="inline-flex items-center h-10 px-6 rounded-full border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
+                >
+                  免费注册
                 </Link>
               </div>
             </div>
           )}
 
-          {/* Submission - 只在登录、非简单关且未通关时显示 */}
+          {/* Submission - 只在登录、非简单关（composite/regex 等）且未通关时显示 */}
           {isLoggedIn && !isCompleted && !isSimpleLevel && level && (
             <SubmissionForm
               levelId={levelId}
@@ -296,11 +321,11 @@ export default async function LevelPage({ params }: LevelPageProps) {
             />
           )}
 
-          {/* 相关教程内链 */}
+          {/* ── 相关教程内链 ── */}
           {siblingContents.length > 0 && (
-            <div className="mt-12 pt-8 border-t">
-              <h2 className="text-sm font-semibold text-muted-foreground mb-4 flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
+            <div className="mt-12 pt-8 border-t border-gray-100">
+              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <BookOpen className="h-3.5 w-3.5" />
                 本章其他教程
               </h2>
               <div className="grid sm:grid-cols-2 gap-2">
@@ -308,66 +333,71 @@ export default async function LevelPage({ params }: LevelPageProps) {
                   <Link
                     key={s.levelId}
                     href={`/zh/levels/${s.chapterId}/${s.levelId}`}
-                    className="flex items-start gap-2 p-3 rounded-lg border border-border/40 bg-card/20 hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all group text-sm"
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-all group text-sm"
                   >
-                    <ChevronRight className="h-4 w-4 text-indigo-400 mt-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                    <span className="text-foreground/80 group-hover:text-indigo-300 transition-colors leading-snug">
+                    <ChevronRight className="h-3.5 w-3.5 text-gray-300 shrink-0 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
+                    <span className="text-gray-600 group-hover:text-gray-900 transition-colors leading-snug">
                       {s.shortTitle}
                     </span>
                   </Link>
                 ))}
               </div>
               {nextChapterContent && nextChapterFirst && (
-                <div className="mt-3">
+                <div className="mt-2">
                   <Link
                     href={`/zh/levels/${nextChapterFirst.chapterId}/${nextChapterFirst.levelId}`}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-indigo-500/20 bg-indigo-500/5 hover:bg-indigo-500/10 transition-all group text-sm"
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl border border-indigo-100 bg-indigo-50/50 hover:bg-indigo-50 transition-all group text-sm"
                   >
-                    <ArrowRight className="h-4 w-4 text-indigo-400 shrink-0" />
-                    <span className="text-indigo-300 font-medium">进入下一章：{nextChapterContent.meta.title}</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-indigo-400 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                    <span className="text-indigo-600 font-medium">进入下一章：{nextChapterContent.meta.title}</span>
                   </Link>
                 </div>
               )}
             </div>
           )}
 
-          {/* Navigation footer */}
-          <div className="mt-8 pt-6 border-t flex items-center justify-between">
+          {/* ── 底部导航 ── */}
+          <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between">
             {prevLevel ? (
-              <Link href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}>
-                <Button variant="ghost" size="sm" className="gap-1">
-                  <ChevronLeft className="h-4 w-4" />
-                  上一关
-                </Button>
+              <Link
+                href={`/zh/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}
+                className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 px-4 py-2 rounded-full border border-gray-100 hover:border-gray-200 transition-all"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                上一关
               </Link>
             ) : (
               <div />
             )}
 
             {(isCompleted || isSkipped) && nextLevel ? (
-              <Link href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
-                <Button className="gap-1">
-                  下一关
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+              <Link
+                href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}
+                className="flex items-center gap-1.5 h-10 px-6 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
+              >
+                下一关
+                <ArrowRight className="h-4 w-4" />
               </Link>
             ) : isCompleted && !nextLevel ? (
-              <Link href="/zh/dashboard">
-                <Button className="gap-1">
-                  🎉 恭喜通关全部关卡！
-                </Button>
+              <Link
+                href="/zh/dashboard"
+                className="flex items-center gap-1.5 h-10 px-6 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
+              >
+                🎉 恭喜通关全部关卡！
               </Link>
             ) : nextLevel && !isLoggedIn ? (
-              <Link href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}>
-                <Button variant="outline" className="gap-1">
-                  下一关
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+              <Link
+                href={`/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}`}
+                className="flex items-center gap-1.5 h-10 px-6 rounded-full border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
+              >
+                下一关
+                <ArrowRight className="h-4 w-4" />
               </Link>
             ) : (
               <div />
             )}
           </div>
+
         </div>
       </main>
     </div>

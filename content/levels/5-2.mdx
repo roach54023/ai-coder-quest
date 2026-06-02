@@ -1,153 +1,91 @@
 ---
 id: "5-2"
-title: "部署到 Vercel"
-page_title: "把网站部署到互联网上"
-seo_title: "Vercel 部署教程 - 免费把网站上线到全球"
-seo_description: "用 Vercel 把你的 Next.js 项目免费部署上线，连接自定义域名，让全世界都能访问你的产品。"
-keywords: ["vercel部署教程","nextjs部署上线","免费网站部署","vercel中文教程","AI项目上线"]
+title: "接入 AI"
+page_title: "让网站变聪明：接入 AI 对话能力"
+seo_title: "Next.js 接入 OpenAI 教程 - AI 对话功能实现"
+seo_description: "用 AI SDK 给 Next.js 网站接入 OpenAI 对话能力，做一个能回答访客问题的 AI 助手。"
+keywords: ["nextjs接入openai", "AI对话功能", "vercel ai sdk", "AI助手教程", "chatbot实现"]
 chapter: "chapter_5"
 order: 2
 is_delivery: false
-verification_type: "url_check"
-verification_config:
-  expected_status: 200
+verification_type: "checklist"
+verification_config: {}
 estimated_minutes: 25
 ---
 
-代码在 GitHub 上了，现在让它变成一个真正的网站——有 URL，全世界都能访问。
+你的作品集网站已经很完整了。现在加上最有意思的一块——让访客可以直接问 AI 关于你的问题。
 
-## 部署平台选择
-
-| 平台 | 特点 | 免费额度 | 推荐场景 |
-|------|------|---------|---------|
-| **Vercel**（首推） | Next.js 官方平台，部署最简单 | 每月 100GB 带宽 | Next.js 项目 |
-| **Netlify** | 老牌平台，稳定可靠 | 每月 100GB 带宽 | 静态站点、前端项目 |
-| **Railway** | 支持数据库+后端一站式 | 每月 $5 免费额度 | 全栈项目 |
-| **Zeabur** | 国内团队，对大陆友好 | 有免费计划 | 大陆用户首选备选 |
-
-**推荐 Vercel**，因为我们用的是 Next.js，Vercel 是它的"亲爹"，兼容性最好。
-
----
-
-## 方案一：Vercel 部署（推荐）
-
-1. 打开 https://vercel.com 用 **GitHub 账号**登录
-2. 点击 **"Add New → Project"**
-3. 选择你刚才推送的 GitHub 仓库
-4. 在 **Environment Variables** 中添加你的环境变量：
-   - `NEXT_PUBLIC_SUPABASE_URL` = 你的 Supabase URL
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = 你的 Supabase Anon Key
-   - 其他 `.env.local` 中的变量（**不要**加 `.env.local` 文件本身）
-5. 点击 **"Deploy"**
-6. 等待 1-2 分钟，部署完成！
-7. 你会得到一个 `https://xxx.vercel.app` 的地址
-
-**避坑指南**
-
-**坑1：环境变量没生效**
-
-Vercel 的环境变量分三个环境：Production / Preview / Development。确保你的变量勾选了 **Production**。添加完变量后需要**重新部署**才会生效（点 Deployments → 最新一条 → Redeploy）。
-
-**坑2：构建失败 — TypeScript 类型错误**
-
-Vercel 构建比本地严格。本地 `npm run dev` 没问题不代表构建能过。部署前先在本地跑一次：
-
-```bash
-npm run build
-```
-
-如果报错，把错误信息发给 AI："帮我修这个构建错误：[粘贴错误]"
-
-**坑3：API 路由 404**
-
-确保你的 API 路由文件在 `app/api/` 目录下，且导出了正确的 HTTP 方法函数（`GET`、`POST` 等）。
-
-**坑4：Supabase 连接失败**
-
-在 Supabase 控制台 → Settings → API → 确认你的 Vercel 域名不在 CORS 限制中。如果用了 RLS，确保策略允许匿名访问公开数据。
-
-**坑5：部署后页面白屏**
-
-通常是客户端组件用了服务端 API。检查浏览器控制台（F12）的报错信息，发给 AI 帮你修。
-
----
-
-## 方案二：Zeabur（大陆用户备选）
-
-如果你访问 Vercel 速度很慢，可以试试 Zeabur：
-
-1. 打开 https://zeabur.com 注册账号
-2. 创建项目 → 添加服务 → 选择 Git → 连接 GitHub 仓库
-3. 添加环境变量
-4. 自动部署完成
-
-Zeabur 的优势是服务器有亚洲节点，大陆访问速度更快。
-
----
-
-## 方案三：Netlify
-
-适合纯前端或静态站点：
-
-1. 打开 https://netlify.com 用 GitHub 登录
-2. "Add new site" → "Import an existing project" → 选仓库
-3. Build command 填 `npm run build`，Publish directory 填 `.next`（或 `out`）
-4. 添加环境变量 → Deploy
-
-注意：Netlify 对 Next.js App Router 的支持不如 Vercel 完善，如果遇到问题优先用 Vercel。
-
----
-
-## 方案四：Railway（全栈一站式）
-
-如果你的项目需要后端服务或数据库：
-
-1. 打开 https://railway.app 用 GitHub 登录
-2. "New Project" → "Deploy from GitHub repo"
-3. Railway 会自动检测 Next.js 项目并配置
-4. 添加环境变量 → 自动部署
-
-Railway 的优势是可以在同一个平台上跑数据库 + 后端 + 前端。
-
----
+比如："你做过哪些设计项目？"、"你擅长什么技术？"——AI 会根据你的作品和简介来回答。
 
 ## 操作步骤
 
-### 第一步：选择部署平台并导入仓库
+### 第一步：配置 AI API
 
-参考上方的平台对比，选择适合你的平台（推荐 Vercel）。
+这里用 OpenAI 的 API，也可以换成其他兼容的服务（比如 DeepSeek，价格更便宜）。
 
-注册并登录平台后，选择"导入 GitHub 仓库"，找到你上一关推送的仓库并选择它。
+对 AI 说：
 
-### 第二步：配置环境变量并点击部署
+```text
+帮我给网站接入 AI 对话能力：
 
-在平台的部署配置页面，将你 `.env.local` 文件中的所有环境变量逐一填入：
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- 其他密钥（注意不要把 `.env.local` 文件本身上传）
+1. 安装 ai 和 @ai-sdk/openai：npm install ai @ai-sdk/openai
+2. 在 .env.local 里添加 OPENAI_API_KEY=（你的 API Key）
+3. 创建 app/api/chat/route.ts，实现流式对话接口：
+   - 接收用户消息
+   - 加上系统提示词（介绍你是谁、你的技能、你的作品）
+   - 调用 OpenAI API，流式返回回复
+```
 
-填好后点击 **Deploy**，等待 1-2 分钟构建完成。
+> **获取 API Key**：访问 [platform.openai.com](https://platform.openai.com)，注册账号，在 API Keys 页面创建新的 Key。如果想用 DeepSeek，访问 [platform.deepseek.com](https://platform.deepseek.com)，价格约为 OpenAI 的 1/10。
 
-如果构建失败，把构建日志最后几行红色错误复制给 AI："帮我修这个部署报错：[粘贴错误]"
+---
 
-### 第三步：验证线上可访问
+### 第二步：做 AI 对话组件
 
-部署成功后，你会得到一个公网地址（如 `https://xxx.vercel.app`）。
+对 AI 说：
 
-在浏览器打开这个地址，确认：
-- 首页能正常加载
-- 数据库连接正常（有数据显示）
-- 手机浏览器也能打开
+```text
+在网站右下角加一个 AI 对话悬浮按钮：
 
-复制这个 URL，准备提交通关。
+1. 右下角有一个圆形按钮，图标是对话气泡
+2. 点击后弹出对话窗口（宽 360px，高 480px）
+3. 对话窗口有：
+   - 顶部标题"问问 AI 助手"和关闭按钮
+   - 中间的消息列表（用户消息靠右，AI 消息靠左）
+   - 底部输入框和发送按钮
+4. AI 回复时有打字机效果（流式显示）
+5. 使用 Vercel AI SDK 的 useChat hook 来管理对话状态
+```
+
+---
+
+### 第三步：优化系统提示词
+
+对 AI 说：
+
+```text
+帮我优化 AI 助手的系统提示词，让它能更好地介绍我：
+
+系统提示词应该包含：
+1. 你的角色定位（比如：你是[你的名字]的 AI 助手，负责回答访客关于[你的名字]的问题）
+2. 你的基本信息（技能、经历、擅长领域）
+3. 你的作品列表（从数据库获取，动态插入提示词）
+4. 回答风格（简洁、友好、专业）
+5. 边界（不知道的问题就说不知道，不要编造）
+
+把作品数据动态插入提示词：在 /api/chat 接口里先查询数据库获取作品列表，然后拼接到系统提示词里。
+```
 
 ## 通关条件
 
-粘贴你的部署地址（如 `https://my-app.vercel.app` 或其他平台的 URL）
+完成以下三步即可通关：
+
+1. 右下角有 AI 对话按钮，点击可以打开对话窗口
+2. 输入问题后，AI 有流式回复（打字机效果）
+3. AI 能正确介绍你的作品（回答"你做过哪些项目？"）
 
 ## 卡住了？
 
-- 部署失败？先看构建日志（Build Logs），把**最后几行红色错误**发给 AI
-- 对 AI 说："Vercel 部署报错了：[粘贴错误信息]，帮我修"
-- 如果是网络问题访问不了 Vercel，换 Zeabur 试试
-- 实在搞不定？发邮件给我：**roach54023@qq.com**，附上报错截图
+- API Key 不对？确认 Key 没有过期，账号有余额
+- 流式回复不工作？让 AI 检查 route.ts 里是否正确使用了 `streamText` 和 `toDataStreamResponse()`
+- AI 回答不准确？优化系统提示词，提供更详细的背景信息

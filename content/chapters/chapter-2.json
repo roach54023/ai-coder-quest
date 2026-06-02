@@ -1,13 +1,13 @@
 {
   "id": "chapter_2",
-  "title": "第二章 · 工程化起步",
-  "subtitle": "从 HTML 文件升级到 React 工程，做出个人作品集并部署到 Vercel",
-  "description": "第一章的网站能用，但它是手工作坊模式。这一章把它升级成工厂模式：用 React 组件化开发，改一处全站生效；用 Vercel 连接 GitHub，推代码自动上线。最终交付物是一个有动画、有响应式、有真实内容的个人作品集网站。",
+  "title": "第二章 · 工程化",
+  "subtitle": "用 React 做个人作品集，连接 GitHub 自动部署到 Vercel",
+  "description": "第一章的网站是手工作坊模式——几个 HTML 文件，改一处要改三遍。这一章升级到工厂模式：用 React 组件化开发，改一处全站生效；连接 GitHub，推代码自动上线。最终交付一个有动画、有响应式、有真实内容的个人作品集，部署在 Vercel 上。",
   "rank_unlocked": {
     "id": "rank_2",
     "name": "AI 前端开发者",
     "subtitle": "能用现代工具做出真实项目",
-    "salary": "¥5K/月"
+    "salary": "¥8K/月"
   },
   "levels": ["2-1", "2-2", "2-3", "2-4", "2-5"],
   "delivery_level": "2-5",

@@ -1,91 +1,83 @@
 ---
 id: "5-3"
-title: "正式发布"
-page_title: "正式发布你的产品"
-seo_title: "网站 SEO 优化教程 - 让谷歌百度找到你的产品"
-seo_description: "用 AI 给你的网站做 SEO 优化：meta 标签、结构化数据、sitemap、页面速度，让搜索引擎收录你的产品。"
-keywords: ["网站seo优化教程","nextjs seo教程","AI做seo","独立开发seo","网站搜索引擎优化"]
+title: "接入支付"
+page_title: "让网站能赚钱：接入 Stripe 支付"
+seo_title: "Stripe 支付集成教程 - Next.js 接入在线支付"
+seo_description: "用 Stripe 给 Next.js 网站加上在线支付功能，实现付费解锁内容或一次性购买。"
+keywords: ["stripe支付教程", "nextjs接入支付", "在线支付集成", "AI做支付功能", "付费内容解锁"]
 chapter: "chapter_5"
 order: 3
-is_delivery: true
-verification_type: "composite"
-verification_config:
-  checks:
-    - type: "url_check"
-      expected_status: 200
-    - type: "github_url"
-      must_have_files: ["package.json"]
+is_delivery: false
+verification_type: "checklist"
+verification_config: {}
 estimated_minutes: 30
 ---
 
-最后一关。你的网站已经上线了，但一个真正的产品还需要一些收尾工作。
+你的网站现在有 AI 能力了。如果你想把某些功能做成付费的——比如"付费解锁完整简历"、"付费预约咨询"——就需要接入支付。
+
+这一关用 Stripe 实现一个最简单的支付流程。
 
 ## 操作步骤
 
-### 第一步：SEO 优化完成
+### 第一步：注册 Stripe 账号
+
+1. 访问 [stripe.com](https://stripe.com)，注册账号
+2. 注册后默认是测试模式，可以用测试卡号付款，不会真的扣钱
+3. 在 Dashboard 左侧点击 "Developers" → "API keys"，复制 Publishable key 和 Secret key
+
+---
+
+### 第二步：创建付费产品
 
 对 AI 说：
 
 ```text
-帮我完善 SEO 优化：
+帮我在网站上加一个付费功能：
 
-1. 优化 SEO：每个页面有独立的 title 和 meta description
-2. 添加 sitemap.xml
-3. 添加 robots.txt
-4. 确保环境变量没有泄露到前端
-5. README.md 写清楚项目介绍和技术栈
+场景：访客可以付费（¥29）解锁我的完整简历 PDF 下载
+
+1. 安装 stripe：npm install stripe @stripe/stripe-js
+2. 在 .env.local 里添加：
+   STRIPE_SECRET_KEY=（你的 Secret key）
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=（你的 Publishable key）
+3. 在 Stripe Dashboard 里创建一个产品"完整简历"，价格 ¥29（或 $2.99 美元）
+4. 创建 app/api/checkout/route.ts，生成 Stripe Checkout Session
+5. 在关于页或首页加一个"解锁完整简历 ¥29"按钮，点击后跳转到 Stripe 支付页面
 ```
 
-完成后，用浏览器打开 `https://你的域名/sitemap.xml`，确认 sitemap 能正常访问。
+---
 
-### 第二步：社交分享卡片生效
+### 第三步：处理支付结果
 
-继续对 AI 说：
+对 AI 说：
 
 ```text
-帮我添加社交分享卡片：
+处理支付完成后的逻辑：
 
-6. 添加网站 favicon（如果没有的话，用首字母生成一个简单的）
-7. 添加 og:image（Open Graph 图片，分享到微信/微博时会显示的封面）
+1. 创建支付成功页面 /payment/success：
+   - 显示"支付成功！"和感谢文字
+   - 显示简历 PDF 的下载按钮
+   - 有返回首页的链接
+
+2. 创建支付取消页面 /payment/cancel：
+   - 显示"支付已取消"
+   - 有重新支付的按钮
+
+3. 在 Stripe Checkout Session 里设置 success_url 和 cancel_url 指向这两个页面
+
+4. 用测试卡号 4242 4242 4242 4242（有效期任意未来日期，CVV 任意三位数）测试支付流程
 ```
-
-完成后，用 [opengraph.xyz](https://www.opengraph.xyz) 输入你的网站 URL，预览分享卡片的效果。
-
-### 第三步：手机适配确认
-
-推送最终代码到 GitHub，Vercel 会自动重新部署：
-
-```text
-帮我做最后的收尾检查：
-
-8. 确保所有页面都能正常访问（没有 404）
-9. 检查移动端适配，确保手机上所有功能正常
-10. 在 Supabase 中设置 RLS（行级安全策略），保护数据
-```
-
-推送代码后等待 Vercel 自动完成部署，然后用手机浏览器访问你的网站，确认一切正常。
-
-### 第四步：分享到社交平台
-
-一切就绪，把链接发给一个朋友，让他们在手机上试试。
-
-然后把你的作品分享出去——朋友圈、微博、即刻、Twitter/X，或者任何你活跃的地方。
-
-粘贴你的线上网站 URL + GitHub 仓库地址，提交通关。
 
 ## 通关条件
 
-粘贴你的线上网站 URL + GitHub 仓库地址
+完成以下三步即可通关：
+
+1. 点击"解锁完整简历"按钮，跳转到 Stripe 支付页面
+2. 用测试卡号完成支付，跳转到成功页面
+3. 成功页面有下载按钮（可以先链接到任意 PDF）
 
 ## 卡住了？
 
-- RLS 策略不会写？对 AI 说："帮我给 posts 表设置 RLS，规则是：所有人可以读公开文章，只有作者可以编辑自己的文章"
-- Lighthouse 分数低？让 AI 帮你优化，通常是图片和未使用的 JS 包导致的
-- 如果 Vercel 自动部署没触发，检查 GitHub 仓库是否正确关联
-- 有任何问题随时联系我：**roach54023@qq.com**
-
-## 恭喜通关！
-
-回头看一下你现在手上有什么：前端界面、后端 API、数据库、用户系统、文件上传，部署在互联网上，谁都能访问。这就是一个完整的互联网产品。
-
-整个过程你没有手动写过一行代码。你做的事情是：用自然语言告诉 AI 你想要什么，然后验证结果。以后想做什么新东西，流程也是一样的。
+- 跳转到 Stripe 失败？检查 API Key 是否正确，确认用的是测试模式的 Key（以 `sk_test_` 开头）
+- 支付后没有跳转？检查 success_url 是否是完整的 URL（包含 `https://`）
+- 想在国内用？Stripe 在中国大陆需要境外银行卡，测试模式不受限制

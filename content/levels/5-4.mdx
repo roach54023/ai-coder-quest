@@ -1,0 +1,94 @@
+---
+id: "5-4"
+title: "最终部署"
+page_title: "大功告成：把你的完整产品推上线"
+seo_title: "全栈应用最终部署 - 生产环境配置完整指南"
+seo_description: "把带有用户认证、AI 对话、Stripe 支付的完整作品集产品部署到 Vercel，完成最终交付。"
+keywords: ["全栈应用部署", "vercel生产部署", "stripe生产环境", "nextjs最终部署"]
+chapter: "chapter_5"
+order: 4
+is_delivery: true
+verification_type: "url_submit"
+verification_config: {}
+delivery_prompt: "粘贴你的 Vercel 网址（例如 https://xxx.vercel.app）"
+estimated_minutes: 20
+---
+
+你做到了。
+
+从一个空白的文件夹，到现在这个有前端、有后端、有数据库、有登录、有 AI、有支付的完整产品。
+
+最后一步，把它推上线。
+
+## 操作步骤
+
+### 第一步：配置所有生产环境变量
+
+打开 Vercel 项目设置，在 "Environment Variables" 里添加所有新增的变量：
+
+- `OPENAI_API_KEY`（或 `DEEPSEEK_API_KEY`）
+- `STRIPE_SECRET_KEY`（**注意：生产环境用 `sk_live_` 开头的 Key，测试环境用 `sk_test_`**）
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`（生产环境用 `pk_live_` 开头）
+
+> 如果你还没准备好接受真实付款，可以先继续用测试 Key，等准备好了再换。
+
+---
+
+### 第二步：更新 Stripe 支付链接
+
+如果你用了生产环境的 Stripe Key，需要在 Stripe Dashboard 里确认产品和价格已创建（测试模式和生产模式的产品是分开的）。
+
+对 AI 说：
+
+```text
+帮我检查 Stripe 相关的代码，确认：
+1. 价格 ID 是从环境变量读取的，而不是写死在代码里
+2. success_url 和 cancel_url 使用的是生产环境的域名（从环境变量读取）
+```
+
+---
+
+### 第三步：推送并验证
+
+```bash
+git add .
+git commit -m "feat: 用户登录、AI对话、Stripe支付"
+git push
+```
+
+部署完成后，逐一验证：
+
+- 访问网站，右下角有 AI 对话按钮
+- 点击"解锁完整简历"，跳转到 Stripe 支付页面
+- 访问 `/admin/login`，用你的账号登录
+- 登录后可以进入后台管理
+
+## 通关条件
+
+完成以下三步即可通关：
+
+1. 代码已推送，Vercel 部署成功
+2. 线上 AI 对话功能正常（能收到回复）
+3. 线上支付流程可以跳转到 Stripe 页面
+
+---
+
+## 你完成了整个课程
+
+回头看看你走过的路：
+
+**序章**：打开终端，运行第一行代码，把网站部署到互联网
+
+**第一章**：做出第一个真正属于你的网站，有首页、作品页、关于页
+
+**第二章**：用 GitHub + Vercel 建立专业的开发工作流，每次改动自动部署
+
+**第三章**：暗色模式、实时搜索、联系表单、响应式适配——完整的交互体验
+
+**第四章**：API 路由、数据库、后台管理、访问统计——真正的全栈应用
+
+**第五章**：用户登录、AI 对话、在线支付——一个可以运营的产品
+
+你没有学过任何编程语言。你只是知道自己想要什么，然后让 AI 帮你实现了。
+
+**这就是 2025 年的超能力。**
