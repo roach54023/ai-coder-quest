@@ -20,18 +20,19 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "VibeCamp - 零基础 AI 编程训练营，用 Claude Code / Trae 做出真产品",
+    default: "VibeCamp - Free Vibe Coding Course for Beginners",
     template: "%s | VibeCamp",
   },
   description:
-    "VibeCamp 是专为非程序员设计的 AI 编程训练营。26 个实战关卡，用 Claude Code、OpenAI Codex 或 Trae（国内免翻墙）写代码，从零开始做出真实可用的产品并上线。完全免费。",
+    "VibeCamp is a free vibe coding course for beginners. Learn AI coding with Claude Code, Codex, Trae, Cursor, or Windsurf through 26 hands-on levels that help you build and deploy real products.",
   keywords: [
-    "AI 编程教程",
-    "Vibe Coding",
-    "Claude Code 教程",
-    "Trae 教程",
-    "零基础 AI 编程",
-    "AI 编程最佳实践",
+    "vibe coding course",
+    "vibe coding course for beginners",
+    "AI coding course for beginners",
+    "vibe coding tutorial",
+    "Claude Code course",
+    "Codex course",
+    "learn AI coding",
   ],
   icons: {
     icon: [
@@ -57,38 +58,43 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "zh_CN",
+    locale: "en_US",
+    alternateLocale: ["zh_CN"],
     url: siteUrl,
     siteName: "VibeCamp",
-    title: "VibeCamp - 零基础 AI 编程训练营",
+    title: "VibeCamp - Free Vibe Coding Course for Beginners",
     description:
-      "用 Claude Code / Codex / Trae 做出真产品。26 个实战关卡，从零到独立上线。完全免费。",
+      "Learn AI coding with Claude Code, Codex, Trae, Cursor, or Windsurf. Build and deploy real products through 26 hands-on vibe coding levels.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "VibeCamp - 零基础 AI 编程训练营",
+        alt: "VibeCamp - Vibe Coding Course for Beginners",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VibeCamp - 零基础 AI 编程训练营",
-    description: "用 Claude Code / Codex / Trae 做出真产品。26 关，从零到上线。完全免费。",
+    title: "VibeCamp - Free Vibe Coding Course for Beginners",
+    description: "Learn AI coding by building and deploying real products through 26 hands-on vibe coding levels.",
     images: ["/og-image.png"],
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      en: siteUrl,
+      "zh-CN": `${siteUrl}/zh`,
+    },
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "VibeCamp AI 编程训练营",
+  name: "VibeCamp Vibe Coding Course for Beginners",
   description:
-    "专为非程序员设计的 AI 编程训练营，通过 26 个实战关卡学会用 Claude Code、Codex、Trae 写代码，从零开始做出真实产品并上线。",
+    "A free AI coding course for beginners. Learn vibe coding through 26 hands-on levels using Claude Code, Codex, Trae, Cursor, or Windsurf to build and deploy real products.",
   provider: {
     "@type": "Organization",
     name: "VibeCamp",
@@ -97,27 +103,27 @@ const jsonLd = {
   offers: {
     "@type": "Offer",
     price: "0",
-    priceCurrency: "CNY",
+    priceCurrency: "USD",
     availability: "https://schema.org/InStock",
   },
   hasCourseInstance: {
     "@type": "CourseInstance",
     courseMode: "online",
-    inLanguage: "zh-CN",
+    inLanguage: "en",
   },
   educationalLevel: "Beginner",
-  inLanguage: "zh-CN",
+  inLanguage: "en",
   isAccessibleForFree: true,
   url: siteUrl,
   teaches: [
-    "Claude Code 使用方法",
-    "OpenAI Codex 使用方法",
-    "Trae AI 编程工具",
-    "vibe coding 方法论",
-    "React 前端开发",
-    "Next.js 全栈开发",
-    "Supabase 数据库",
-    "Vercel 部署上线",
+    "Vibe coding workflow",
+    "Claude Code basics",
+    "OpenAI Codex basics",
+    "AI coding tools",
+    "React frontend development",
+    "Next.js full-stack development",
+    "Supabase database basics",
+    "Vercel deployment",
   ],
 };
 
@@ -127,7 +133,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="dark">
+    <html lang="en" className="dark">
       <head>
         <script
           type="application/ld+json"

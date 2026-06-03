@@ -348,35 +348,35 @@ export default function HomeClient() {
       </header>
 
       {/* ── Hero ── */}
-      <section className="pt-44 pb-36 px-6 text-center">
+      <section className="pt-24 pb-12 px-5 text-center">
         {/* 标签 */}
-        <div className="inline-block text-sm text-gray-400 border border-gray-200 rounded-full px-4 py-1.5 mb-10 tracking-wide">
+        <div className="inline-block text-xs text-gray-400 border border-gray-200 rounded-full px-3.5 py-1 mb-5 tracking-wide">
           AI 编程教程 · 零基础做出真产品
         </div>
 
         {/* 主标题 */}
-        <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[1.0] mb-8 text-gray-900">
+        <h1 className="text-3xl md:text-7xl font-black tracking-tight leading-[1.05] mb-4 text-gray-900">
           Vibe Coding
           <br />
           <span className="text-indigo-600">游戏化</span> AI 编程训练营
         </h1>
 
-        <p className="text-xl text-gray-400 mb-14 max-w-lg mx-auto leading-relaxed">
+        <p className="text-base text-gray-400 mb-8 max-w-lg mx-auto leading-relaxed">
           不学编程语言，用自然语言指挥 AI 写代码。
           <br />
           26 个实战关卡，每关都有可上线的真实产出。
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a
             href="/zh/register"
-            className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-700 text-white rounded-full text-base px-10 py-4 font-semibold transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-700 text-white rounded-full text-sm px-8 py-3.5 font-semibold transition-colors"
           >
             免费开始闯关 <ArrowRight className="h-4 w-4" />
           </a>
           <Link
             href="#journey"
-            className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 rounded-full text-base px-10 py-4 font-medium transition-colors"
+            className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 rounded-full text-sm px-8 py-3.5 font-medium transition-colors"
           >
             查看课程地图
           </Link>
@@ -387,24 +387,23 @@ export default function HomeClient() {
       <div className="border-t border-gray-100" />
 
       {/* ── 学员案例 ── */}
-      <section id="cases" className="py-28 px-6">
+      <section id="cases" className="py-10 md:py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-6">
-            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">User Cases</p>
-            <h2 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight">
-              看见每一个
-              <br />
-              <span className="text-gray-300">闪亮的你</span>
+          <div className="mb-4">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">Real People · Real Products</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
+              真实学员，
+              <span className="text-indigo-600">真实产品</span>
             </h2>
           </div>
-          <p className="text-lg text-gray-400 mb-16 max-w-md">
-            加入他们，分享你的 vibe coding 故事
+          <p className="text-base text-gray-400 mb-7 max-w-md">
+            零基础，3–5 周，做出有人用、有收入的产品
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {userCases.map((c, i) => (
-              <div key={i} className="border border-gray-100 rounded-2xl p-7 hover:border-gray-300 transition-all group">
-                <div className="flex items-center gap-3 mb-5">
+              <div key={i} className="border border-gray-100 rounded-2xl p-5 hover:border-gray-300 transition-all group">
+                <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl">
                     {c.emoji}
                   </div>
@@ -416,7 +415,7 @@ export default function HomeClient() {
                 <h3 className="font-bold text-gray-900 text-base mb-3 leading-snug group-hover:text-indigo-600 transition-colors">
                   {c.story}
                 </h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-5">{c.desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">{c.desc}</p>
                 <div className="inline-block text-xs font-bold text-indigo-600 bg-indigo-50 rounded-full px-3 py-1">
                   {c.result}
                 </div>
@@ -424,7 +423,7 @@ export default function HomeClient() {
             ))}
           </div>
 
-          <div className="mt-10 text-center">
+          <div className="mt-7 text-center">
             <Link
               href="/zh/stories"
               className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors border border-gray-200 hover:border-gray-400 rounded-full px-6 py-3"
@@ -438,11 +437,11 @@ export default function HomeClient() {
       <div className="border-t border-gray-100" />
 
       {/* ── 课程地图 ── */}
-      <section id="journey" className="py-28 px-6">
+      <section id="journey" className="py-10 md:py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-20">
-            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">Course Map</p>
-            <h2 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight">
+          <div className="mb-6 md:mb-10">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">Course Map</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
               从零到独立开发
               <br />
               <span className="text-gray-300">每关都有真实产出</span>
@@ -458,7 +457,7 @@ export default function HomeClient() {
               >
                 <div className="flex flex-col md:flex-row">
                   {/* 左侧插图 */}
-                  <div className="md:w-56 shrink-0 relative overflow-hidden" style={{ minHeight: "180px" }}>
+                  <div className="hidden md:block md:w-56 shrink-0 relative overflow-hidden" style={{ minHeight: "140px" }}>
                     <div className="absolute inset-0">
                       {chapterIllustrations[stage.chapterId]}
                     </div>
@@ -471,9 +470,16 @@ export default function HomeClient() {
                   </div>
 
                   {/* 右侧内容 */}
-                  <div className="flex-1 p-6 flex flex-col md:flex-row gap-6">
+                  <div className="flex-1 p-4 md:p-6 flex flex-col md:flex-row gap-5 md:gap-6">
                     {/* 章节简介 */}
                     <div className="md:w-52 shrink-0">
+                      {/* 移动端章节标签（桌面端在插图上显示） */}
+                      <div
+                        className="inline-block md:hidden text-xs font-black px-2.5 py-1 rounded-full mb-3"
+                        style={{ background: stage.color, color: "white" }}
+                      >
+                        {stage.chapterLabel}
+                      </div>
                       <div className="text-[10px] text-gray-400 font-bold tracking-widest mb-2 uppercase">{stage.chapterEn}</div>
                       <h3 className="text-xl font-black text-gray-900 mb-2 leading-tight whitespace-pre-line">
                         {stage.tagline}
@@ -488,7 +494,7 @@ export default function HomeClient() {
                     </div>
 
                     {/* 关卡列表 */}
-                    <div className="flex-1 grid sm:grid-cols-2 gap-2 content-start">
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 content-start">
                       {stage.levels.map((level) => (
                         <Link
                           key={level.id}
@@ -521,15 +527,15 @@ export default function HomeClient() {
       <div className="border-t border-gray-100" />
 
       {/* ── FAQ ── */}
-      <section className="py-28 px-6">
+      <section className="py-12 px-6">
         <div className="max-w-2xl mx-auto">
-          <div className="mb-14">
-            <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">FAQ</p>
-            <h2 className="text-5xl font-black text-gray-900">常见问题</h2>
+          <div className="mb-8">
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">FAQ</p>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">常见问题</h2>
           </div>
           <div>
             {faqs.map((faq, i) => (
-              <div key={i} className="py-7 border-b border-gray-100 last:border-0">
+              <div key={i} className="py-4 border-b border-gray-100 last:border-0">
                 <h3 className="font-bold text-gray-900 mb-3">{faq.q}</h3>
                 <p className="text-gray-500 leading-relaxed text-sm">{faq.a}</p>
               </div>
@@ -539,8 +545,8 @@ export default function HomeClient() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 px-6 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
+      <footer className="py-8 md:py-12 px-6 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-10">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded flex-shrink-0">
@@ -554,7 +560,7 @@ export default function HomeClient() {
             <p className="text-sm text-gray-400">AI 编程教程训练营 · 游戏化学习，做出真产品</p>
           </div>
 
-          <div className="flex flex-wrap gap-x-12 gap-y-6">
+          <div className="flex flex-wrap gap-x-8 gap-y-6">
             <nav className="space-y-2.5">
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">课程</div>
               <Link href="/zh/levels/prologue/0-1" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">序章 · 装好工具</Link>

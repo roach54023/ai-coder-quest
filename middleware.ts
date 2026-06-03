@@ -8,6 +8,39 @@ export function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   const isLoggedIn = !!sessionCookie;
 
+  const legacyAppPathMap: Record<string, string> = {
+    "/dashboard": "/zh/dashboard",
+    "/profile": "/zh/profile",
+    "/share": "/zh/share",
+    "/admin": "/zh/admin",
+  };
+
+  for (const [legacyPath, zhPath] of Object.entries(legacyAppPathMap)) {
+    if (pathname === legacyPath || pathname.startsWith(`${legacyPath}/`)) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname.replace(legacyPath, zhPath);
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // If an older English page bundle still points to /zh auth pages, keep users
+  // on the English auth flow when the click came from an English public page.
+  if ((pathname === "/zh/login" || pathname === "/zh/register") && !isLoggedIn) {
+    const referer = request.headers.get("referer");
+    if (referer) {
+      const refererUrl = new URL(referer);
+      const cameFromEnglishPage =
+        refererUrl.origin === request.nextUrl.origin &&
+        !refererUrl.pathname.startsWith("/zh");
+
+      if (cameFromEnglishPage) {
+        const url = request.nextUrl.clone();
+        url.pathname = pathname === "/zh/login" ? "/login" : "/register";
+        return NextResponse.redirect(url);
+      }
+    }
+  }
+
   // 受保护的路由（/levels 已移除，教程页公开可访问）
   const protectedPaths = [
     "/dashboard", "/profile", "/share", "/admin",
@@ -26,8 +59,7 @@ export function middleware(request: NextRequest) {
   // 已登录用户访问登录/注册页面 → 重定向到 dashboard
   const loginPaths = ["/login", "/register", "/zh/login", "/zh/register"];
   if (loginPaths.includes(pathname) && isLoggedIn) {
-    const target = pathname.startsWith("/zh/") ? "/zh/dashboard" : "/dashboard";
-    return NextResponse.redirect(new URL(target, request.url));
+    return NextResponse.redirect(new URL("/zh/dashboard", request.url));
   }
 
   return NextResponse.next();
@@ -36,9 +68,13 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
+    "/dashboard",
     "/profile/:path*",
+    "/profile",
     "/share/:path*",
+    "/share",
     "/admin/:path*",
+    "/admin",
     "/login",
     "/register",
     "/zh/dashboard/:path*",

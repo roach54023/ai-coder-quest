@@ -17,6 +17,48 @@ estimated_minutes: 20
 
 和 AI 聊设计就像和真人设计师沟通一样——你说"高级感""留白多一点""像 Apple 那种"，它能理解。不需要说"padding: 24px"。
 
+## 什么是 Tailwind CSS？
+
+传统的 CSS 写法是这样的：
+
+```css
+/* 在 CSS 文件里写 */
+.button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+```
+
+Tailwind CSS 的写法是这样的：
+
+```html
+<!-- 直接在 HTML/JSX 里写 -->
+<button class="bg-blue-500 text-white px-4 py-2 rounded-md">
+  按钮
+</button>
+```
+
+Tailwind 把常用的 CSS 属性都变成了简短的类名，你直接在 HTML 里写类名，不需要单独写 CSS 文件。
+
+**为什么 Tailwind 适合 Vibe Coding？** 因为 AI 非常擅长写 Tailwind——它见过大量 Tailwind 代码，能准确理解你的设计需求并生成对应的类名组合。你说"毛玻璃效果"，AI 知道要写 `backdrop-blur-md bg-white/10`。
+
+## 常用 Tailwind 类名速查
+
+| 效果 | Tailwind 类名 |
+|------|-------------|
+| 深色背景 | `bg-gray-900` |
+| 白色文字 | `text-white` |
+| 圆角 | `rounded-lg` |
+| 阴影 | `shadow-lg` |
+| 毛玻璃 | `backdrop-blur-md bg-white/10` |
+| 居中 | `flex items-center justify-center` |
+| 网格 3 列 | `grid grid-cols-3 gap-6` |
+| hover 效果 | `hover:scale-105 transition-transform` |
+
+你不需要记住这些，AI 会帮你写。但知道这些类名的存在，能帮你更准确地描述你想要的效果。
+
 ## 操作步骤
 
 ### 第一步：接入 Tailwind CSS 并全面美化
@@ -72,6 +114,39 @@ estimated_minutes: 20
 
 如果手机端有布局问题，告诉 AI 具体是哪里不对，让它修复。
 
+---
+
+## 设计风格参考
+
+不知道选什么风格？这里有几个常见的方向：
+
+**极简深色（推荐）**：深灰/黑色背景，白色文字，一个强调色（蓝色/紫色/绿色）。适合技术类、设计类作品集。参考：Linear、Vercel 官网。
+
+**明亮简约**：白色背景，深色文字，大量留白。适合设计师、创意类作品集。参考：Notion、Apple 官网。
+
+**渐变活泼**：渐变色背景，白色文字，有动感。适合年轻、有活力的个人品牌。参考：Stripe、Figma 官网。
+
+**专业商务**：深蓝色系，白色文字，正式感强。适合求职、商务类作品集。参考：LinkedIn、咨询公司官网。
+
+---
+
+## 关于"响应式设计"
+
+Tailwind 的响应式设计非常直观：
+
+```
+sm:   ← 640px 以上（手机横屏）
+md:   ← 768px 以上（平板）
+lg:   ← 1024px 以上（桌面）
+xl:   ← 1280px 以上（大屏）
+```
+
+比如 `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` 的意思是：手机 1 列，平板 2 列，桌面 3 列。
+
+你不需要记住这些，但当 AI 写出这样的代码时，你能看懂它在做什么。
+
+---
+
 ## 通关条件
 
 完成以下三步即可通关：
@@ -85,3 +160,4 @@ estimated_minutes: 20
 - Tailwind 安装后样式不生效？让 AI 检查 `tailwind.config.js` 的 `content` 配置是否包含了你的文件路径
 - 手机端布局乱了？告诉 AI 具体哪个部分有问题，让它修复
 - 不知道怎么描述你想要的风格？打开 [Dribbble](https://dribbble.com) 搜 "portfolio website dark"，找一个你喜欢的截图，描述它的特征
+- 毛玻璃效果不明显？让 AI 调整 `backdrop-blur` 的强度，或者确认背景有足够的对比度

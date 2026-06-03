@@ -19,6 +19,32 @@ estimated_minutes: 15
 
 暗色模式不只是好看，它还是一个很好的练手场景——你会学到"状态"是什么，以及怎么让网站记住用户的选择。
 
+## 为什么暗色模式这么重要？
+
+暗色模式已经从"可选功能"变成了"用户期待"。
+
+根据 Android 和 iOS 的统计数据，超过 80% 的用户在手机上开启了暗色模式。如果你的网站没有暗色模式，这些用户打开你的网站时会看到一片刺眼的白色——第一印象就差了。
+
+除了用户体验，暗色模式还有实际好处：在 OLED 屏幕上（大多数现代手机），暗色模式能显著节省电量，因为黑色像素不发光。
+
+## 理解"状态"这个概念
+
+在实现暗色模式之前，先理解一个重要概念：**状态（State）**。
+
+状态是"会变化的数据"。暗色模式的状态就是：当前是暗色还是亮色？这个值会随着用户点击按钮而改变。
+
+在 React 里，状态用 `useState` 管理：
+
+```javascript
+const [isDark, setIsDark] = useState(false);
+// isDark 是当前值（false = 亮色，true = 暗色）
+// setIsDark 是改变这个值的函数
+```
+
+当用户点击切换按钮时，调用 `setIsDark(!isDark)`，状态改变，React 自动重新渲染页面，应用新的样式。
+
+你不需要自己写这段代码，AI 会帮你写。但理解"状态"这个概念，能帮你更好地理解 AI 在做什么。
+
 ## 操作步骤
 
 ### 第一步：加入主题切换按钮
@@ -66,6 +92,46 @@ estimated_minutes: 15
 
 如果有哪个地方颜色不对，告诉 AI 具体是哪里，让它修复。
 
+---
+
+## 关于 localStorage
+
+`localStorage` 是浏览器提供的本地存储功能，可以在用户的浏览器里存储少量数据（最多 5-10MB）。
+
+它的特点是：
+- 数据存在用户的浏览器里，不需要服务器
+- 关闭浏览器后数据还在（不像 sessionStorage 关闭就清空）
+- 只能存字符串（存对象需要用 JSON.stringify 转换）
+
+用法很简单：
+
+```javascript
+// 存数据
+localStorage.setItem('theme', 'dark');
+
+// 读数据
+const theme = localStorage.getItem('theme'); // 'dark'
+
+// 删数据
+localStorage.removeItem('theme');
+```
+
+暗色模式、语言偏好、用户设置等"不需要服务器存储的用户偏好"，都适合用 localStorage 保存。
+
+---
+
+## 关于 prefers-color-scheme
+
+`prefers-color-scheme` 是一个 CSS 媒体查询，可以检测用户的系统是否开启了暗色模式：
+
+```javascript
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+```
+
+这样你的网站就能在用户第一次访问时，自动匹配他们的系统设置，不需要用户手动切换。
+
+---
+
 ## 通关条件
 
 完成以下三步即可通关：
@@ -79,3 +145,4 @@ estimated_minutes: 15
 - 刷新后主题丢失？让 AI 检查 localStorage 的读取逻辑，确认是在页面加载时读取的
 - 某些文字在切换后看不清？告诉 AI 具体是哪个元素，让它修复颜色
 - 切换动画太突兀？让 AI 给 `body` 或根元素加上 `transition: background-color 0.2s, color 0.2s`
+- 系统暗色模式检测不准确？让 AI 检查 `prefers-color-scheme` 的读取时机，确保在客户端执行

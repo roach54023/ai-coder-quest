@@ -1,13 +1,13 @@
 import { MetadataRoute } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecodecamp.cn";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/levels", "/stories"],
-      disallow: ["/dashboard", "/profile", "/admin", "/api", "/login", "/register", "/share"],
+      allow: ["/", "/about", "/projects", "/stories", "/zh", "/zh/levels", "/zh/stories"],
+      disallow: ["/zh/dashboard", "/zh/profile", "/zh/admin", "/api", "/login", "/register", "/zh/login", "/zh/register", "/zh/share"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

@@ -17,6 +17,73 @@ estimated_minutes: 25
 
 这一关加上用户登录，让后台只有你能进。
 
+## 为什么需要用户认证？
+
+你的后台管理页面（`/admin/works`）目前是完全公开的——任何知道这个 URL 的人都能访问，修改你的作品数据。
+
+用户认证（Authentication）解决的就是这个问题：**验证"你是你"**。
+
+认证系统的核心流程：
+
+```
+用户输入邮箱+密码
+    ↓
+服务器验证是否匹配
+    ↓
+匹配成功 → 生成 Session Token（一串随机字符）
+    ↓
+Token 存入 Cookie
+    ↓
+之后每次请求，浏览器自动带上这个 Cookie
+    ↓
+服务器验证 Cookie 里的 Token → 确认用户身份
+```
+
+## 认证 vs 授权
+
+这两个概念经常被混淆：
+
+**认证（Authentication）**：你是谁？验证身份。
+- 例：输入密码登录
+
+**授权（Authorization）**：你能做什么？验证权限。
+- 例：普通用户只能看，管理员才能改
+
+这一关主要做认证——确认只有你（管理员）能进后台。
+
+## 为什么用 Supabase Auth？
+
+你已经在用 Supabase 做数据库了。Supabase 内置了完整的认证系统，不需要额外安装服务：
+
+- 支持邮箱/密码登录
+- 支持 Google、GitHub 等第三方登录（OAuth）
+- 自动处理 Token 的生成、存储、刷新
+- 与数据库的行级安全（RLS）深度集成
+
+自己从头实现一套认证系统需要处理：密码哈希、Token 生成、Session 管理、CSRF 防护……用 Supabase Auth 可以跳过所有这些，直接用现成的。
+
+## 理解 Middleware
+
+这一关会用到 Next.js 的 Middleware（中间件）。
+
+Middleware 是在请求到达页面之前运行的代码。你可以在这里：
+- 检查用户是否已登录
+- 如果没登录，重定向到登录页
+- 如果已登录，放行
+
+```
+用户访问 /admin/works
+    ↓
+Middleware 运行（检查 Cookie 里有没有有效的 Session）
+    ↓
+有 Session → 放行，显示页面
+没有 Session → 重定向到 /admin/login
+```
+
+Middleware 的好处是：你只需要写一次，所有 `/admin/*` 路由都自动受保护，不需要在每个页面里单独检查。
+
+---
+
 ## 操作步骤
 
 ### 第一步：开启 Supabase 认证
@@ -27,6 +94,8 @@ Supabase 内置了完整的用户认证系统，不需要自己写。
 2. 点击 "Providers"，确认 "Email" 已开启
 3. 点击 "Users"，点击 "Invite user"，输入你的邮箱，发送邀请
 4. 去邮箱点击邀请链接，设置密码
+
+> 💡 **为什么用邀请而不是注册？** 因为你不想让任何人都能注册账号。邀请方式只有你自己有账号，更安全。
 
 ---
 
@@ -42,12 +111,15 @@ Supabase 内置了完整的用户认证系统，不需要自己写。
    - 简洁的居中卡片布局
    - 邮箱和密码输入框
    - 登录按钮
-   - 登录失败时显示错误提示
+   - 登录失败时显示错误提示（"邮箱或密码错误"）
+   - 登录中时按钮显示 loading 状态
 3. 登录成功后跳转到 /admin/works
 4. 创建 app/api/auth/login/route.ts 处理登录请求
 
 参考 Supabase 官方的 Next.js Auth 文档实现。
 ```
+
+> ✅ **马上验证：** 访问 `/admin/login`，用你的邮箱和密码登录，确认能跳转到 `/admin/works`。**确认可用后再继续下一步。**
 
 ---
 
@@ -58,24 +130,74 @@ Supabase 内置了完整的用户认证系统，不需要自己写。
 ```text
 保护所有 /admin 路由，未登录时自动跳转到登录页：
 
-1. 创建 middleware.ts，检查用户是否已登录
-2. 访问 /admin/* 路径时，如果未登录，重定向到 /admin/login
-3. 已登录时访问 /admin/login，重定向到 /admin/works
-4. 在后台页面的右上角加上"退出登录"按钮，点击后清除登录状态并跳转到首页
+1. 创建 middleware.ts（在项目根目录，不是 app 目录里）
+2. 检查用户是否已登录（通过 Supabase session）
+3. 访问 /admin/* 路径时，如果未登录，重定向到 /admin/login
+4. 已登录时访问 /admin/login，重定向到 /admin/works
+5. 在后台页面的右上角加上"退出登录"按钮，点击后清除登录状态并跳转到首页
+
+middleware.ts 的大致结构：
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
+
+export async function middleware(req) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
+  const { data: { session } } = await supabase.auth.getSession()
+  
+  if (!session && req.nextUrl.pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/admin/login', req.url))
+  }
+  
+  return res
+}
 ```
 
 退出登录后，尝试直接访问 `/admin/works`，确认会被重定向到登录页。
+
+---
+
+### 第四步：优化登录体验（可选）
+
+基础功能做好后，可以进一步优化：
+
+```text
+优化登录页面的体验：
+1. 添加"记住我"选项（延长 session 有效期）
+2. 支持按 Enter 键提交表单
+3. 密码输入框右侧加"显示/隐藏密码"按钮
+4. 登录失败时，密码框自动清空并获得焦点
+5. 页面标题改为"管理员登录 - [你的网站名]"
+```
+
+---
+
+## 安全注意事项
+
+**不要在前端存储密码**：密码只在登录时发送给服务器，之后只存 Token。
+
+**Session 有效期**：Supabase 默认 Session 有效期是 1 小时，之后自动刷新（只要用户还在活跃）。
+
+**HTTPS 是必须的**：Cookie 里的 Token 在 HTTP 下可能被截获。Vercel 部署默认是 HTTPS，本地开发用 localhost 也是安全的。
+
+**不要把 Service Role Key 暴露给前端**：Supabase 有两种 Key：`anon key`（可以暴露）和 `service_role key`（绝对不能暴露，有完全的数据库权限）。
+
+---
 
 ## 通关条件
 
 完成以下三步即可通关：
 
-1. 登录页面可以正常访问
-2. 用你的邮箱和密码可以成功登录
-3. 未登录时访问 `/admin/works` 会跳转到登录页
+1. 登录页面可以正常访问（`/admin/login`）
+2. 用你的邮箱和密码可以成功登录，跳转到后台
+3. 未登录时访问 `/admin/works` 会自动跳转到登录页
 
 ## 卡住了？
 
-- 登录后还是跳回登录页？让 AI 检查 middleware.ts 里的 session 读取逻辑
-- 邮件没收到？检查垃圾邮件文件夹，或者在 Supabase Authentication → Users 里直接修改密码
-- 退出登录不生效？让 AI 确认退出时清除了 Supabase 的 session cookie
+**登录后还是跳回登录页？** 让 AI 检查 middleware.ts 里的 session 读取逻辑，确认 `createMiddlewareClient` 的用法正确。
+
+**邮件没收到？** 检查垃圾邮件文件夹，或者在 Supabase Authentication → Users 里直接修改密码（点击用户 → Reset Password）。
+
+**退出登录不生效？** 让 AI 确认退出时调用了 `supabase.auth.signOut()`，并且清除了 Cookie。
+
+**Middleware 不生效？** 确认 `middleware.ts` 在项目根目录（和 `package.json` 同级），不是在 `app/` 目录里。
