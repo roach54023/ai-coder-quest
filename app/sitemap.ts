@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllLevelIds } from "@/lib/content/levels";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+import { siteUrl } from "@/lib/site-url";
 
 function getChapterId(levelId: string): string {
   const prefix = levelId.split("-")[0];

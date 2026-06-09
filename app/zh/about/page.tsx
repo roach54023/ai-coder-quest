@@ -5,7 +5,7 @@ import { RANKS } from "@/lib/content/ranks";
 import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "什么是 AI 编程（Vibe Coding）零基础入门指南",

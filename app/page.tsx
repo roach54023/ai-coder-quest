@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/json-ld";
 import HomeClientEn from "./HomeClientEn";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "Vibe Coding Course for Beginners | VibeCamp",

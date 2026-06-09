@@ -5,7 +5,7 @@ import { EN_RANKS } from "@/lib/content/english-course";
 import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "What Is Vibe Coding? Beginner Guide to AI Coding",
