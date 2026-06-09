@@ -126,6 +126,7 @@ export default async function RootLayout({
   return (
     <html lang={lang} className="dark">
       <head>
+        <meta name="baidu-site-verification" content="codeva-CIBp6WMYf3" />
         <JsonLd data={globalJsonLd} />
         {/* Google Analytics 4 */}
         <Script
