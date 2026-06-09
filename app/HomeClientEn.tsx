@@ -186,7 +186,7 @@ export default function HomeClientEn() {
             <Link href="/about" className="hover:text-gray-900 transition-colors">What is Vibe Coding</Link>
             <Link href="/#journey" className="hover:text-gray-900 transition-colors">Course Map</Link>
             <Link href="/stories" className="hover:text-gray-900 transition-colors">Student Stories</Link>
-            <Link href="/zh" className="hover:text-gray-900 transition-colors">Chinese</Link>
+            <Link href="/zh" className="hover:text-gray-900 transition-colors">中文版</Link>
           </nav>
           <div className="flex items-center gap-3">
             {isPending ? (

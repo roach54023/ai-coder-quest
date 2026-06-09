@@ -165,7 +165,7 @@ export default function AboutPage() {
             <Link href="/about" className="text-gray-900 font-medium">What is Vibe Coding</Link>
             <Link href="/#journey" className="hover:text-gray-900 transition-colors">Course Map</Link>
             <Link href="/stories" className="hover:text-gray-900 transition-colors">Student Stories</Link>
-            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">Chinese</Link>
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">中文版</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
             <a href="/register">Start free</a>
