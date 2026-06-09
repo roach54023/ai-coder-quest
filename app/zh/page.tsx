@@ -4,7 +4,7 @@ import HomeClient from "../HomeClient";
 export const metadata: Metadata = {
   title: "AI 编程教程 | Vibe Coding 零基础训练营",
   description:
-    "VibeCamp 是专注 AI 编程（Vibe Coding）的游戏化教程平台。零基础用 Claude Code / Trae / Codex 做出真实产品，26 个实战关卡，每关都有可上线的产出。",
+    "VibeCamp 是专注 AI 编程教程（Vibe Coding）的游戏化学习平台。零基础用 Claude Code / Trae / Codex 做出真实产品，26 个实战关卡，每关都有可上线的产出。",
   keywords: [
     "AI 编程教程",
     "Vibe Coding",

@@ -1,0 +1,129 @@
+---
+id: "4-5"
+title: "部署第四版"
+page_title: "交付第四版：带后端能力的完整作品集"
+seo_title: "Vercel 环境变量配置 - 部署带数据库的 Next.js 应用"
+seo_description: "把带有 API 路由、数据库、后台管理和访问统计的作品集网站部署到 Vercel，配置生产环境变量。"
+keywords: ["vercel环境变量", "nextjs数据库部署", "supabase生产环境", "全栈应用部署"]
+chapter: "chapter_4"
+order: 5
+is_delivery: true
+verification_type: "url_submit"
+verification_config: {}
+delivery_prompt: "粘贴你的 Vercel 网址（例如 https://xxx.vercel.app）"
+estimated_minutes: 15
+---
+
+这一章你的网站从纯前端变成了全栈应用：有 API 接口、有数据库、有后台管理、有访问统计。
+
+部署这样的应用，需要多做一步——配置生产环境的环境变量。
+
+## 本地开发 vs 生产环境
+
+在本地开发时，你的环境变量存在 `.env.local` 文件里：
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
+RESEND_API_KEY=re_xxx...
+```
+
+但这个文件不会提交到 GitHub（因为 `.gitignore` 里排除了它），所以 Vercel 不知道这些配置。
+
+你需要在 Vercel 的控制台里手动配置这些环境变量，告诉 Vercel 生产环境用什么值。
+
+## 环境变量的三个环境
+
+Vercel 支持三个环境：
+
+- **Production（生产）**：你的正式网站，访问 `xxx.vercel.app` 时使用
+- **Preview（预览）**：每次推送到非主分支时，Vercel 会创建一个预览链接
+- **Development（开发）**：本地开发时使用（通常用 `.env.local` 覆盖）
+
+对于这门课，只需要配置 Production 环境就够了。
+
+## 操作步骤
+
+### 第一步：配置 Vercel 环境变量
+
+本地开发时，环境变量放在 `.env.local` 文件里。但这个文件不会提交到 GitHub，所以 Vercel 不知道这些配置。
+
+1. 打开 [vercel.com](https://vercel.com)，进入你的项目
+2. 点击 "Settings" → "Environment Variables"
+3. 添加以下变量：
+   - `NEXT_PUBLIC_SUPABASE_URL`：你的 Supabase 项目 URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`：你的 Supabase anon key
+   - `RESEND_API_KEY`：你的 Resend API Key（如果配置了邮件功能）
+
+每个变量填写名称和值，Environment 选择 "Production"，点击 Save。
+
+---
+
+### 第二步：提交并推送
+
+```bash
+git add .
+git commit -m "feat: API路由、数据库、后台管理、访问统计"
+git push
+```
+
+---
+
+### 第三步：验证生产环境
+
+部署完成后，验证以下功能在线上正常工作：
+
+- 作品页能正常加载（数据从数据库读取）
+- 点击作品，查看次数增加
+- 联系表单提交后有成功反馈
+- 访问 `/admin/works` 能看到后台管理页面
+
+如果某个功能在线上不工作，在 Vercel 的 "Functions" 标签里查看日志，把错误信息告诉 AI。
+
+---
+
+## 如何查看 Vercel 的函数日志
+
+当 API 路由出错时，错误信息不会显示在浏览器里（因为是服务器端错误），而是记录在 Vercel 的日志里。
+
+查看方法：
+1. 打开 Vercel 项目
+2. 点击 "Functions" 标签
+3. 找到出错的函数，点击查看日志
+4. 把错误信息复制给 AI，让它帮你排查
+
+---
+
+## 关于 Supabase 的生产环境
+
+Supabase 的免费计划有一个限制：**项目超过 7 天不活跃会被暂停**。
+
+如果你的网站部署后没有人访问，7 天后 Supabase 项目可能会被暂停，导致数据库连接失败。
+
+解决方法：
+- 定期访问你的网站（触发数据库查询）
+- 或者升级到 Supabase Pro（$25/月）
+- 或者设置一个定时任务，每天自动 ping 一下数据库
+
+对于学习项目来说，定期访问就够了。
+
+---
+
+## 通关条件
+
+完成以下三步即可通关：
+
+1. Vercel 环境变量已配置
+2. 线上作品页能正常加载数据库里的作品
+3. 线上点击作品后查看次数增加
+
+## 第四章完成！
+
+你的作品集现在是一个真正的全栈应用：
+
+- API 路由处理后端逻辑
+- Supabase 数据库存储数据
+- 后台管理页面管理内容
+- 访问统计了解访客行为
+
+下一章，我们来做最有意思的部分——接入 AI 能力，让网站真正"智能"起来。

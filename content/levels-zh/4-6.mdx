@@ -1,0 +1,248 @@
+---
+id: "4-6"
+title: "AI 能力集成"
+page_title: "给你的应用接入 AI 超能力"
+seo_title: "AI 功能集成教程：给 SaaS 产品接入 AI 聊天"
+seo_description: "这篇 AI 功能集成教程教你用 DeepSeek/OpenAI API 给全栈应用加上 AI 聊天：流式输出、对话历史、Rate Limiting，做出真正可商用的 AI 产品。"
+keywords: ["AI功能集成教程","DeepSeek API教程","nextjs接入AI","AI聊天功能开发","全栈AI应用教程"]
+chapter: "chapter_4"
+order: 6
+is_delivery: true
+verification_type: "composite"
+verification_config:
+  checks:
+    - type: "url_check"
+      expected_status: 200
+estimated_minutes: 40
+---
+
+这是第四章的终极关卡。你已经有了全栈应用——现在给它加上 AI 能力，让你的产品真正具备"2025年该有的样子"。
+
+## 为什么 AI 功能是现在最值得学的技能
+
+2023年之前，给产品加 AI 功能意味着：招一个机器学习工程师、搭建 GPU 服务器、训练模型、维护推理服务……成本百万起步。
+
+2025年，你只需要：一个 API Key + 几十行代码 + 每月几十块钱的 API 费用。
+
+这个变化的意义是：**AI 能力从大公司的专属武器，变成了每个独立开发者都能用的基础设施**。
+
+你的应用可以做到：
+
+- **智能对话**：接入 ChatGPT/Claude API，让用户跟你的产品对话
+- **内容生成**：自动写文案、生成摘要、翻译
+- **图片理解**：上传图片让 AI 分析内容
+- **智能搜索**：语义搜索，而不是关键词匹配
+- **数据分析**：让 AI 帮用户分析数据、生成报告
+
+这一关先实现最基础也最通用的能力——**AI 聊天**，然后在此基础上叠加更多智能功能。
+
+## 选哪个 AI 服务？
+
+市面上的 AI API 服务很多，对于国内开发者来说，选择时主要考虑三个因素：能不能直连、价格、效果。
+
+| 服务 | 模型 | 价格（输入/输出） | 直连 | 推荐场景 |
+|------|------|------|------|------|
+| **DeepSeek** | DeepSeek-V3 | ¥1/¥2 每百万token | ✅ 国内直连 | **首选，性价比最高** |
+| **智谱 AI** | GLM-4 | 有免费额度 | ✅ 国内直连 | 学生/初学者 |
+| **月之暗面** | Moonshot | ¥12/¥12 每百万token | ✅ 国内直连 | 长文本处理 |
+| **OpenAI** | GPT-4o-mini | $0.15/$0.6 每百万token | ❌ 需代理 | 海外用户 |
+| **Anthropic** | Claude 3.5 Haiku | $0.8/$4 每百万token | ❌ 需代理 | 代码生成 |
+
+**推荐新手用 DeepSeek**：国内直连、价格极低（比 OpenAI 便宜约 10 倍）、效果优秀，且 API 格式完全兼容 OpenAI SDK，换模型只需改一行代码。
+
+## 理解 Token 和费用
+
+AI API 按 token 计费。Token 是 AI 处理文本的基本单位，大约：
+
+- 1 个英文单词 ≈ 1.3 个 token
+- 1 个中文字 ≈ 1.5-2 个 token
+- 1000 个中文字 ≈ 1500-2000 个 token
+
+以 DeepSeek 为例，¥1/百万 token 意味着：
+- 发送 1000 个中文字的消息 ≈ 0.002 元
+- 一次完整对话（来回 10 轮）≈ 0.02-0.05 元
+- 每天 100 个用户各对话 5 轮 ≈ 1-5 元/天
+
+对于学习项目来说，费用几乎可以忽略不计。
+
+## 理解流式响应（Streaming）
+
+普通 API 调用是"等 AI 想完再一次性返回"，用户要等 5-10 秒才看到回复。
+
+流式响应是"AI 想到哪说到哪，边生成边传输"，用户立刻看到第一个字，然后像打字机一样逐字显示。
+
+这是现代 AI 产品的标配体验。实现原理：
+
+```
+用户发消息
+    ↓
+服务器调用 AI API（stream: true）
+    ↓
+AI 每生成几个 token，就立刻推送给服务器
+    ↓
+服务器通过 Server-Sent Events 推送给浏览器
+    ↓
+浏览器逐字显示
+```
+
+---
+
+## 操作步骤
+
+### 第一步：获取 AI API Key
+
+选定你的 AI 服务提供商，注册账号并创建 API Key：
+
+- **DeepSeek**：访问 [platform.deepseek.com](https://platform.deepseek.com) → 注册 → API Keys → 创建
+- **智谱 AI**：访问 [open.bigmodel.cn](https://open.bigmodel.cn) → 注册 → API Keys
+- **OpenAI**：访问 [platform.openai.com](https://platform.openai.com) → API Keys
+- **Anthropic**：访问 [console.anthropic.com](https://console.anthropic.com) → API Keys
+
+把 API Key 记下来（待会要填到代码里）。新用户通常有免费额度，够本关开发测试用。
+
+> ⚠️ **安全提醒**：API Key 是你的"钱包钥匙"，绝对不能提交到 GitHub。它应该只存在 `.env.local` 文件里，而这个文件已经被 `.gitignore` 排除了。
+
+---
+
+### 第二步：创建 AI 聊天功能
+
+钥匙有了，现在让 AI 帮你搭建完整的聊天界面。对你的 AI 编程助手说：
+
+```text
+帮我给项目添加 AI 聊天功能：
+
+技术方案：
+1. 使用 DeepSeek API（兼容 OpenAI SDK 格式）
+2. 安装 openai 包（DeepSeek 兼容 OpenAI 的 SDK）
+3. 创建 /api/chat 接口，实现流式响应（streaming）
+4. 前端做一个聊天界面：
+   - 消息列表（区分用户消息和 AI 回复）
+   - 输入框 + 发送按钮
+   - AI 回复时显示打字机效果（逐字显示）
+   - 支持 Markdown 渲染
+5. 添加对话历史记录（存到数据库）
+
+环境变量：
+DEEPSEEK_API_KEY=sk-xxx
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+
+代码示例：
+const openai = new OpenAI({
+  apiKey: process.env.DEEPSEEK_API_KEY,
+  baseURL: process.env.DEEPSEEK_BASE_URL,
+});
+
+const stream = await openai.chat.completions.create({
+  model: "deepseek-chat",
+  messages: [...],
+  stream: true,
+});
+```
+
+AI 写完代码后，把 `.env.local` 中的 `sk-xxx` 替换成你第一步拿到的真实 API Key。
+
+> ✅ **马上验证：** 启动项目，打开聊天页面，随便问 AI 一句话。如果能看到 AI 逐字回复，说明基础链路通了。**确认可用后再继续下一步。**
+
+---
+
+### 第三步：添加智能功能
+
+聊天能跑通后，根据你应用的定位添加更具体的 AI 能力（选一个方向，或跳过直接到下一步）：
+
+**内容管理系统（博客/CMS）：**
+
+```text
+帮我添加 AI 辅助写作功能：文章编辑器旁边加"AI 助手"面板，功能包括一键生成摘要、续写、改写、翻译成英文，选中文字后右键菜单出现"AI 润色"选项，自动生成 SEO 标题和描述。
+```
+
+**电商/产品类：**
+
+```text
+帮我添加 AI 智能推荐：根据用户浏览历史推荐相关内容，智能搜索（用户输入自然语言 AI 理解意图后返回结果），自动生成产品描述。
+```
+
+**工具类应用：**
+
+```text
+帮我添加 AI 数据分析功能：用户上传 CSV/Excel 文件，AI 自动分析数据特征、生成可视化图表，用自然语言提问 AI 回答关于数据的问题，生成 Markdown 格式分析报告。
+```
+
+---
+
+### 第四步：添加安全防护
+
+AI 功能上线之前必须加保护，否则有人写脚本疯狂调用，一晚上就能刷掉余额：
+
+```text
+帮我给 AI 功能添加安全措施：
+1. Rate limiting：每个用户每分钟最多 10 次请求
+2. Token 限制：单次对话最多 2000 tokens
+3. 内容过滤：检测并拒绝不当内容
+4. 费用控制：设置每日 API 调用预算上限
+5. 错误处理：API 超时、额度用完时的友好提示
+```
+
+> ✅ **验证：** 试试快速连续发送 15 条消息，确认第 11 条开始被拦截并提示"请求过于频繁"。
+
+---
+
+### 第五步：优化体验
+
+最后一步让整个 AI 功能感觉"丝滑"：
+
+```text
+帮我优化 AI 功能的用户体验：
+1. 加载状态：AI 思考时显示动画
+2. 错误重试：失败时自动重试一次
+3. 响应缓存：相同问题不重复调用 API
+4. 流式输出：逐字显示 AI 回复，不要等全部生成完
+5. 快捷指令：预设一些常用 prompt 模板
+```
+
+做完后整体体验一遍：打开聊天页面 → 发消息 → 看到打字机效果的回复 → 快速连发验证限流 → 试试快捷指令。如果整个流程顺畅，恭喜——你的产品有 AI 了。
+
+---
+
+## 常见问题排查
+
+**Q: 调用 API 报 401 错误？**
+
+API Key 不对或已过期。检查 `.env.local` 里的 Key 是否正确，注意不要有多余的空格。
+
+**Q: 流式响应不工作，一次性返回所有内容？**
+
+后端需要正确设置响应头 `Content-Type: text/event-stream`，前端需要用 `ReadableStream` 读取。让 AI 检查这两处。
+
+**Q: 本地能用，部署到 Vercel 后不工作？**
+
+最常见原因是忘记在 Vercel 配置环境变量。去 Vercel 项目设置 → Environment Variables，添加 `DEEPSEEK_API_KEY`。
+
+**Q: API 调用费用会不会很高？**
+
+DeepSeek 非常便宜，日常开发测试一个月花不到 10 块钱。上线后可以通过 rate limiting 控制成本。建议在 DeepSeek 控制台设置每月消费上限。
+
+**Q: 想换成 OpenAI 或 Claude 怎么改？**
+
+只需改两行代码：`baseURL` 和 `model` 名称。这就是为什么推荐用 OpenAI SDK——它是行业标准，大多数 AI 服务都兼容这个格式。
+
+---
+
+## 通关条件
+
+截图展示：
+
+1. 你的应用中有一个可用的 AI 功能（聊天/生成/分析都行）
+2. 能看到 AI 的实时响应效果（打字机效果）
+
+提交你的应用 URL（本地 localhost 截图也可以）。
+
+## 进阶挑战（可选）
+
+- 接入多个 AI 模型，让用户选择
+- 实现 RAG（检索增强生成）：让 AI 基于你的数据回答问题
+- 添加语音输入（Web Speech API）
+- 实现 AI Agent：让 AI 能调用工具完成复杂任务
+
+---
+
+遇到问题？联系 roach54023@qq.com

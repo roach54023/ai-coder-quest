@@ -1,13 +1,65 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock, TrendingUp, Trophy, Star, ExternalLink, Mail } from "lucide-react";
+import { Clock, TrendingUp, Trophy, Star, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+
 export const metadata: Metadata = {
-  title: "学员案例 · VibeCamp AI 编程教程",
-  description: "零基础学员用 AI 编程 3-5 周做出有收入的产品。真实案例：工具站月入 ¥2800、SaaS 月入 ¥7000+。",
+  title: "AI 编程学员案例：零基础 3-5 周做出有收入的产品",
+  description: "AI 编程学员案例：零基础学员用 AI 编程 3-5 周做出有收入的产品。真实案例：工具站月入 ¥2800、SaaS 月入 ¥7000+。",
+  keywords: [
+    "AI 编程学员案例",
+    "Vibe Coding 案例",
+    "零基础 AI 编程成果",
+    "AI 编程副业变现",
+    "独立开发成功案例",
+  ],
+  openGraph: {
+    title: "AI 编程学员案例：零基础 3-5 周做出有收入的产品 | VibeCamp",
+    description: "AI 编程学员案例：零基础学员用 AI 编程 3-5 周做出有收入的产品。工具站月入 ¥2800、SaaS 月入 ¥7000+。",
+    url: `${siteUrl}/zh/stories`,
+    siteName: "VibeCamp",
+    locale: "zh_CN",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "AI 编程学员案例 VibeCamp" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI 编程学员案例：零基础 3-5 周做出有收入的产品 | VibeCamp",
+    description: "AI 编程学员案例：零基础学员用 AI 编程 3-5 周做出有收入的产品。工具站月入 ¥2800、SaaS 月入 ¥7000+。",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: `${siteUrl}/zh/stories`,
+    languages: {
+      "zh-CN": `${siteUrl}/zh/stories`,
+      en: `${siteUrl}/stories`,
+    },
+  },
 };
+
+const storiesJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "AI 编程学员案例",
+    description: "AI 编程学员案例：零基础学员用 AI 编程 3-5 周做出有收入的产品。真实案例：工具站月入 ¥2800、SaaS 月入 ¥7000+。",
+    url: `${siteUrl}/zh/stories`,
+    inLanguage: "zh-CN",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "AI 编程教程", item: `${siteUrl}/zh` },
+      { "@type": "ListItem", position: 2, name: "AI 编程学员案例", item: `${siteUrl}/zh/stories` },
+    ],
+  },
+];
 
 const cases = [
   {
@@ -120,11 +172,12 @@ const moreStories = [
 export default function StoriesPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={storiesJsonLd} />
 
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/zh" className="flex items-center gap-2">
             <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
@@ -135,7 +188,7 @@ export default function StoriesPage() {
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
             <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
-            <Link href="/#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="/zh#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
             <Link href="/zh/stories" className="text-gray-900 font-medium">学员案例</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
@@ -151,7 +204,7 @@ export default function StoriesPage() {
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
             零基础，3–5 周，
             <br />
-            <span className="text-indigo-600">做出有收入的产品</span>
+            <span className="text-indigo-600">AI 编程学员案例</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-xl mx-auto leading-relaxed">
             这些人没有任何编程背景，只是学会了「如何让 AI 帮自己写代码」——然后一切都不一样了。

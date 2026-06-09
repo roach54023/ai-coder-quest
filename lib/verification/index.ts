@@ -7,17 +7,18 @@ import { ChecklistVerifier } from './checklist-verifier';
 export interface VerificationInput {
   text_content?: string;
   url_content?: string;
+  locale?: 'en' | 'zh';
 }
 
 export interface VerificationResult {
   passed: boolean | null;
   method: 'auto' | 'manual';
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface Verifier {
-  verify(input: VerificationInput, config: Record<string, any>): Promise<VerificationResult>;
+  verify(input: VerificationInput, config: Record<string, unknown>): Promise<VerificationResult>;
 }
 
 export function createVerifier(type: string): Verifier {

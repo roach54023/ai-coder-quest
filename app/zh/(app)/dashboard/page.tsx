@@ -125,7 +125,7 @@ export default async function DashboardPage() {
 
         {/* ── 页面标题 ── */}
         <div className="mb-8">
-          <p className="text-sm text-gray-400 uppercase tracking-widest mb-2 font-medium">Course Map</p>
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-2 font-medium">课程地图</p>
           <h1 className="text-4xl font-black text-gray-900">闯关地图</h1>
         </div>
 
@@ -327,7 +327,7 @@ export default async function DashboardPage() {
                         </span>
 
                         {/* 交付物 */}
-                        {(level as any).delivery && !isCompleted && (
+                        {"delivery" in level && level.delivery && !isCompleted && (
                           <span className="text-[10px] text-amber-600 font-bold px-2 py-0.5 rounded-full bg-amber-50 border border-amber-100 shrink-0">
                             交付
                           </span>

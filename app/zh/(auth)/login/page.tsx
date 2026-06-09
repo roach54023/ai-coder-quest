@@ -1,10 +1,21 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { signIn } from "@/lib/auth-client";
+
+function Logo({ size = 26 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
+      <rect width="512" height="512" rx="115" fill="#6C47FF" />
+      <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function LoginPage() {
   return (
@@ -25,18 +36,20 @@ function LoginForm() {
   const [oauthLoading, setOauthLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleCredentialsLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCredentialsLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     setError("");
+
     const { error: signInError } = await signIn.email({ email, password, callbackURL: next });
     if (signInError) {
-      setError("邮箱或密码错误，请重试");
+      setError("邮箱或密码错误，请重试。");
       setLoading(false);
-    } else {
-      router.push(next);
-      router.refresh();
+      return;
     }
+
+    router.push(next);
+    router.refresh();
   };
 
   const handleGitHubLogin = async () => {
@@ -46,62 +59,50 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen bg-white flex">
-      {/* 左侧装饰区 */}
       <div className="hidden lg:flex lg:w-1/2 bg-gray-50 border-r border-gray-100 flex-col justify-between p-12">
-        <Link href="/" className="flex items-center gap-2">
-          <svg width="28" height="28" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
-            <rect width="512" height="512" rx="115" fill="#6C47FF"/>
-            <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-            <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
-          </svg>
+        <Link href="/zh" className="flex items-center gap-2">
+          <Logo size={28} />
           <span className="font-bold text-gray-900 text-base">VibeCamp</span>
         </Link>
 
         <div>
-          <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">Vibe Coding</p>
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">AI 编程教程</p>
           <h2 className="text-4xl font-black text-gray-900 leading-tight mb-4">
-            不学编程语言，
+            不背语法，
             <br />
             用 AI 做出真产品。
           </h2>
           <p className="text-gray-400 text-sm leading-relaxed">
-            26 个实战关卡，每关都有可上线的真实产出。
+            继续你的 AI 编程闯关课程，一关一关把项目做出来。
           </p>
         </div>
 
         <div className="space-y-3">
           {[
-            { emoji: "🚀", text: "序章：10 分钟跑通第一个网页" },
-            { emoji: "🎨", text: "第一章：做出个人作品集网站" },
-            { emoji: "⚡", text: "第五章：接入支付，做出能赚钱的产品" },
+            { icon: "01", text: "安装 AI 编程助手" },
+            { icon: "02", text: "做出并发布第一个网站" },
+            { icon: "03", text: "加入全栈、AI 和支付功能" },
           ].map((item) => (
             <div key={item.text} className="flex items-center gap-3 text-sm text-gray-500">
-              <span>{item.emoji}</span>
+              <span className="w-7 h-7 rounded-full bg-white border border-gray-100 flex items-center justify-center text-[10px] font-black text-indigo-500">
+                {item.icon}
+              </span>
               <span>{item.text}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 右侧登录区 */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
-          {/* 移动端 Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
-            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
-              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
-              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
-            </svg>
+          <Link href="/zh" className="flex items-center gap-2 mb-10 lg:hidden">
+            <Logo />
             <span className="font-bold text-gray-900">VibeCamp</span>
           </Link>
 
           <h1 className="text-2xl font-black text-gray-900 mb-1">欢迎回来</h1>
-          <p className="text-sm text-gray-400 mb-8">登录继续你的闯关之旅</p>
+          <p className="text-sm text-gray-400 mb-8">登录后继续你的 AI 编程课程。</p>
 
-          {/* GitHub 登录 */}
           <button
             onClick={handleGitHubLogin}
             disabled={oauthLoading}
@@ -117,7 +118,6 @@ function LoginForm() {
             使用 GitHub 登录
           </button>
 
-          {/* 分隔线 */}
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-100" />
@@ -127,15 +127,14 @@ function LoginForm() {
             </div>
           </div>
 
-          {/* 邮箱密码表单 */}
           <form onSubmit={handleCredentialsLogin} className="space-y-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">邮箱</label>
               <input
                 type="email"
-                placeholder="your@email.com"
+                placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 required
                 className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
               />
@@ -144,19 +143,15 @@ function LoginForm() {
               <label className="block text-xs font-medium text-gray-600 mb-1.5">密码</label>
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="请输入密码"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 required
                 className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
               />
             </div>
 
-            {error && (
-              <div className="text-xs text-red-500 bg-red-50 border border-red-100 px-4 py-3 rounded-xl">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-xs text-red-500 bg-red-50 border border-red-100 px-4 py-3 rounded-xl">{error}</div>}
 
             <button
               type="submit"

@@ -28,8 +28,7 @@ export default function LoginPage() {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const requestedNext = searchParams.get("next") || "/zh/dashboard";
-  const next = requestedNext === "/dashboard" ? "/zh/dashboard" : requestedNext;
+  const next = searchParams.get("next") || "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

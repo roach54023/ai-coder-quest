@@ -1,13 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signUp, signIn } from "@/lib/auth-client";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { signIn, signUp } from "@/lib/auth-client";
+
+function Logo({ size = 26 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
+      <rect width="512" height="512" rx="115" fill="#6C47FF" />
+      <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") || "/zh/dashboard";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -15,64 +37,59 @@ export default function RegisterPage() {
   const [oauthLoading, setOauthLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     setError("");
+
     const { error: signUpError } = await signUp.email({
       email,
       password,
       name: displayName || email.split("@")[0],
-      callbackURL: "/zh/dashboard",
+      callbackURL: next,
     });
+
     if (signUpError) {
-      setError(signUpError.message || "注册失败，请重试");
+      setError(signUpError.message || "注册失败，请重试。");
       setLoading(false);
-    } else {
-      router.push("/zh/dashboard");
-      router.refresh();
+      return;
     }
+
+    router.push(next);
+    router.refresh();
   };
 
   const handleGitHubLogin = async () => {
     setOauthLoading(true);
-    await signIn.social({ provider: "github", callbackURL: "/zh/dashboard" });
+    await signIn.social({ provider: "github", callbackURL: next });
   };
 
   return (
     <div className="min-h-screen bg-white flex">
-      {/* 左侧装饰区 */}
       <div className="hidden lg:flex lg:w-1/2 bg-gray-50 border-r border-gray-100 flex-col justify-between p-12">
-        <Link href="/" className="flex items-center gap-2">
-          <svg width="28" height="28" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
-            <rect width="512" height="512" rx="115" fill="#6C47FF"/>
-            <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-            <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
-          </svg>
+        <Link href="/zh" className="flex items-center gap-2">
+          <Logo size={28} />
           <span className="font-bold text-gray-900 text-base">VibeCamp</span>
         </Link>
 
         <div>
-          <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">Join VibeCamp</p>
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">加入 VibeCamp</p>
           <h2 className="text-4xl font-black text-gray-900 leading-tight mb-4">
             会打字，
             <br />
-            就能做网站。
+            就能开始做产品。
           </h2>
           <p className="text-gray-400 text-sm leading-relaxed">
-            不需要学编程语言，用自然语言指挥 AI 写代码。
-            <br />
-            完全免费，随时开始。
+            用自然语言提示词、真实项目和免费的闯关课程学习 AI 编程。
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           {[
             { num: "26", label: "实战关卡" },
-            { num: "6", label: "章节" },
+            { num: "6", label: "课程章节" },
             { num: "0", label: "编程基础要求" },
-            { num: "∞", label: "可能性" },
+            { num: "免费", label: "核心课程访问" },
           ].map((item) => (
             <div key={item.label} className="bg-white rounded-2xl p-4 border border-gray-100">
               <div className="text-2xl font-black text-gray-900">{item.num}</div>
@@ -82,24 +99,16 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* 右侧注册区 */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
-          {/* 移动端 Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
-            <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
-              <rect width="512" height="512" rx="115" fill="#6C47FF"/>
-              <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M 344 148 L 432 256 L 344 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="296" y1="136" x2="216" y2="376" stroke="white" strokeWidth="52" strokeLinecap="round"/>
-            </svg>
+          <Link href="/zh" className="flex items-center gap-2 mb-10 lg:hidden">
+            <Logo />
             <span className="font-bold text-gray-900">VibeCamp</span>
           </Link>
 
           <h1 className="text-2xl font-black text-gray-900 mb-1">创建账号</h1>
-          <p className="text-sm text-gray-400 mb-8">开始你的 AI 编程闯关之旅，完全免费</p>
+          <p className="text-sm text-gray-400 mb-8">开始免费的 AI 编程课程。</p>
 
-          {/* 表单 */}
           <form onSubmit={handleRegister} className="space-y-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">昵称（可选）</label>
@@ -107,7 +116,7 @@ export default function RegisterPage() {
                 type="text"
                 placeholder="你的昵称"
                 value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
+                onChange={(event) => setDisplayName(event.target.value)}
                 className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
               />
             </div>
@@ -115,9 +124,9 @@ export default function RegisterPage() {
               <label className="block text-xs font-medium text-gray-600 mb-1.5">邮箱</label>
               <input
                 type="email"
-                placeholder="your@email.com"
+                placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 required
                 className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
               />
@@ -128,18 +137,14 @@ export default function RegisterPage() {
                 type="password"
                 placeholder="至少 6 位"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 required
                 minLength={6}
                 className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
               />
             </div>
 
-            {error && (
-              <div className="text-xs text-red-500 bg-red-50 border border-red-100 px-4 py-3 rounded-xl">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-xs text-red-500 bg-red-50 border border-red-100 px-4 py-3 rounded-xl">{error}</div>}
 
             <button
               type="submit"
@@ -151,17 +156,15 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {/* 分隔线 */}
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-100" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-xs text-gray-400">或直接使用</span>
+              <span className="bg-white px-3 text-xs text-gray-400">或继续使用</span>
             </div>
           </div>
 
-          {/* GitHub */}
           <button
             onClick={handleGitHubLogin}
             disabled={oauthLoading}

@@ -3,17 +3,28 @@
 import { useState } from "react";
 import { ArrowRight, Share2, Copy, Check, X, Users } from "lucide-react";
 import Link from "next/link";
+import { WechatGroupButton } from "@/components/levels/wechat-group-button";
 
 interface SharePromptProps {
   levelTitle: string;
   nextLevelUrl?: string | null;
+  dashboardUrl?: string;
+  locale?: "en" | "zh";
 }
 
-export function SharePrompt({ levelTitle, nextLevelUrl }: SharePromptProps) {
+export function SharePrompt({
+  levelTitle,
+  nextLevelUrl,
+  dashboardUrl = "/dashboard",
+  locale = "en",
+}: SharePromptProps) {
   const [copied, setCopied] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  const shareText = `我刚在 VibeCamp 通过了「${levelTitle}」🎉 零代码基础也能用 AI 做开发！`;
+  const copy = locale === "zh" ? zhCopy : enCopy;
+  const shareText = locale === "zh"
+    ? `我刚刚在 VibeCamp 完成了「${levelTitle}」。正在通过真实项目学习 AI 编程。`
+    : `I just completed "${levelTitle}" on VibeCamp. Learning AI coding by shipping real projects.`;
   const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://vibecodecamp.cn";
 
   const handleTwitterShare = () => {
@@ -28,27 +39,29 @@ export function SharePrompt({ levelTitle, nextLevelUrl }: SharePromptProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // 折叠态：简洁横条
+  const supportHref = "mailto:roach54023@qq.com?subject=VibeCamp%20course%20help";
+
+  // Collapsed success strip.
   if (dismissed) {
     return (
       <div className="mb-6 px-5 py-3.5 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-emerald-500 text-sm">✓</span>
-          <span className="text-sm text-emerald-700 font-medium">本关已通过</span>
+          <span className="text-sm text-emerald-700 font-medium">{copy.levelComplete}</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDismissed(false)}
             className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
           >
-            分享
+            {copy.share}
           </button>
           {nextLevelUrl && (
             <Link
               href={nextLevelUrl}
               className="inline-flex items-center gap-1 h-8 px-4 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-xs font-semibold transition-colors"
             >
-              继续下一关
+              {copy.continueNext}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           )}
@@ -59,17 +72,17 @@ export function SharePrompt({ levelTitle, nextLevelUrl }: SharePromptProps) {
 
   return (
     <div className="mb-6 rounded-2xl border border-emerald-100 overflow-hidden">
-      {/* 顶部绿色装饰条 */}
+      
       <div className="h-1 bg-gradient-to-r from-emerald-400 to-teal-400" />
 
       <div className="px-6 py-5">
-        {/* 标题行 */}
+        
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-base">
               🎉
             </div>
-            <span className="font-black text-gray-900">通关成功！</span>
+            <span className="font-black text-gray-900">{copy.levelComplete}</span>
           </div>
           <button
             onClick={() => setDismissed(true)}
@@ -79,26 +92,30 @@ export function SharePrompt({ levelTitle, nextLevelUrl }: SharePromptProps) {
           </button>
         </div>
 
-        {/* 分享引导文案 */}
+        {/* Share prompt */}
         <p className="text-sm text-gray-400 mb-4">
-          截图你的成果，分享到交流群一起交流 👇
+          {copy.description}
         </p>
 
-        {/* 分享按钮组 */}
+        {/* Share buttons */}
         <div className="flex flex-wrap gap-2 mb-5">
-          <button
-            onClick={() => window.open("https://REPLACE_WITH_GROUP_LINK", "_blank")}
-            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-xs font-semibold transition-colors"
-          >
-            <Users className="w-3.5 h-3.5" />
-            加入交流群
-          </button>
+          {locale === "zh" ? (
+            <WechatGroupButton variant="solid" />
+          ) : (
+            <a
+              href={supportHref}
+              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-xs font-semibold transition-colors"
+            >
+              <Users className="w-3.5 h-3.5" />
+              {copy.getHelp}
+            </a>
+          )}
           <button
             onClick={handleTwitterShare}
             className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 text-xs font-medium transition-colors"
           >
             <Share2 className="w-3.5 h-3.5" />
-            发推分享
+            {copy.shareOnX}
           </button>
           <button
             onClick={handleCopyLink}
@@ -109,28 +126,52 @@ export function SharePrompt({ levelTitle, nextLevelUrl }: SharePromptProps) {
             ) : (
               <Copy className="w-3.5 h-3.5" />
             )}
-            {copied ? "已复制" : "复制文案"}
+            {copied ? copy.copied : copy.copyText}
           </button>
         </div>
 
-        {/* 下一关 CTA */}
+        
         {nextLevelUrl ? (
           <Link
             href={nextLevelUrl}
             className="flex items-center justify-center gap-2 h-11 w-full rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
           >
-            继续下一关
+            {copy.continueNext}
             <ArrowRight className="h-4 w-4" />
           </Link>
         ) : (
           <Link
-            href="/zh/dashboard"
+            href={dashboardUrl}
             className="flex items-center justify-center gap-2 h-11 w-full rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold transition-colors"
           >
-            🎉 恭喜通关全部关卡！
+            {copy.allComplete}
           </Link>
         )}
       </div>
     </div>
   );
 }
+
+const enCopy = {
+  levelComplete: "Level complete",
+  share: "Share",
+  continueNext: "Continue to next level",
+  description: "Share your progress or continue to the next level.",
+  getHelp: "Email support",
+  shareOnX: "Share on X",
+  copied: "Copied",
+  copyText: "Copy text",
+  allComplete: "All levels complete",
+};
+
+const zhCopy = {
+  levelComplete: "关卡已完成",
+  share: "分享",
+  continueNext: "继续下一关",
+  description: "分享你的进度，或继续进入下一关。",
+  getHelp: "微信扫码加群",
+  shareOnX: "分享到 X",
+  copied: "已复制",
+  copyText: "复制文案",
+  allComplete: "全部关卡已完成",
+};

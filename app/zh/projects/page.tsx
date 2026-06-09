@@ -1,12 +1,65 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Wrench, Bot, Newspaper, ShoppingBag, BarChart3, CreditCard, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+
 export const metadata: Metadata = {
-  title: "实战项目库 · VibeCamp AI 编程教程",
-  description: "6 个真实可上线的 AI 编程项目模板，从工具站到完整 SaaS，学完对应章节即可动手做，做完直接上线变现。",
+  title: "AI 编程项目库：实战项目模板",
+  description: "AI 编程项目库收录 6 个真实可上线的 AI 编程项目模板，从工具站、内容站到完整 SaaS，学完对应章节即可动手做，做完直接上线变现。",
+  keywords: [
+    "AI 编程项目",
+    "AI 编程实战项目",
+    "Vibe Coding 项目",
+    "零基础 AI 编程项目",
+    "独立开发项目",
+    "SaaS 项目模板",
+  ],
+  openGraph: {
+    title: "AI 编程项目库：实战项目模板 | VibeCamp",
+    description: "6 个真实可上线的 AI 编程项目，从工具站到完整 SaaS，学完对应章节即可动手做。",
+    url: `${siteUrl}/zh/projects`,
+    siteName: "VibeCamp",
+    locale: "zh_CN",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "AI 编程实战项目库 VibeCamp" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI 编程项目库：实战项目模板 | VibeCamp",
+    description: "6 个真实可上线的 AI 编程项目，从工具站到完整 SaaS，学完对应章节即可动手做。",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: `${siteUrl}/zh/projects`,
+    languages: {
+      "zh-CN": `${siteUrl}/zh/projects`,
+      en: `${siteUrl}/projects`,
+    },
+  },
 };
+
+const projectsJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "AI 编程实战项目库",
+    description: "6 个真实可上线的 AI 编程项目模板，从工具站到完整 SaaS，学完对应章节即可动手做，做完直接上线变现。",
+    url: `${siteUrl}/zh/projects`,
+    inLanguage: "zh-CN",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "AI 编程教程", item: `${siteUrl}/zh` },
+      { "@type": "ListItem", position: 2, name: "AI 编程实战项目库", item: `${siteUrl}/zh/projects` },
+    ],
+  },
+];
 
 const projects = [
   {
@@ -98,11 +151,12 @@ const projects = [
 export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={projectsJsonLd} />
 
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/zh" className="flex items-center gap-2">
             <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
@@ -114,7 +168,7 @@ export default function ProjectsPage() {
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
             <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
             <Link href="/zh/projects" className="text-gray-900 font-medium">实战项目</Link>
-            <Link href="/#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="/zh#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
             <Link href="/zh/stories" className="hover:text-gray-900 transition-colors">学员案例</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
@@ -128,12 +182,12 @@ export default function ProjectsPage() {
         <div className="max-w-3xl mx-auto">
           <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">Project Library</p>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
-            跟着做，
+            AI 编程项目，
             <br />
             <span className="text-indigo-600">做完能上线</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-xl mx-auto leading-relaxed">
-            这些都是真实可做的项目，不是练习题。每个项目学完对应章节就能开始做，做完直接上线变现。
+            这些 AI 编程项目都是真实可做的项目，不是练习题。每个项目学完对应章节就能开始做，做完直接上线变现。
           </p>
         </div>
       </section>
@@ -210,7 +264,7 @@ export default function ProjectsPage() {
                 免费开始闯关 <ArrowRight className="h-4 w-4" />
               </a>
               <Link
-                href="/#journey"
+                href="/zh#journey"
                 className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 rounded-full text-base px-10 py-4 font-medium transition-colors"
               >
                 查看课程地图

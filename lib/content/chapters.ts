@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import type { ContentLocale } from './levels';
 
-const CHAPTERS_DIR = path.join(process.cwd(), 'content/chapters');
+function getChaptersDir(locale: ContentLocale = 'en') {
+  return path.join(process.cwd(), locale === 'zh' ? 'content/chapters-zh' : 'content/chapters-en');
+}
 
 export interface ChapterMeta {
   id: string;
@@ -20,9 +23,9 @@ export interface ChapterMeta {
   completion_message: string;
 }
 
-export function getChapterMeta(chapterId: string): ChapterMeta | null {
+export function getChapterMeta(chapterId: string, locale: ContentLocale = 'en'): ChapterMeta | null {
   try {
-    const filePath = path.join(CHAPTERS_DIR, `${chapterId}.json`);
+    const filePath = path.join(getChaptersDir(locale), `${chapterId}.json`);
     const content = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(content);
   } catch {
@@ -30,13 +33,14 @@ export function getChapterMeta(chapterId: string): ChapterMeta | null {
   }
 }
 
-export function getAllChapters(): ChapterMeta[] {
+export function getAllChapters(locale: ContentLocale = 'en'): ChapterMeta[] {
   try {
-    const files = fs.readdirSync(CHAPTERS_DIR);
+    const chaptersDir = getChaptersDir(locale);
+    const files = fs.readdirSync(chaptersDir);
     return files
       .filter((f) => f.endsWith('.json'))
       .map((f) => {
-        const content = fs.readFileSync(path.join(CHAPTERS_DIR, f), 'utf-8');
+        const content = fs.readFileSync(path.join(chaptersDir, f), 'utf-8');
         return JSON.parse(content);
       })
       .sort((a, b) => {

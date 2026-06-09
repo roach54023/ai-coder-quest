@@ -76,7 +76,7 @@ export default async function ProfilePage() {
 
         {/* ── 页面标题 ── */}
         <div className="mb-8">
-          <p className="text-sm text-gray-400 uppercase tracking-widest mb-2 font-medium">Profile</p>
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-2 font-medium">个人主页</p>
           <h1 className="text-4xl font-black text-gray-900">我的主页</h1>
         </div>
 

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createVerifier, VerificationInput } from "@/lib/verification";
 import { awardLevelXP } from "@/lib/xp";
+import type { Json } from "@/types/database";
 
 export async function POST(request: NextRequest) {
   const session = await auth.api.getSession({
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest) {
   const type = formData.get("type") as string;
   const textContent = formData.get("text_content") as string | null;
   const urlContent = formData.get("url_content") as string | null;
+  const locale = formData.get("locale") === "zh" ? "zh" : "en";
 
   if (!levelId || !type) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -43,11 +45,12 @@ export async function POST(request: NextRequest) {
   const verificationInput: VerificationInput = {
     text_content: textContent || undefined,
     url_content: urlContent || undefined,
+    locale,
   };
 
   const verificationResult = await verifier.verify(
     verificationInput,
-    (level.verification_config as Record<string, any>) || {}
+    (level.verification_config as Record<string, unknown>) || {}
   );
 
   // Determine submission status
@@ -68,7 +71,7 @@ export async function POST(request: NextRequest) {
       text_content: textContent,
       url_content: urlContent,
       status: submissionStatus,
-      auto_verification_result: verificationResult as any,
+      auto_verification_result: verificationResult as unknown as Json,
     })
     .select()
     .single();

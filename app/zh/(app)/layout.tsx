@@ -39,7 +39,7 @@ export default async function AppLayout({
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/zh" className="flex items-center gap-2">
             <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>

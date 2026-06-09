@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, Bot, CheckCircle2, CreditCard, ExternalLink, Mail, Newspaper, ShoppingBag, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
 
 export const metadata: Metadata = {
   title: "AI Coding Projects for Beginners",
   description:
-    "Explore practical AI coding projects for beginners: portfolio sites, SEO tools, AI copy generators, content aggregators, dashboards, and paid SaaS products you can build with vibe coding.",
+    "Explore AI coding projects for beginners: SEO tools, AI copy generators, dashboards, content sites, and paid SaaS products you can build with vibe coding.",
   keywords: [
     "AI coding projects",
     "AI coding projects for beginners",
@@ -15,11 +18,35 @@ export const metadata: Metadata = {
     "beginner coding projects with AI",
     "SaaS project ideas",
   ],
+  openGraph: {
+    title: "AI Coding Projects for Beginners | VibeCamp",
+    description:
+      "Explore practical AI coding projects you can ship with vibe coding: tools, dashboards, content sites, and paid SaaS ideas.",
+    url: `${siteUrl}/projects`,
+    siteName: "VibeCamp",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI coding projects for beginners by VibeCamp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Coding Projects for Beginners | VibeCamp",
+    description:
+      "Beginner-friendly AI coding projects you can build, deploy, and turn into real products.",
+    images: ["/og-image.png"],
+  },
   alternates: {
-    canonical: "https://vibecamps.org/projects",
+    canonical: `${siteUrl}/projects`,
     languages: {
-      en: "https://vibecamps.org/projects",
-      "zh-CN": "https://vibecamps.org/zh/projects",
+      en: `${siteUrl}/projects`,
+      "zh-CN": `${siteUrl}/zh/projects`,
     },
   },
 };
@@ -105,6 +132,51 @@ const projects = [
   },
 ];
 
+const projectsJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "AI Coding Projects for Beginners",
+    description:
+      "A collection of practical AI coding projects for beginners, including SEO tools, AI copy generators, dashboards, content sites, and paid SaaS ideas.",
+    url: `${siteUrl}/projects`,
+    inLanguage: "en",
+    isPartOf: {
+      "@id": `${siteUrl}/#website`,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "AI Coding Projects for Beginners",
+    itemListElement: projects.map((project, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: project.title,
+      description: project.desc,
+      url: `${siteUrl}/projects#${project.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Vibe Coding Course",
+        item: `${siteUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "AI Coding Projects",
+        item: `${siteUrl}/projects`,
+      },
+    ],
+  },
+];
+
 function Logo() {
   return (
     <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
@@ -119,6 +191,7 @@ function Logo() {
 export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={projectsJsonLd} />
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2"><Logo /><span className="font-bold text-base text-gray-900">VibeCamp</span></Link>
@@ -138,7 +211,7 @@ export default function ProjectsPage() {
         <div className="max-w-3xl mx-auto">
           <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">AI coding projects</p>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
-            AI Coding Projects
+            AI Coding Projects for Beginners{" "}
             <br />
             <span className="text-indigo-600">You Can Actually Ship</span>
           </h1>
@@ -154,7 +227,12 @@ export default function ProjectsPage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.map((p) => (
-              <Link key={p.title} href={`/zh/levels/${p.chapterId}/${p.levelId}`} className="group flex flex-col border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-sm transition-all">
+              <Link
+                key={p.title}
+                id={p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+                href="/register?next=%2Fdashboard"
+                className="group flex flex-col border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-sm transition-all"
+              >
                 <div className="flex items-start justify-between gap-3 mb-5">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: p.color + "15", border: `1px solid ${p.color}20` }}>
                     <p.icon className="h-5 w-5" style={{ color: p.color }} />

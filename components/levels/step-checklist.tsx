@@ -9,7 +9,7 @@ import { getStepsByLevelId, type StepItem } from "@/lib/content/steps";
 interface StepChecklistProps {
   levelId: string;
   isCompleted: boolean;
-  /** 是否为简单关（操作清单做完即通关，不需要提交截图） */
+  /** Simple levels complete once every checklist item is done. */
   isSimpleLevel?: boolean;
 }
 
@@ -26,6 +26,7 @@ export function StepChecklist({ levelId, isCompleted, isSimpleLevel = false }: S
 
   useEffect(() => {
     if (isCompleted && steps) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCompletedSteps(steps.map((s) => s.id));
     } else {
       const saved = localStorage.getItem(storageKey);
@@ -98,7 +99,7 @@ export function StepChecklist({ levelId, isCompleted, isSimpleLevel = false }: S
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-muted-foreground">
-          📋 操作清单
+          Checklist
         </h3>
         <span className="text-xs text-muted-foreground">
           {completedSteps.length}/{steps.length}
@@ -158,7 +159,7 @@ export function StepChecklist({ levelId, isCompleted, isSimpleLevel = false }: S
                   className="h-7 text-xs px-2 text-green-600 hover:text-green-700 hover:bg-green-500/10"
                   onClick={() => handleComplete(step)}
                 >
-                  做好了 ✓
+                  Done
                 </Button>
               )}
             </div>
@@ -180,21 +181,21 @@ export function StepChecklist({ levelId, isCompleted, isSimpleLevel = false }: S
         <div className="mt-3 text-center animate-[fadeIn_0.3s_ease-out]">
           <span className="inline-flex items-center gap-1.5 text-sm text-green-600 font-medium">
             <PartyPopper className="w-4 h-4" />
-            通关成功！正在跳转…
+            Level complete. Redirecting...
           </span>
         </div>
       )}
       {allDone && !isCompleted && !justCompleted && !isSimpleLevel && (
         <div className="mt-3 text-center">
           <span className="text-sm text-green-600 font-medium">
-            ✅ 全部完成！可以提交通关了
+            All steps complete. You can submit verification now.
           </span>
         </div>
       )}
       {allDone && !isCompleted && !justCompleted && isSimpleLevel && completing && (
         <div className="mt-3 text-center">
           <span className="text-sm text-muted-foreground">
-            正在记录通关…
+            Recording completion...
           </span>
         </div>
       )}

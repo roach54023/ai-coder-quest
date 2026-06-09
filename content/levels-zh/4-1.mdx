@@ -1,0 +1,155 @@
+---
+id: "4-1"
+title: "API 路由入门"
+page_title: "让网站有后端：用 Next.js API 路由处理真实请求"
+seo_title: "Next.js API 路由教程 - 前后端一体化开发"
+seo_description: "学习 Next.js API 路由，让你的作品集网站有真正的后端能力，处理表单提交和数据请求。"
+keywords: ["nextjs api路由", "前后端一体化", "serverless函数", "API接口教程", "AI做后端"]
+chapter: "chapter_4"
+order: 1
+is_delivery: false
+verification_type: "checklist"
+verification_config: {}
+estimated_minutes: 20
+---
+
+到目前为止，你的网站是纯前端的——所有数据都写死在代码里，表单提交也只是模拟。
+
+Next.js 有一个强大的功能：**API 路由**。你可以在同一个项目里写后端接口，不需要单独搭服务器。这一关来理解并用上它。
+
+## 什么是"前后端分离"？
+
+在传统的 Web 开发里，前端和后端是分开的：
+
+- **前端**：运行在用户浏览器里，负责显示界面
+- **后端**：运行在服务器上，负责处理数据、连接数据库
+
+两者通过 **API（接口）** 通信：前端发请求，后端处理后返回数据。
+
+这种架构的问题是：你需要维护两个独立的项目，部署也更复杂。
+
+## Next.js 的解决方案：API 路由
+
+Next.js 把前端和后端放在同一个项目里。`app/api/` 目录下的文件会自动变成 API 接口，和前端代码共享同一个部署环境。
+
+这种方式叫 **Serverless Functions（无服务器函数）**：你写函数，Vercel 负责运行它，不需要你管理服务器。
+
+| 传统方式 | Next.js API 路由 |
+|---------|----------------|
+| 前端项目 + 后端项目 | 一个项目搞定 |
+| 需要管理服务器 | Vercel 自动管理 |
+| 部署两次 | 部署一次 |
+| 跨域问题 | 同源，无跨域 |
+
+## API 路由的工作原理
+
+在 Next.js 里，`app/api/` 目录下的文件会自动变成 API 接口。
+
+比如 `app/api/hello/route.ts` 就对应 `/api/hello` 这个接口。
+
+一个最简单的 API 路由长这样：
+
+```typescript
+// app/api/hello/route.ts
+export async function GET() {
+  return Response.json({ message: 'Hello from API!' });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  return Response.json({ received: body });
+}
+```
+
+- `GET` 函数处理 GET 请求（获取数据）
+- `POST` 函数处理 POST 请求（提交数据）
+- 函数名必须是大写的 HTTP 方法名
+
+## 操作步骤
+
+### 第一步：理解 API 路由
+
+对 AI 说：
+
+```text
+帮我创建一个最简单的 API 路由来理解它的工作方式：
+
+创建 app/api/hello/route.ts，返回一个 JSON：
+{
+  "message": "Hello from API!",
+  "time": "当前时间"
+}
+
+然后在首页加一个按钮"测试 API"，点击后调用这个接口，把返回的 message 显示在按钮旁边。
+```
+
+点击按钮，看看是否能显示 API 返回的内容。
+
+---
+
+### 第二步：让联系表单真正发邮件
+
+上一章的联系表单只是模拟提交。现在让它真的能发邮件。
+
+对 AI 说：
+
+```text
+帮我用 Resend 服务让联系表单真正发送邮件：
+
+1. 安装 resend 包：npm install resend
+2. 创建 app/api/contact/route.ts，接收表单数据（姓名、邮箱、主题、消息），用 Resend 发送邮件到我的邮箱
+3. 更新联系表单，把提交请求改为调用 /api/contact 接口
+4. 在 .env.local 里添加 RESEND_API_KEY 变量（我需要去 resend.com 注册获取）
+
+注意：先用 console.log 打印接收到的数据，确认接口正常工作后再接入 Resend。
+```
+
+> **获取 Resend API Key**：访问 [resend.com](https://resend.com)，注册免费账号，在 Dashboard 里创建 API Key，复制到 `.env.local` 文件里。Resend 免费计划每月可以发 3000 封邮件，对个人网站完全够用。
+
+---
+
+### 第三步：测试接口
+
+对 AI 说：
+
+```text
+帮我在联系页面加上接口测试功能：
+
+- 提交表单后，如果接口返回错误，在表单上方显示具体的错误信息
+- 在浏览器控制台打印接口的完整响应，方便调试
+- 如果 RESEND_API_KEY 没有配置，接口返回友好的错误提示而不是崩溃
+```
+
+---
+
+## 关于环境变量
+
+你注意到 API Key 存在 `.env.local` 文件里，而不是直接写在代码里。这是一个重要的安全实践。
+
+**为什么不能把 API Key 写在代码里？**
+
+代码会提交到 GitHub，GitHub 仓库可能是公开的。如果 API Key 写在代码里，任何人都能看到，然后用你的 Key 发邮件、消耗你的额度。
+
+**环境变量的命名规则：**
+
+- `NEXT_PUBLIC_` 开头的变量：前端和后端都能访问（会暴露给浏览器）
+- 没有 `NEXT_PUBLIC_` 前缀的变量：只有后端（API 路由）能访问
+
+API Key 这类敏感信息，一定不要加 `NEXT_PUBLIC_` 前缀，只在后端使用。
+
+---
+
+## 通关条件
+
+完成以下三步即可通关：
+
+1. `/api/hello` 接口可以访问，返回 JSON 数据
+2. 联系表单调用真实的 API 路由（不再是 setTimeout 模拟）
+3. 接口有错误处理，不会因为缺少配置而崩溃
+
+## 卡住了？
+
+- 接口返回 404？检查文件路径是否是 `app/api/xxx/route.ts`，函数名是否是 `GET` 或 `POST`
+- 跨域报错？API 路由和前端在同一个 Next.js 项目里，不存在跨域问题，让 AI 检查请求 URL 是否正确
+- Resend 发送失败？先确认 API Key 是否正确配置，再让 AI 查看错误信息
+- 环境变量不生效？修改 `.env.local` 后需要重启开发服务器（`npm run dev`）

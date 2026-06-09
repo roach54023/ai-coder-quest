@@ -1,13 +1,89 @@
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, ExternalLink, Mail } from "lucide-react";
+import { CheckCircle2, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RANKS } from "@/lib/content/ranks";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+
 export const metadata: Metadata = {
-  title: "什么是 AI 编程（Vibe Coding）· VibeCamp",
-  description: "Vibe Coding 是 2025 年最重要的新技能。不学编程语言，用自然语言指挥 Claude Code / Trae 写代码，零基础 3-5 周做出可上线的真实产品。",
+  title: "什么是 AI 编程（Vibe Coding）零基础入门指南",
+  description: "什么是 AI 编程？Vibe Coding 是 2025 年最重要的新技能。不学编程语言，用自然语言指挥 Claude Code / Trae 写代码，零基础 3-5 周做出可上线的真实产品。",
+  keywords: [
+    "什么是 AI 编程",
+    "Vibe Coding 是什么",
+    "AI 编程入门",
+    "Claude Code 教程",
+    "Trae 教程",
+    "零基础 AI 编程",
+    "AI 编程工具对比",
+  ],
+  openGraph: {
+    title: "什么是 AI 编程（Vibe Coding）零基础入门指南 | VibeCamp",
+    description: "什么是 AI 编程？不学编程语言，用自然语言指挥 AI 写代码。零基础 3-5 周做出可上线的真实产品。",
+    url: `${siteUrl}/zh/about`,
+    siteName: "VibeCamp",
+    locale: "zh_CN",
+    type: "article",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "什么是 AI 编程 Vibe Coding 入门指南" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "什么是 AI 编程（Vibe Coding）零基础入门指南 | VibeCamp",
+    description: "什么是 AI 编程？不学编程语言，用自然语言指挥 AI 写代码。零基础 3-5 周做出可上线的真实产品。",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: `${siteUrl}/zh/about`,
+    languages: {
+      "zh-CN": `${siteUrl}/zh/about`,
+      en: `${siteUrl}/about`,
+    },
+  },
 };
+
+const aboutJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "什么是 AI 编程（Vibe Coding）？零基础入门指南",
+    description: "什么是 AI 编程？Vibe Coding 是 2025 年最重要的新技能。不学编程语言，用自然语言指挥 Claude Code / Trae 写代码，零基础 3-5 周做出可上线的真实产品。",
+    url: `${siteUrl}/zh/about`,
+    inLanguage: "zh-CN",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "AI 编程（Vibe Coding）需要编程基础吗？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "完全不需要。你不需要学任何编程语言，只需要学会如何用自然语言指挥 AI 帮你写代码。会打字、会上网就够了。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Claude Code、Trae、Codex 用哪个？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Trae 是字节跳动出品，国内用户无需翻墙，完全免费，推荐优先试试。Claude Code 代码理解力强，Codex 有图形界面对零基础最友好。",
+        },
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "AI 编程教程", item: `${siteUrl}/zh` },
+      { "@type": "ListItem", position: 2, name: "什么是 AI 编程", item: `${siteUrl}/zh/about` },
+    ],
+  },
+];
 
 const tools = [
   {
@@ -33,11 +109,12 @@ const tools = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={aboutJsonLd} />
 
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/zh" className="flex items-center gap-2">
             <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
@@ -48,7 +125,7 @@ export default function AboutPage() {
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
             <Link href="/zh/about" className="text-gray-900 font-medium">什么是 AI 编程</Link>
-            <Link href="/#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
+            <Link href="/zh#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
             <Link href="/zh/stories" className="hover:text-gray-900 transition-colors">学员案例</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>

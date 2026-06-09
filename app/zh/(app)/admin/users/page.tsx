@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RANKS } from "@/lib/content/ranks";
 
@@ -38,6 +38,7 @@ export default async function AdminUsersPage() {
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           {user.avatar_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={user.avatar_url}
                               alt=""

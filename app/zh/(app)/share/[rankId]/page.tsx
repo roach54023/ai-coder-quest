@@ -40,7 +40,7 @@ export default async function SharePage({ params }: SharePageProps) {
       {/* ── 导航栏 ── */}
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/zh" className="flex items-center gap-2">
             <svg width="26" height="26" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="rounded-lg flex-shrink-0">
               <rect width="512" height="512" rx="115" fill="#6C47FF"/>
               <path d="M 168 148 L 80 256 L 168 364" fill="none" stroke="white" strokeWidth="52" strokeLinecap="round" strokeLinejoin="round"/>
@@ -63,7 +63,7 @@ export default async function SharePage({ params }: SharePageProps) {
 
           {/* ── 页面标题 ── */}
           <div className="text-center mb-10">
-            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">Rank Unlocked</p>
+            <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">段位解锁</p>
             <h1 className="text-4xl font-black text-gray-900">段位解锁！</h1>
           </div>
 
@@ -132,6 +132,7 @@ export default async function SharePage({ params }: SharePageProps) {
             rankName={rank.name}
             salary={rank.salary}
             displayName={displayName}
+            locale="zh"
           />
 
           {/* ── 继续闯关 CTA ── */}

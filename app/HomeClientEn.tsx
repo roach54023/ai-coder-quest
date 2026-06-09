@@ -167,11 +167,11 @@ function Logo() {
 export default function HomeClientEn() {
   const { data: session, isPending } = useSession();
   const user = session?.user;
-  const dashboardHref = "/zh/dashboard";
+  const dashboardHref = "/dashboard";
   const authHref = (next: string) => `/register?next=${encodeURIComponent(next)}`;
   const levelHref = (chapterId: string, levelId: string) => {
-    const next = `/zh/levels/${chapterId}/${levelId}`;
-    return user ? next : authHref(next);
+    const href = `/levels/${chapterId}/${levelId}`;
+    return user ? href : authHref(href);
   };
 
   return (
@@ -186,7 +186,7 @@ export default function HomeClientEn() {
             <Link href="/about" className="hover:text-gray-900 transition-colors">What is Vibe Coding</Link>
             <Link href="/#journey" className="hover:text-gray-900 transition-colors">Course Map</Link>
             <Link href="/stories" className="hover:text-gray-900 transition-colors">Student Stories</Link>
-            <Link href="/zh" className="hover:text-gray-900 transition-colors">中文</Link>
+            <Link href="/zh" className="hover:text-gray-900 transition-colors">Chinese</Link>
           </nav>
           <div className="flex items-center gap-3">
             {isPending ? (
@@ -234,12 +234,12 @@ export default function HomeClientEn() {
           Vibe coding course for beginners
         </div>
         <h1 className="text-3xl md:text-7xl font-black tracking-tight leading-[1.05] mb-4 text-gray-900">
-          Vibe Coding Course
+          Vibe Coding Course{" "}
           <br />
           <span className="text-indigo-600">for Beginners</span>
         </h1>
         <p className="text-base text-gray-500 mb-8 max-w-xl mx-auto leading-relaxed">
-          Learn AI coding without memorizing programming languages. VibeCamp gives you 26 hands-on levels that turn plain-language prompts into real, deployed products.
+          This free vibe coding course teaches you AI coding without memorizing programming languages. VibeCamp gives you 26 hands-on levels that turn plain-language prompts into real, deployed products.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a href={user ? dashboardHref : authHref(dashboardHref)} className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-700 text-white rounded-full text-sm px-8 py-3.5 font-semibold transition-colors">

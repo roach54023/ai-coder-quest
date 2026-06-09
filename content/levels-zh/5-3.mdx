@@ -1,0 +1,170 @@
+---
+id: "5-3"
+title: "接入支付"
+page_title: "让网站能赚钱：接入 Stripe 支付"
+seo_title: "Stripe 支付集成教程 - Next.js 接入在线支付"
+seo_description: "用 Stripe 给 Next.js 网站加上在线支付功能，实现付费解锁内容或一次性购买。"
+keywords: ["stripe支付教程", "nextjs接入支付", "在线支付集成", "AI做支付功能", "付费内容解锁"]
+chapter: "chapter_5"
+order: 3
+is_delivery: false
+verification_type: "checklist"
+verification_config: {}
+estimated_minutes: 30
+---
+
+你的网站现在有 AI 能力了。如果你想把某些功能做成付费的——比如"付费解锁完整简历"、"付费预约咨询"——就需要接入支付。
+
+这一关用 Stripe 实现一个最简单的支付流程。
+
+## 为什么是 Stripe？
+
+支付是一个高度监管的领域，自己处理信用卡信息需要通过 PCI DSS 认证，成本极高。Stripe 帮你处理了所有合规问题，你只需要调用 API。
+
+国内外主流支付方案对比：
+
+| 方案 | 支持地区 | 接入难度 | 费率 | 适合场景 |
+|------|------|------|------|------|
+| **Stripe** | 全球（中国大陆需境外卡） | 简单 | 2.9% + $0.30 | 出海产品、国际用户 |
+| **微信支付** | 中国大陆 | 复杂（需营业执照） | 0.6% | 国内 C 端产品 |
+| **支付宝** | 中国大陆 | 复杂（需营业执照） | 0.6% | 国内 C 端产品 |
+| **Paddle** | 全球 | 简单 | 5% + $0.50 | SaaS 订阅 |
+
+**对于这门课**：用 Stripe 的测试模式，不需要真实银行卡，不会真的扣钱。等你真正要上线收款时，再考虑选哪个方案。
+
+## 理解 Stripe Checkout
+
+Stripe 提供了两种接入方式：
+
+**Stripe Checkout（推荐）**：用户点击按钮后，跳转到 Stripe 托管的支付页面。Stripe 处理所有支付逻辑，你只需要处理支付结果。
+
+**Stripe Elements**：把支付表单嵌入你的页面，用户不需要跳转。更灵活，但实现更复杂。
+
+对于初学者，**强烈推荐 Stripe Checkout**：几行代码就能跑通，Stripe 的支付页面已经经过大量优化，转化率不差。
+
+## Stripe 的核心概念
+
+**Product（产品）**：你卖的东西，比如"完整简历"、"1小时咨询"。
+
+**Price（价格）**：产品的定价，可以是一次性付款或订阅。一个产品可以有多个价格（比如月付和年付）。
+
+**Checkout Session**：一次支付会话。用户点击购买时，你的服务器创建一个 Session，返回支付页面 URL，用户跳转过去付款。
+
+**Webhook**：支付完成后，Stripe 会向你的服务器发送通知。这是确认支付成功的可靠方式（不能只靠跳转到成功页面，因为用户可能直接关闭浏览器）。
+
+---
+
+## 操作步骤
+
+### 第一步：注册 Stripe 账号
+
+1. 访问 [stripe.com](https://stripe.com)，注册账号
+2. 注册后默认是**测试模式**，可以用测试卡号付款，不会真的扣钱
+3. 在 Dashboard 左侧点击 "Developers" → "API keys"，复制 Publishable key 和 Secret key
+
+> 💡 测试模式的 Key 以 `pk_test_` 和 `sk_test_` 开头，生产模式以 `pk_live_` 和 `sk_live_` 开头。开发阶段只用测试 Key。
+
+---
+
+### 第二步：创建付费产品
+
+对 AI 说：
+
+```text
+帮我在网站上加一个付费功能：
+
+场景：访客可以付费（¥29）解锁我的完整简历 PDF 下载
+
+1. 安装 stripe：npm install stripe @stripe/stripe-js
+2. 在 .env.local 里添加：
+   STRIPE_SECRET_KEY=（你的 Secret key，sk_test_ 开头）
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=（你的 Publishable key，pk_test_ 开头）
+3. 在 Stripe Dashboard 里创建一个产品"完整简历"，价格 ¥29（或 $2.99 美元）
+4. 创建 app/api/checkout/route.ts，生成 Stripe Checkout Session
+5. 在关于页或首页加一个"解锁完整简历 ¥29"按钮，点击后跳转到 Stripe 支付页面
+```
+
+> ✅ **马上验证：** 点击"解锁完整简历"按钮，确认能跳转到 Stripe 的支付页面（测试模式下是 `checkout.stripe.com` 的页面）。
+
+---
+
+### 第三步：处理支付结果
+
+对 AI 说：
+
+```text
+处理支付完成后的逻辑：
+
+1. 创建支付成功页面 /payment/success：
+   - 显示"支付成功！"和感谢文字
+   - 显示简历 PDF 的下载按钮
+   - 有返回首页的链接
+
+2. 创建支付取消页面 /payment/cancel：
+   - 显示"支付已取消"
+   - 有重新支付的按钮
+
+3. 在 Stripe Checkout Session 里设置 success_url 和 cancel_url 指向这两个页面
+
+4. 用测试卡号 4242 4242 4242 4242（有效期任意未来日期，CVV 任意三位数）测试支付流程
+```
+
+> ✅ **马上验证：** 用测试卡号完成支付，确认跳转到成功页面，并且下载按钮可以点击。
+
+---
+
+### 第四步：添加 Webhook（可选但推荐）
+
+Webhook 是支付系统的"保险"——即使用户支付后直接关闭浏览器，你也能收到支付成功的通知。
+
+对 AI 说：
+
+```text
+帮我添加 Stripe Webhook 处理支付完成事件：
+
+1. 创建 app/api/webhook/route.ts
+2. 验证 Webhook 签名（防止伪造请求）
+3. 处理 checkout.session.completed 事件：
+   - 记录支付记录到数据库（用户邮箱、支付金额、时间）
+   - 发送确认邮件给用户（可选）
+
+本地测试 Webhook：
+- 安装 Stripe CLI：brew install stripe/stripe-cli/stripe
+- 运行：stripe listen --forward-to localhost:3000/api/webhook
+- 这会把 Stripe 的 Webhook 转发到你的本地服务器
+```
+
+---
+
+## 测试卡号大全
+
+Stripe 提供了各种测试卡号，用于模拟不同的支付场景：
+
+| 卡号 | 场景 |
+|------|------|
+| `4242 4242 4242 4242` | 支付成功 |
+| `4000 0000 0000 0002` | 卡被拒绝 |
+| `4000 0025 0000 3155` | 需要 3D 验证 |
+| `4000 0000 0000 9995` | 余额不足 |
+
+所有测试卡的有效期填任意未来日期，CVV 填任意三位数，邮编填任意五位数。
+
+---
+
+## 通关条件
+
+完成以下三步即可通关：
+
+1. 点击"解锁完整简历"按钮，跳转到 Stripe 支付页面
+2. 用测试卡号完成支付，跳转到成功页面
+3. 成功页面有下载按钮（可以先链接到任意 PDF）
+
+## 卡住了？
+
+**跳转到 Stripe 失败？** 检查 API Key 是否正确，确认用的是测试模式的 Key（以 `sk_test_` 开头）。
+
+**支付后没有跳转？** 检查 `success_url` 是否是完整的 URL（包含 `https://` 或 `http://localhost:3000`）。
+
+**想在国内用？** Stripe 在中国大陆需要境外银行卡，测试模式不受限制。如果你的用户主要在国内，考虑用微信支付或支付宝（需要营业执照）。
+
+**价格显示不对？** Stripe 的金额单位是最小货币单位（分），¥29 要传 `2900`，$2.99 要传 `299`。

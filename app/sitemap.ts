@@ -17,64 +17,134 @@ function getChapterId(levelId: string): string {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const levelIds = getAllLevelIds();
+  const englishLevelIds = getAllLevelIds("en");
+  const chineseLevelIds = getAllLevelIds("zh");
+  const lastModified = new Date("2026-06-04");
 
-  const levelUrls: MetadataRoute.Sitemap = levelIds.map((levelId) => ({
-    url: `${siteUrl}/zh/levels/${getChapterId(levelId)}/${levelId}`,
-    lastModified: new Date(),
+  const englishLevelUrls: MetadataRoute.Sitemap = englishLevelIds.map((levelId) => ({
+    url: `${siteUrl}/levels/${getChapterId(levelId)}/${levelId}`,
+    lastModified,
     changeFrequency: "weekly",
     priority: 0.8,
+    alternates: {
+      languages: {
+        en: `${siteUrl}/levels/${getChapterId(levelId)}/${levelId}`,
+        "zh-CN": `${siteUrl}/zh/levels/${getChapterId(levelId)}/${levelId}`,
+      },
+    },
+  }));
+
+  const chineseLevelUrls: MetadataRoute.Sitemap = chineseLevelIds.map((levelId) => ({
+    url: `${siteUrl}/zh/levels/${getChapterId(levelId)}/${levelId}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.75,
+    alternates: {
+      languages: {
+        "zh-CN": `${siteUrl}/zh/levels/${getChapterId(levelId)}/${levelId}`,
+        en: `${siteUrl}/levels/${getChapterId(levelId)}/${levelId}`,
+      },
+    },
   }));
 
   return [
     {
       url: siteUrl,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 1.0,
+      alternates: {
+        languages: {
+          en: `${siteUrl}/`,
+          "zh-CN": `${siteUrl}/zh`,
+        },
+      },
     },
     {
       url: `${siteUrl}/about`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.85,
+      alternates: {
+        languages: {
+          en: `${siteUrl}/about`,
+          "zh-CN": `${siteUrl}/zh/about`,
+        },
+      },
     },
     {
       url: `${siteUrl}/projects`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.85,
+      alternates: {
+        languages: {
+          en: `${siteUrl}/projects`,
+          "zh-CN": `${siteUrl}/zh/projects`,
+        },
+      },
     },
     {
       url: `${siteUrl}/stories`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.75,
+      alternates: {
+        languages: {
+          en: `${siteUrl}/stories`,
+          "zh-CN": `${siteUrl}/zh/stories`,
+        },
+      },
     },
     {
       url: `${siteUrl}/zh`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 0.95,
+      alternates: {
+        languages: {
+          "zh-CN": `${siteUrl}/zh`,
+          en: `${siteUrl}/`,
+        },
+      },
     },
     {
       url: `${siteUrl}/zh/about`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.75,
+      alternates: {
+        languages: {
+          "zh-CN": `${siteUrl}/zh/about`,
+          en: `${siteUrl}/about`,
+        },
+      },
     },
     {
       url: `${siteUrl}/zh/projects`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.75,
+      alternates: {
+        languages: {
+          "zh-CN": `${siteUrl}/zh/projects`,
+          en: `${siteUrl}/projects`,
+        },
+      },
     },
     {
       url: `${siteUrl}/zh/stories`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
+      alternates: {
+        languages: {
+          "zh-CN": `${siteUrl}/zh/stories`,
+          en: `${siteUrl}/stories`,
+        },
+      },
     },
-    ...levelUrls,
+    ...englishLevelUrls,
+    ...chineseLevelUrls,
   ];
 }

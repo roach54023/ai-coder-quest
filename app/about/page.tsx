@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RANKS } from "@/lib/content/ranks";
+import { EN_RANKS } from "@/lib/content/english-course";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
 
 export const metadata: Metadata = {
   title: "What Is Vibe Coding? Beginner Guide to AI Coding",
   description:
-    "What is vibe coding? Learn how beginners use AI coding tools like Claude Code, Codex, Trae, Cursor, and Windsurf to build real websites and products with plain-language prompts.",
+    "What is vibe coding? Learn how beginners use Claude Code, Codex, Trae, Cursor, and Windsurf to build real products with plain-language prompts.",
   keywords: [
     "what is vibe coding",
     "vibe coding",
@@ -16,14 +19,105 @@ export const metadata: Metadata = {
     "Claude Code tutorial",
     "AI coding tools",
   ],
+  openGraph: {
+    title: "What Is Vibe Coding? Beginner Guide to AI Coding",
+    description:
+      "Learn what vibe coding means and how beginners use AI coding tools to build real websites and products with plain-language prompts.",
+    url: `${siteUrl}/about`,
+    siteName: "VibeCamp",
+    locale: "en_US",
+    type: "article",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "What is vibe coding guide by VibeCamp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "What Is Vibe Coding? Beginner Guide to AI Coding",
+    description:
+      "A practical beginner guide to vibe coding, AI coding tools, and plain-language software building.",
+    images: ["/og-image.png"],
+  },
   alternates: {
-    canonical: "https://vibecamps.org/about",
+    canonical: `${siteUrl}/about`,
     languages: {
-      en: "https://vibecamps.org/about",
-      "zh-CN": "https://vibecamps.org/zh/about",
+      en: `${siteUrl}/about`,
+      "zh-CN": `${siteUrl}/zh/about`,
     },
   },
 };
+
+const aboutJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "What Is Vibe Coding? Beginner Guide to AI Coding",
+    description:
+      "A beginner guide explaining vibe coding, AI coding tools, and how non-programmers can build software with plain-language prompts.",
+    image: `${siteUrl}/og-image.png`,
+    mainEntityOfPage: `${siteUrl}/about`,
+    author: {
+      "@id": `${siteUrl}/#organization`,
+    },
+    publisher: {
+      "@id": `${siteUrl}/#organization`,
+    },
+    inLanguage: "en",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What is vibe coding?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Vibe coding is building software by describing the product behavior you want in natural language, then using AI coding tools to generate, inspect, fix, and ship the code.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do beginners need to know programming before vibe coding?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. Beginners can start by learning how to write clear prompts, test the generated product, and iterate with AI while gradually learning engineering basics.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Which tools are used for vibe coding?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Common vibe coding tools include Claude Code, Codex, Trae, Cursor, and Windsurf. The workflow matters more than a single tool interface.",
+        },
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Vibe Coding Course",
+        item: `${siteUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "What Is Vibe Coding",
+        item: `${siteUrl}/about`,
+      },
+    ],
+  },
+];
 
 const tools = [
   {
@@ -60,6 +154,7 @@ function Logo() {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={aboutJsonLd} />
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
@@ -70,7 +165,7 @@ export default function AboutPage() {
             <Link href="/about" className="text-gray-900 font-medium">What is Vibe Coding</Link>
             <Link href="/#journey" className="hover:text-gray-900 transition-colors">Course Map</Link>
             <Link href="/stories" className="hover:text-gray-900 transition-colors">Student Stories</Link>
-            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">中文</Link>
+            <Link href="/zh/about" className="hover:text-gray-900 transition-colors">Chinese</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
             <a href="/register">Start free</a>
@@ -82,12 +177,15 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto">
           <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">What is vibe coding</p>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
-            What Is
+            What Is{" "}
             <br />
             <span className="text-indigo-600">Vibe Coding?</span>
           </h1>
           <p className="text-gray-500 text-xl max-w-2xl mx-auto leading-relaxed">
             Vibe coding is building software by describing the product you want in natural language, then using AI coding tools to generate, inspect, fix, and ship the code.
+          </p>
+          <p className="text-gray-400 text-sm max-w-2xl mx-auto leading-relaxed mt-5">
+            If you are asking what is vibe coding, the practical answer is this: it is a product-building workflow where prompts, testing, and iteration matter as much as the generated code.
           </p>
         </div>
       </section>
@@ -133,6 +231,10 @@ export default function AboutPage() {
           </div>
 
           <div className="border border-gray-100 rounded-2xl p-7">
+            <h2 className="text-base font-bold text-gray-900 mb-3">What is vibe coding in practice?</h2>
+            <p className="text-sm text-gray-500 leading-relaxed mb-6">
+              What is vibe coding beyond the phrase itself? It is a way to turn product intent into working software by giving AI a clear brief, reviewing the output, and improving the result through real browser feedback.
+            </p>
             <h2 className="text-base font-bold text-gray-900 mb-5">AI coding tools used in vibe coding</h2>
             <div className="grid sm:grid-cols-3 gap-4 text-sm">
               {tools.map((tool) => (
@@ -161,7 +263,7 @@ export default function AboutPage() {
             VibeCamp turns vibe coding into a structured AI coding course. Each rank maps to practical product-building ability.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            {RANKS.map((rank) => (
+            {EN_RANKS.map((rank) => (
               <div key={rank.id} className="relative border rounded-2xl p-5 text-center hover:border-gray-200 transition-all overflow-hidden flex flex-col items-center justify-center min-h-[160px] group bg-white" style={{ borderColor: rank.badge_color + "25" }}>
                 <div className="relative w-11 h-11 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform" style={{ background: rank.badge_color + "12", border: `1.5px solid ${rank.badge_color}30` }}>
                   {rank.badge_icon}

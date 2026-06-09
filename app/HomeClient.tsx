@@ -356,9 +356,9 @@ export default function HomeClient() {
 
         {/* 主标题 */}
         <h1 className="text-3xl md:text-7xl font-black tracking-tight leading-[1.05] mb-4 text-gray-900">
-          Vibe Coding
+          AI 编程教程
           <br />
-          <span className="text-indigo-600">游戏化</span> AI 编程训练营
+          <span className="text-indigo-600">零基础</span> Vibe Coding 训练营
         </h1>
 
         <p className="text-base text-gray-400 mb-8 max-w-lg mx-auto leading-relaxed">

@@ -2,24 +2,51 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, ExternalLink, Mail, Star, TrendingUp, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vibecamps.org";
+
 export const metadata: Metadata = {
-  title: "AI Coding Course for Beginners: Student Stories",
+  title: "Vibe Coding Examples: Beginner Student Stories",
   description:
-    "See how beginners use VibeCamp's AI coding course to build websites, tools, dashboards, and SaaS products with vibe coding and AI coding tools.",
+    "Real vibe coding examples from beginners who built tools, websites, dashboards, and SaaS products. These vibe coding examples show what students shipped with AI coding in 3–5 weeks.",
   keywords: [
-    "AI coding course for beginners",
-    "vibe coding course stories",
-    "learn AI coding",
-    "beginner AI coding",
     "vibe coding examples",
+    "beginner AI coding stories",
+    "vibe coding projects examples",
+    "AI coding beginner results",
+    "learn AI coding results",
   ],
+  openGraph: {
+    title: "Vibe Coding Examples: Beginner Student Stories | VibeCamp",
+    description:
+      "Real vibe coding examples from beginners who built tools, websites, dashboards, and SaaS products with AI coding in 3–5 weeks.",
+    url: `${siteUrl}/stories`,
+    siteName: "VibeCamp",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Vibe coding examples from beginner students at VibeCamp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vibe Coding Examples: Beginner Student Stories | VibeCamp",
+    description:
+      "Real vibe coding examples from beginners who shipped tools, websites, and SaaS products in 3–5 weeks.",
+    images: ["/og-image.png"],
+  },
   alternates: {
-    canonical: "https://vibecamps.org/stories",
+    canonical: `${siteUrl}/stories`,
     languages: {
-      en: "https://vibecamps.org/stories",
-      "zh-CN": "https://vibecamps.org/zh/stories",
+      en: `${siteUrl}/stories`,
+      "zh-CN": `${siteUrl}/zh/stories`,
     },
   },
 };
@@ -66,6 +93,51 @@ const cases = [
     tool: "Codex",
     level: "Lv.26",
     xp: 2600,
+  },
+];
+
+const storiesJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Vibe Coding Examples: Beginner Student Stories",
+    description:
+      "Real vibe coding examples from beginners who built tools, websites, dashboards, and SaaS products with AI coding in 3–5 weeks.",
+    url: `${siteUrl}/stories`,
+    inLanguage: "en",
+    isPartOf: {
+      "@id": `${siteUrl}/#website`,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Beginner AI Coding Stories",
+    itemListElement: cases.map((story, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: story.project,
+      description: story.result,
+      url: `${siteUrl}/stories#${story.project.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Vibe Coding Course",
+        item: `${siteUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Student Stories",
+        item: `${siteUrl}/stories`,
+      },
+    ],
   },
 ];
 
@@ -134,6 +206,7 @@ function Logo() {
 export default function StoriesPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <JsonLd data={storiesJsonLd} />
       <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2"><Logo /><span className="font-bold text-base text-gray-900">VibeCamp</span></Link>
@@ -150,14 +223,14 @@ export default function StoriesPage() {
 
       <section className="pt-36 pb-20 px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">AI coding course for beginners</p>
+          <p className="text-sm text-gray-400 uppercase tracking-widest mb-5 font-medium">Vibe coding examples</p>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-gray-900">
-            Beginners Using AI Coding
+            Vibe Coding Examples{" "}
             <br />
-            <span className="text-indigo-600">to Ship Real Products</span>
+            <span className="text-indigo-600">from Real Beginners</span>
           </h1>
           <p className="text-gray-500 text-xl max-w-xl mx-auto leading-relaxed">
-            These VibeCamp examples show how non-programmers can use a structured AI coding course to build tools, websites, and SaaS products.
+            These VibeCamp stories show how non-programmers used vibe coding to build tools, websites, and SaaS products in 3–5 weeks.
           </p>
         </div>
       </section>
@@ -168,11 +241,15 @@ export default function StoriesPage() {
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
             <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">Featured Cases</p>
-            <h2 className="text-3xl font-black text-gray-900">Featured AI coding course outcomes</h2>
+            <h2 className="text-3xl font-black text-gray-900">Featured vibe coding examples</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {cases.map((c) => (
-              <article key={c.project} className="group flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:border-gray-200 hover:shadow-sm transition-all">
+              <article
+                key={c.project}
+                id={c.project.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+                className="group flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:border-gray-200 hover:shadow-sm transition-all"
+              >
                 <div className="relative h-44 overflow-hidden" style={{ background: `linear-gradient(135deg, ${c.tagColor}12 0%, #f8f9fa 60%)` }}>
                   <Image src={c.screenshot} alt={`${c.project} built with an AI coding course`} fill className="object-cover object-top z-10 mix-blend-multiply opacity-25" sizes="(max-width: 768px) 100vw, 33vw" />
                   <div className="absolute top-3 right-3 z-20 text-xs font-bold text-gray-600 bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-gray-100 flex items-center gap-1">
@@ -221,7 +298,7 @@ export default function StoriesPage() {
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
             <p className="text-sm text-gray-400 uppercase tracking-widest mb-3 font-medium">More Stories</p>
-            <h2 className="text-3xl font-black text-gray-900">More beginner AI coding examples</h2>
+            <h2 className="text-3xl font-black text-gray-900">More beginner vibe coding examples</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {moreStories.map((s) => (

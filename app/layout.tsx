@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { AuthSessionProvider } from "@/components/auth/session-provider";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Toaster } from "sonner";
 import Script from "next/script";
+import { headers } from "next/headers";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | VibeCamp",
   },
   description:
-    "VibeCamp is a free vibe coding course for beginners. Learn AI coding with Claude Code, Codex, Trae, Cursor, or Windsurf through 26 hands-on levels that help you build and deploy real products.",
+    "Free vibe coding course for beginners. Learn AI coding with Claude Code, Codex, Trae, Cursor, or Windsurf through 26 hands-on levels and real products.",
   keywords: [
     "vibe coding course",
     "vibe coding course for beginners",
@@ -89,56 +91,42 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Course",
-  name: "VibeCamp Vibe Coding Course for Beginners",
-  description:
-    "A free AI coding course for beginners. Learn vibe coding through 26 hands-on levels using Claude Code, Codex, Trae, Cursor, or Windsurf to build and deploy real products.",
-  provider: {
+const globalJsonLd = [
+  {
+    "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
     name: "VibeCamp",
     url: siteUrl,
+    logo: `${siteUrl}/logo.png`,
+    sameAs: ["https://github.com/roach54023/ai-coder-quest"],
   },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    availability: "https://schema.org/InStock",
-  },
-  hasCourseInstance: {
-    "@type": "CourseInstance",
-    courseMode: "online",
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "VibeCamp",
+    url: siteUrl,
     inLanguage: "en",
+    publisher: {
+      "@id": `${siteUrl}/#organization`,
+    },
   },
-  educationalLevel: "Beginner",
-  inLanguage: "en",
-  isAccessibleForFree: true,
-  url: siteUrl,
-  teaches: [
-    "Vibe coding workflow",
-    "Claude Code basics",
-    "OpenAI Codex basics",
-    "AI coding tools",
-    "React frontend development",
-    "Next.js full-stack development",
-    "Supabase database basics",
-    "Vercel deployment",
-  ],
-};
+];
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "/";
+  const lang = pathname === "/zh" || pathname.startsWith("/zh/") ? "zh-CN" : "en";
+
   return (
-    <html lang="en" className="dark">
+    <html lang={lang} className="dark">
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={globalJsonLd} />
         {/* Google Analytics 4 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-7DV9QMDH7N"

@@ -6,9 +6,9 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Copy, Check, CheckCircle2, Circle, ArrowRight, Rocket, Users, Loader2, Link as LinkIcon, ExternalLink } from "lucide-react";
-import { toast } from "sonner";
 import { type StepItem } from "@/lib/content/steps";
 import { trackLevelView, trackStepComplete, trackLevelComplete } from "@/lib/analytics";
+import { WechatGroupButton } from "@/components/levels/wechat-group-button";
 
 // --- Main component ---
 interface LevelContentProps {
@@ -22,6 +22,8 @@ interface LevelContentProps {
   deliveryPrompt?: string;
   isLevelCompleted?: boolean;
   nextLevelUrl?: string | null;
+  dashboardUrl?: string;
+  locale?: "en" | "zh";
 }
 
 export function LevelContent({
@@ -35,6 +37,8 @@ export function LevelContent({
   deliveryPrompt,
   isLevelCompleted = false,
   nextLevelUrl = null,
+  dashboardUrl = "/dashboard",
+  locale = "en",
 }: LevelContentProps) {
   const storageKey = `steps-${levelId}`;
 
@@ -49,6 +53,7 @@ export function LevelContent({
 
   useEffect(() => {
     if (isLevelCompleted && steps) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCompletedSteps(steps.map((s) => s.id));
     } else {
       const saved = localStorage.getItem(storageKey);
@@ -81,29 +86,29 @@ export function LevelContent({
     if (!isSimpleLevel || completing || isLevelCompleted) return;
     setCompleting(true);
 
-    // 乐观跳转：立即导航，后台异步记录进度
+    // Navigate immediately while progress is recorded in the background.
     trackLevelComplete(levelId, chapterId, levelTitle);
     if (nextLevelUrl) {
       router.push(nextLevelUrl);
     } else {
-      router.push("/zh/dashboard");
+      router.push(dashboardUrl);
     }
 
-    // 后台静默记录，不阻塞跳转
+    // Record progress silently without blocking navigation.
     fetch("/api/progress/complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ level_id: levelId }),
-    }).catch(() => {/* 静默失败，下次进入页面会重新同步 */});
-  }, [isSimpleLevel, completing, isLevelCompleted, levelId, chapterId, levelTitle, nextLevelUrl, router]);
+    }).catch(() => {/* Progress will sync again next time the page opens. */});
+  }, [isSimpleLevel, completing, isLevelCompleted, levelId, chapterId, levelTitle, nextLevelUrl, router, dashboardUrl]);
 
   const handleDeliverySubmit = useCallback(async () => {
     if (!deliveryUrl.trim()) {
-      setDeliveryError("请填入你的作品链接");
+      setDeliveryError(locale === "zh" ? "请粘贴你的项目链接。" : "Paste your project URL.");
       return;
     }
     if (!deliveryUrl.startsWith("http")) {
-      setDeliveryError("链接需要以 http:// 或 https:// 开头");
+      setDeliveryError(locale === "zh" ? "链接必须以 http:// 或 https:// 开头。" : "The URL must start with http:// or https://.");
       return;
     }
     setDeliveryError("");
@@ -121,17 +126,17 @@ export function LevelContent({
         if (nextLevelUrl) {
           router.push(nextLevelUrl);
         } else {
-          router.push("/zh/dashboard");
+          router.push(dashboardUrl);
         }
       } else {
-        setDeliveryError("提交失败，请重试");
+        setDeliveryError(locale === "zh" ? "提交失败，请重试。" : "Submission failed. Please try again.");
         setDeliverySubmitting(false);
       }
     } catch {
-      setDeliveryError("网络错误，请重试");
+      setDeliveryError(locale === "zh" ? "网络错误，请重试。" : "Network error. Please try again.");
       setDeliverySubmitting(false);
     }
-  }, [deliveryUrl, levelId, chapterId, levelTitle, nextLevelUrl, router]);
+  }, [deliveryUrl, levelId, chapterId, levelTitle, nextLevelUrl, router, dashboardUrl, locale]);
 
   const handleStepComplete = useCallback(
     (step: StepItem) => {
@@ -144,7 +149,7 @@ export function LevelContent({
       const stepIndex = steps ? steps.findIndex((s) => s.id === step.id) + 1 : 0;
       trackStepComplete(levelId, step.id, step.label, stepIndex);
     },
-    [completedSteps, steps, isSimpleLevel, autoComplete, levelId]
+    [completedSteps, steps, levelId]
   );
 
   const progress =
@@ -152,8 +157,8 @@ export function LevelContent({
       ? Math.round((completedSteps.length / steps.length) * 100)
       : 0;
 
-  // Split content: intro (before "## 操作步骤") and tutorial sections (after it)
-  const stepsSectionRegex = /^##\s+操作步骤.*$/m;
+  // Split content: intro before "Action Steps" and tutorial sections after it.
+  const stepsSectionRegex = locale === "zh" ? /^##\s+操作步骤.*$/m : /^##\s+Action Steps.*$/m;
   const match = content.match(stepsSectionRegex);
   let introContent: string;
   let tutorialContent: string;
@@ -167,10 +172,11 @@ export function LevelContent({
   }
 
   const tutorialSections = splitBySections(tutorialContent);
+  const supportHref = "mailto:roach54023@qq.com?subject=VibeCamp%20course%20help";
 
   return (
     <div>
-      {/* ── 进度条 ── */}
+      {/* Progress bar */}
       {steps && steps.length > 0 && mounted && (
         <div className="sticky top-14 z-10 py-3 -mx-6 px-6 bg-white/95 backdrop-blur-sm border-b border-gray-100 mb-8">
           <div className="flex items-center gap-3">
@@ -181,23 +187,25 @@ export function LevelContent({
               />
             </div>
             <span className="text-xs text-gray-400 shrink-0 tabular-nums">
-              {completedSteps.length}/{steps.length} 步
+              {completedSteps.length}/{steps.length} {locale === "zh" ? "步" : "steps"}
             </span>
           </div>
         </div>
       )}
 
-      {/* ── 简介内容 ── */}
+      {/* Intro content */}
       {introContent && (
         <div className="prose-light mb-8">
           <MarkdownRenderer content={introContent} />
         </div>
       )}
 
-      {/* ── 操作步骤（与教程内容交织） ── */}
+      {/* Action steps woven into lesson content */}
       {steps && steps.length > 0 && mounted && tutorialSections.length > 0 ? (
         <div className="mb-6">
-          <h2 className="text-xl font-black text-gray-900 mb-6">操作步骤</h2>
+          <h2 className="text-xl font-black text-gray-900 mb-6">
+            {locale === "zh" ? "操作步骤" : "Action Steps"}
+          </h2>
 
           {tutorialSections.map((section, index) => {
             const step = steps[index];
@@ -212,12 +220,12 @@ export function LevelContent({
                 key={index}
                 className={`mb-10 ${isDone && !justDoneThis ? "opacity-60" : ""} transition-opacity duration-300`}
               >
-                {/* 教程内容 */}
+                {/* Tutorial content */}
                 <div className="prose-light">
                   <MarkdownRenderer content={section} />
                 </div>
 
-                {/* 步骤确认 */}
+                {/* Step confirmation */}
                 {step && !isLevelCompleted && (
                   <div className="mt-4">
                     {isDone ? (
@@ -240,7 +248,7 @@ export function LevelContent({
                         <div className="flex items-center justify-center gap-2">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 group-hover:text-emerald-500 transition-colors" />
                           <span className="text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 transition-colors">
-                            ✅ 我已完成：{step.label}
+                            {locale === "zh" ? "完成：" : "Done: "}{step.label}
                           </span>
                         </div>
                       </button>
@@ -249,14 +257,14 @@ export function LevelContent({
                         <div className="flex items-center gap-2">
                           <Circle className="w-4 h-4 text-gray-300" />
                           <span className="text-xs text-gray-400">
-                            第 {index + 1} 步：{step.label}
+                            {locale === "zh" ? `第 ${index + 1} 步：` : `Step ${index + 1}: `}{step.label}
                           </span>
                         </div>
                       </div>
                     )}
                   </div>
                 )}
-                {/* 已通关 — 显示完成徽章 */}
+                {/* Completed level badge */}
                 {step && isLevelCompleted && (
                   <div className="mt-3 flex items-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-50 border border-emerald-100">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
@@ -267,7 +275,7 @@ export function LevelContent({
             );
           })}
 
-          {/* 多余步骤（无对应教程节） */}
+          {/* Extra steps without matching tutorial sections */}
           {steps.length > tutorialSections.length && (
             <div className="space-y-2 mb-4">
               {steps.slice(tutorialSections.length).map((step, idx) => {
@@ -300,7 +308,7 @@ export function LevelContent({
                         <div className="flex items-center justify-center gap-2">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 group-hover:text-emerald-500 transition-colors" />
                           <span className="text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 transition-colors">
-                            ✅ 我已完成：{step.label}
+                            {locale === "zh" ? "完成：" : "Done: "}{step.label}
                           </span>
                         </div>
                       </button>
@@ -316,19 +324,19 @@ export function LevelContent({
             </div>
           )}
 
-          {/* 全部步骤完成，非简单关 → 提示去提交 */}
+          {/* All steps done, non-simple level */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             !isSimpleLevel && (
               <div className="mt-6 px-5 py-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-center">
                 <CheckCircle2 className="w-7 h-7 text-emerald-500 mx-auto mb-2" />
                 <span className="text-sm text-emerald-700 font-semibold block">
-                  ✅ 全部步骤完成！请在下方提交验证
+                  {locale === "zh" ? "所有步骤已完成。请在下方提交验证。" : "All steps are complete. Submit your verification below."}
                 </span>
               </div>
             )}
 
-          {/* 全部步骤完成，交付关 → URL 提交框 */}
+          {/* All steps done, delivery level */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             isSimpleLevel &&
@@ -339,11 +347,12 @@ export function LevelContent({
                 setDeliveryUrl={setDeliveryUrl}
                 deliveryError={deliveryError}
                 deliverySubmitting={deliverySubmitting}
+                locale={locale}
                 onSubmit={handleDeliverySubmit}
               />
             )}
 
-          {/* 全部步骤完成，普通关 → 一键通关 */}
+          {/* All steps done, simple level */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             isSimpleLevel &&
@@ -351,9 +360,11 @@ export function LevelContent({
               <div className="mt-8">
                 <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-8 text-center">
                   <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
-                  <h3 className="text-xl font-black text-gray-900 mb-2">全部完成！</h3>
+                  <h3 className="text-xl font-black text-gray-900 mb-2">
+                    {locale === "zh" ? "准备好了。" : "All set."}
+                  </h3>
                   <p className="text-sm text-gray-400 mb-6">
-                    点击下方按钮通关，自动进入下一关
+                    {locale === "zh" ? "标记本关完成，然后进入下一关。" : "Mark this level complete and move to the next one."}
                   </p>
                   <button
                     onClick={() => autoComplete()}
@@ -363,12 +374,12 @@ export function LevelContent({
                     {completing ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        跳转中…
+                        {locale === "zh" ? "继续中..." : "Moving on..."}
                       </>
                     ) : (
                       <>
                         <Rocket className="w-5 h-5" />
-                        通关！进入下一关
+                        {locale === "zh" ? "完成本关" : "Complete level"}
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}
@@ -378,9 +389,11 @@ export function LevelContent({
             )}
         </div>
       ) : steps && steps.length > 0 && mounted ? (
-        // 无教程节，独立清单模式
+        // Checklist-only mode.
         <div className="mb-6">
-          <h2 className="text-xl font-black text-gray-900 mb-5">操作清单</h2>
+          <h2 className="text-xl font-black text-gray-900 mb-5">
+            {locale === "zh" ? "检查清单" : "Checklist"}
+          </h2>
           <div className="space-y-2 mb-4">
             {steps.map((step, index) => {
               const isDone = completedSteps.includes(step.id);
@@ -411,7 +424,7 @@ export function LevelContent({
                       <div className="flex items-center justify-center gap-2">
                         <CheckCircle2 className="w-5 h-5 text-emerald-400 group-hover:text-emerald-500 transition-colors" />
                         <span className="text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 transition-colors">
-                          ✅ 我已完成：{step.label}
+                          {locale === "zh" ? "完成：" : "Done: "}{step.label}
                         </span>
                       </div>
                     </button>
@@ -426,7 +439,7 @@ export function LevelContent({
             })}
           </div>
 
-          {/* 交付关 → URL 提交框 */}
+          {/* Delivery level URL submit box */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             isSimpleLevel &&
@@ -437,11 +450,12 @@ export function LevelContent({
                 setDeliveryUrl={setDeliveryUrl}
                 deliveryError={deliveryError}
                 deliverySubmitting={deliverySubmitting}
+                locale={locale}
                 onSubmit={handleDeliverySubmit}
               />
             )}
 
-          {/* 普通关通关按钮 */}
+          {/* Simple level completion button */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             isSimpleLevel &&
@@ -449,8 +463,12 @@ export function LevelContent({
               <div className="mt-6">
                 <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-8 text-center">
                   <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
-                  <h3 className="text-xl font-black text-gray-900 mb-2">全部完成！</h3>
-                  <p className="text-sm text-gray-400 mb-6">点击下方按钮通关，自动进入下一关</p>
+                  <h3 className="text-xl font-black text-gray-900 mb-2">
+                    {locale === "zh" ? "准备好了。" : "All set."}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-6">
+                    {locale === "zh" ? "标记本关完成，然后进入下一关。" : "Mark this level complete and move to the next one."}
+                  </p>
                   <button
                     onClick={() => autoComplete()}
                     disabled={completing}
@@ -459,12 +477,12 @@ export function LevelContent({
                     {completing ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        跳转中…
+                        {locale === "zh" ? "继续中..." : "Moving on..."}
                       </>
                     ) : (
                       <>
                         <Rocket className="w-5 h-5" />
-                        通关！进入下一关
+                        {locale === "zh" ? "完成本关" : "Complete level"}
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}
@@ -473,20 +491,20 @@ export function LevelContent({
               </div>
             )}
 
-          {/* 非简单关 → 提示提交 */}
+          {/* Non-simple level submit hint */}
           {completedSteps.length === steps.length &&
             !isLevelCompleted &&
             !isSimpleLevel && (
               <div className="mt-6 px-5 py-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-center">
                 <CheckCircle2 className="w-7 h-7 text-emerald-500 mx-auto mb-2" />
                 <span className="text-sm text-emerald-700 font-semibold block">
-                  ✅ 全部完成！请在下方提交验证
+                  {locale === "zh" ? "所有步骤已完成。请在下方提交验证。" : "All steps are complete. Submit your verification below."}
                 </span>
               </div>
             )}
         </div>
       ) : (
-        // 无步骤，直接渲染剩余教程内容
+        // No checklist; render the remaining lesson content directly.
         tutorialContent && (
           <div className="prose-light mb-8">
             <MarkdownRenderer content={tutorialContent} />
@@ -494,26 +512,32 @@ export function LevelContent({
         )
       )}
 
-      {/* ── 通关条件 / 卡住了 等后置章节 ── */}
-      {renderAfterSections(content)}
+      {/* Pass criteria and troubleshooting sections */}
+      {renderAfterSections(content, locale)}
 
-      {/* ── 交流群入口 ── */}
+      {/* Help link */}
       {mounted && !isLevelCompleted && (
         <div className="mt-8 px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 flex items-center gap-4">
           <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
             <Users className="w-4 h-4 text-indigo-400" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-gray-600 font-medium">遇到问题？</p>
-            <p className="text-xs text-gray-400">加入交流群和同学们一起讨论</p>
+            <p className="text-sm text-gray-600 font-medium">{locale === "zh" ? "需要帮助？" : "Need help?"}</p>
+            <p className="text-xs text-gray-400">
+              {locale === "zh" ? "继续之前，可以先问同学、导师或你的 AI 助手。" : "Ask a classmate, mentor, or your AI assistant before moving on."}
+            </p>
           </div>
-          <button
-            onClick={() => window.open("https://REPLACE_WITH_GROUP_LINK", "_blank")}
-            className="shrink-0 inline-flex items-center gap-1.5 h-8 px-4 rounded-full border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 text-xs font-medium transition-colors"
-          >
-            <Users className="w-3 h-3" />
-            加入交流群
-          </button>
+          {locale === "zh" ? (
+            <WechatGroupButton className="shrink-0" />
+          ) : (
+            <a
+              href={supportHref}
+              className="shrink-0 inline-flex items-center gap-1.5 h-8 px-4 rounded-full border border-gray-200 hover:border-gray-400 text-gray-600 hover:text-gray-900 text-xs font-medium transition-colors"
+            >
+              <Users className="w-3 h-3" />
+              Email support
+            </a>
+          )}
         </div>
       )}
     </div>
@@ -554,10 +578,10 @@ function splitBySections(content: string): string[] {
 }
 
 /**
- * Extract and render "通关条件" and "卡住了？" sections
+ * Extract and render pass criteria and troubleshooting sections.
  */
-function renderAfterSections(content: string) {
-  const passConditionRegex = /^##\s+通关条件.*$/m;
+function renderAfterSections(content: string, locale: "en" | "zh") {
+  const passConditionRegex = locale === "zh" ? /^##\s+通关条件.*$/m : /^##\s+Pass Criteria.*$/m;
   const match = content.match(passConditionRegex);
 
   if (!match || match.index === undefined) return null;
@@ -572,7 +596,7 @@ function renderAfterSections(content: string) {
   );
 }
 
-// --- Markdown 渲染器（白底极简风格）---
+// --- Markdown renderer ---
 function MarkdownRenderer({ content }: { content: string }) {
   return (
     <ReactMarkdown
@@ -697,13 +721,14 @@ function MarkdownRenderer({ content }: { content: string }) {
   );
 }
 
-// --- 交付关 URL 提交框 ---
+// --- Delivery URL submit box ---
 function DeliverySubmitBox({
   deliveryPrompt,
   deliveryUrl,
   setDeliveryUrl,
   deliveryError,
   deliverySubmitting,
+  locale,
   onSubmit,
 }: {
   deliveryPrompt?: string;
@@ -711,25 +736,30 @@ function DeliverySubmitBox({
   setDeliveryUrl: (v: string) => void;
   deliveryError: string;
   deliverySubmitting: boolean;
+  locale: "en" | "zh";
   onSubmit: () => void;
 }) {
   return (
     <div className="mt-8 rounded-2xl border border-amber-100 overflow-hidden">
-      {/* 标题栏 */}
+      {/* Header */}
       <div className="px-6 py-4 bg-amber-50 border-b border-amber-100 flex items-center gap-3">
         <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
           <LinkIcon className="w-4 h-4 text-amber-600" />
         </div>
         <div>
-          <h3 className="text-sm font-black text-gray-900">🎯 提交你的作品</h3>
-          <p className="text-xs text-gray-400 mt-0.5">这是本章的交付关，填入链接即可通关</p>
+          <h3 className="text-sm font-black text-gray-900">
+            {locale === "zh" ? "提交你的项目" : "Submit your project"}
+          </h3>
+          <p className="text-xs text-gray-400 mt-0.5">
+            {locale === "zh" ? "粘贴项目链接，完成这一交付关卡。" : "Paste the project URL to complete this delivery level."}
+          </p>
         </div>
       </div>
 
       <div className="px-6 py-5 space-y-4 bg-white">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {deliveryPrompt ?? "粘贴你的作品链接（https://...）"}
+            {deliveryPrompt ?? (locale === "zh" ? "粘贴你的项目链接（https://...）" : "Paste your project URL (https://...)")}
           </label>
           <div className="flex gap-2">
             <input
@@ -745,7 +775,7 @@ function DeliverySubmitBox({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-11 w-11 flex items-center justify-center rounded-xl border border-gray-200 hover:border-gray-300 text-gray-400 hover:text-gray-600 transition-colors shrink-0"
-                title="预览链接"
+                title={locale === "zh" ? "预览链接" : "Preview link"}
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -764,12 +794,12 @@ function DeliverySubmitBox({
           {deliverySubmitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              提交中…
+              {locale === "zh" ? "提交中..." : "Submitting..."}
             </>
           ) : (
             <>
               <Rocket className="w-4 h-4" />
-              提交作品，完成通关
+              {locale === "zh" ? "提交项目" : "Submit project"}
               <ArrowRight className="w-4 h-4" />
             </>
           )}
@@ -779,7 +809,7 @@ function DeliverySubmitBox({
   );
 }
 
-// --- 代码块（带复制按钮）---
+// --- Code block with copy button ---
 function CodeBlock({
   language,
   children,
@@ -800,7 +830,7 @@ function CodeBlock({
       <button
         className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 h-7 w-7 flex items-center justify-center rounded-md bg-white/80 hover:bg-white border border-gray-200 shadow-sm"
         onClick={handleCopy}
-        aria-label="复制代码"
+        aria-label="Copy code"
       >
         {copied ? (
           <Check className="w-3.5 h-3.5 text-emerald-500" />

@@ -1,0 +1,136 @@
+---
+id: "2-5"
+title: "GitHub + Vercel 部署"
+page_title: "连接 GitHub，推代码自动部署到 Vercel"
+seo_title: "GitHub + Vercel 自动部署教程 - 推代码自动上线"
+seo_description: "把作品集代码推到 GitHub，连接 Vercel 实现自动部署。以后每次推代码，网站自动更新上线。"
+keywords: ["github vercel部署", "自动部署教程", "react网站上线", "vercel部署教程", "github pages替代"]
+chapter: "chapter_2"
+order: 5
+is_delivery: true
+verification_type: "url_submit"
+verification_config: {}
+delivery_prompt: "粘贴你的 Vercel 网址（例如 https://xxx.vercel.app）"
+estimated_minutes: 20
+---
+
+作品集做好了。这一关把它部署到 Vercel，获得一个真实的网址。
+
+和第一章的 Cloudflare Pages 不同，这次我们用 **GitHub + Vercel** 的方式——代码推到 GitHub，Vercel 自动检测到更新，自动重新部署。以后你每次改了代码，推一下，网站就自动更新了，不需要手动上传文件。
+
+## 为什么要用 GitHub？
+
+GitHub 是全球最大的代码托管平台，有超过 1 亿开发者在上面存放代码。
+
+对你来说，GitHub 有三个作用：
+
+**备份**：代码存在 GitHub 上，电脑坏了也不怕丢失。
+
+**版本控制**：每次提交都有记录，可以看到代码的历史变化，出了问题可以回滚。
+
+**自动部署**：连接 Vercel 后，每次推代码，网站自动更新，不需要手动操作。
+
+## Git 的基本概念
+
+Git 是版本控制工具，GitHub 是基于 Git 的代码托管平台。你需要了解几个基本概念：
+
+**仓库（Repository）**：存放代码的地方，就像一个文件夹，但带有版本历史。
+
+**提交（Commit）**：保存一个版本，就像给代码拍一张快照。每次提交都有一条描述信息，说明这次改了什么。
+
+**推送（Push）**：把本地的提交上传到 GitHub。
+
+**分支（Branch）**：代码的不同版本线。默认只有一个 `main` 分支，这门课里你只需要用这一个。
+
+你不需要记住 Git 命令，AI 会帮你执行。但理解这些概念，能帮你更好地理解 AI 在做什么。
+
+## 操作步骤
+
+### 第一步：把代码推到 GitHub
+
+对 AI 说：
+
+```text
+帮我把这个项目推到 GitHub：
+1. 初始化 git 仓库
+2. 创建 .gitignore 文件（忽略 node_modules 和 .env）
+3. 提交所有代码
+4. 指导我在 GitHub 上创建一个新仓库（告诉我每一步怎么点）
+5. 设置 remote 并推送代码
+6. 确认代码在 GitHub 上能看到
+```
+
+按 AI 的指引操作。如果没有 GitHub 账号，先去 [github.com](https://github.com) 注册，免费的。
+
+---
+
+### 第二步：连接 Vercel，一键部署
+
+1. 打开 [vercel.com](https://vercel.com)，用 GitHub 账号登录
+2. 点击 **「Add New Project」**
+3. 找到你刚才推上去的仓库，点 **「Import」**
+4. 框架会自动识别为 Vite，不需要改任何配置
+5. 点 **「Deploy」**
+
+等 1-2 分钟，部署完成。Vercel 会给你一个网址：`https://你的项目名.vercel.app`
+
+---
+
+### 第三步：验证并体验自动部署
+
+用手机打开这个链接，确认网站正常显示。
+
+然后做一个小测试，感受自动部署的魔法：
+
+1. 在本地改一行文字（比如把首页标题改一下）
+2. 对 AI 说："帮我把改动推到 GitHub"
+3. 打开 Vercel 控制台，看到它自动开始重新部署了
+4. 等 1 分钟，刷新你的网址，改动生效了
+
+这就是现代开发的工作流：写代码 → 推 GitHub → 自动上线。
+
+---
+
+## 关于 .gitignore
+
+`.gitignore` 文件告诉 Git 哪些文件不需要提交到 GitHub。
+
+最重要的两类文件不能提交：
+
+**`node_modules/`**：这个文件夹里是所有安装的依赖，可能有几百 MB，而且别人可以通过 `npm install` 重新生成，没必要上传。
+
+**`.env` 和 `.env.local`**：这些文件里存放 API Key 等敏感信息，绝对不能上传到公开的 GitHub 仓库，否则别人能看到你的密钥。
+
+AI 会帮你创建正确的 `.gitignore` 文件，但你需要知道这个概念，避免意外泄露敏感信息。
+
+---
+
+## Vercel 的免费额度
+
+Vercel 的免费计划（Hobby）对个人项目来说完全够用：
+
+- 无限个人项目
+- 每月 100GB 带宽
+- 自动 HTTPS
+- 自定义域名支持
+- 每次部署自动生成预览链接
+
+唯一的限制是不能用于商业项目（需要升级到 Pro，$20/月）。这门课的学习项目完全在免费范围内。
+
+---
+
+## 通关条件
+
+完成以下三步即可通关：
+
+1. 代码推送到 GitHub
+2. Vercel 部署成功，获得真实网址
+3. 用手机访问确认正常
+
+## 卡住了？
+
+- push 失败要求认证？AI 会指导你配置 Personal Access Token 或 SSH Key
+- 不确定 .env 是否被排除了？检查 .gitignore 文件是否包含 `.env`
+- Vercel 部署失败？把错误信息复制给 AI，让它帮你排查
+- 网站样式在线上丢失？让 AI 检查 Tailwind 的 purge 配置是否正确
+- GitHub 仓库设置为 Private？Vercel 可以访问私有仓库，但需要在授权时勾选
