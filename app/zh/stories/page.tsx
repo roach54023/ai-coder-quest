@@ -190,6 +190,7 @@ export default function StoriesPage() {
             <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
             <Link href="/zh#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
             <Link href="/zh/stories" className="text-gray-900 font-medium">学员案例</Link>
+            <Link href="/stories" className="hover:text-gray-900 transition-colors">English</Link>
           </nav>
           <Button size="sm" className="bg-gray-900 hover:bg-gray-700 text-white rounded-full px-5 text-sm" asChild>
             <a href="/zh/register">开始闯关 →</a>

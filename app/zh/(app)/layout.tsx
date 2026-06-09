@@ -63,6 +63,12 @@ export default async function AppLayout({
             >
               我的主页
             </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 px-4 py-2 rounded-full transition-colors"
+            >
+              English
+            </Link>
           </nav>
 
           {/* 右侧：段位 + 用户 + 退出 */}

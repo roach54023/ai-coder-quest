@@ -60,10 +60,15 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-white flex">
       <div className="hidden lg:flex lg:w-1/2 bg-gray-50 border-r border-gray-100 flex-col justify-between p-12">
-        <Link href="/zh" className="flex items-center gap-2">
-          <Logo size={28} />
-          <span className="font-bold text-gray-900 text-base">VibeCamp</span>
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/zh" className="flex items-center gap-2">
+            <Logo size={28} />
+            <span className="font-bold text-gray-900 text-base">VibeCamp</span>
+          </Link>
+          <Link href="/login" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+            English
+          </Link>
+        </div>
 
         <div>
           <p className="text-sm text-gray-400 uppercase tracking-widest mb-4 font-medium">AI 编程教程</p>
@@ -95,10 +100,15 @@ function LoginForm() {
 
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
-          <Link href="/zh" className="flex items-center gap-2 mb-10 lg:hidden">
-            <Logo />
-            <span className="font-bold text-gray-900">VibeCamp</span>
-          </Link>
+          <div className="flex items-center justify-between mb-10 lg:hidden">
+            <Link href="/zh" className="flex items-center gap-2">
+              <Logo />
+              <span className="font-bold text-gray-900">VibeCamp</span>
+            </Link>
+            <Link href="/login" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+              English
+            </Link>
+          </div>
 
           <h1 className="text-2xl font-black text-gray-900 mb-1">欢迎回来</h1>
           <p className="text-sm text-gray-400 mb-8">登录后继续你的 AI 编程课程。</p>

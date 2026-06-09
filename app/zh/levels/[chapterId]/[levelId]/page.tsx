@@ -220,6 +220,12 @@ export default async function LevelPage({ params }: LevelPageProps) {
                 个人主页
               </Link>
             )}
+            <Link
+              href={`/levels/${chapterId}/${levelId}`}
+              className="text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 px-4 py-2 rounded-full transition-colors"
+            >
+              English
+            </Link>
           </nav>
 
           {/* Right side */}

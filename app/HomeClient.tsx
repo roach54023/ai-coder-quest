@@ -313,6 +313,7 @@ export default function HomeClient() {
             <Link href="/zh/about" className="hover:text-gray-900 transition-colors">什么是 AI 编程</Link>
             <Link href="#journey" className="hover:text-gray-900 transition-colors">课程地图</Link>
             <Link href="#cases" className="hover:text-gray-900 transition-colors">学员案例</Link>
+            <Link href="/" className="hover:text-gray-900 transition-colors">English</Link>
           </nav>
 
           <div className="flex items-center gap-3">
