@@ -1,0 +1,44 @@
+[
+  {
+    "id": "prologue",
+    "file": "/share-posters/chapter-prologue.png",
+    "share_id": "poster_chapter_prologue_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_prologue&share_id=poster_chapter_prologue_v1",
+    "headline": "我跑通了第一个 AI 编程循环"
+  },
+  {
+    "id": "chapter_1",
+    "file": "/share-posters/chapter-1-static-site.png",
+    "share_id": "poster_chapter_1_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_1&share_id=poster_chapter_1_v1",
+    "headline": "我通关了 AI 编程第一章"
+  },
+  {
+    "id": "chapter_2",
+    "file": "/share-posters/chapter-2-frontend.png",
+    "share_id": "poster_chapter_2_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_2&share_id=poster_chapter_2_v1",
+    "headline": "我把网页升级成了前端项目"
+  },
+  {
+    "id": "chapter_3",
+    "file": "/share-posters/chapter-3-interaction.png",
+    "share_id": "poster_chapter_3_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_3&share_id=poster_chapter_3_v1",
+    "headline": "我做出了更像产品的交互体验"
+  },
+  {
+    "id": "chapter_4",
+    "file": "/share-posters/chapter-4-fullstack.png",
+    "share_id": "poster_chapter_4_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_4&share_id=poster_chapter_4_v1",
+    "headline": "我接上了后端、数据库和 AI 能力"
+  },
+  {
+    "id": "chapter_5",
+    "file": "/share-posters/chapter-5-launch.png",
+    "share_id": "poster_chapter_5_v1",
+    "url": "https://vibecamps.org/zh?utm_source=wechat&utm_medium=poster&utm_campaign=chapter_5&share_id=poster_chapter_5_v1",
+    "headline": "我完成了一个可上线运营的 AI 产品"
+  }
+]
