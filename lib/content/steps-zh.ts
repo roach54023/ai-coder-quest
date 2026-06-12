@@ -45,6 +45,12 @@ const LEVEL_STEPS: Record<string, StepItem[]> = {
     { id: "visit", label: "通过 Vercel 链接访问到线上网站", feedback: "🌍 全世界都能看到了！" },
     { id: "share", label: "把链接发给朋友或发到社交平台", feedback: "🎉 第一章交付完成！" },
   ],
+  "1-5": [
+    { id: "search", label: "列表页加入搜索框并能实时过滤卡片", feedback: "🔍 搜索功能生效！" },
+    { id: "map", label: "详情页嵌入地图并显示完整地址", feedback: "🗺️ 地图嵌入完成！" },
+    { id: "share", label: "详情页加入复制链接和社交分享按钮", feedback: "📣 分享功能完成！" },
+    { id: "mobile", label: "手机端测试搜索、地图和分享都正常", feedback: "📱 产品体验更完整了！" },
+  ],
 
   // ── 第二章 ────────────────────────────────────────────────────────────────
   "2-1": [
@@ -125,6 +131,12 @@ const LEVEL_STEPS: Record<string, StepItem[]> = {
     { id: "env", label: "Vercel 环境变量已配置", feedback: "⚙️ 环境变量就位！" },
     { id: "works", label: "线上作品页能正常加载数据库里的作品", feedback: "🌍 线上数据库通了！" },
     { id: "views", label: "线上点击作品后查看次数增加", feedback: "🎉 第四章交付完成！" },
+  ],
+  "4-6": [
+    { id: "provider", label: "选择 AI 服务商并配置 API Key", feedback: "🔑 AI 接口准备好了！" },
+    { id: "api", label: "创建 AI 对话或生成接口，能返回结果", feedback: "🤖 AI 能力接通！" },
+    { id: "ui", label: "前端加入输入框、加载状态和错误提示", feedback: "💬 AI 交互完成！" },
+    { id: "guard", label: "加入基础限流或失败保护，避免接口被滥用", feedback: "🛡️ AI 功能更稳了！" },
   ],
 
   // ── 第五章 ────────────────────────────────────────────────────────────────
