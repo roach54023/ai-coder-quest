@@ -603,12 +603,13 @@ function MarkdownRenderer({ content }: { content: string }) {
       components={{
         code({ className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
-          const isInline = !match;
+          const codeText = String(children).replace(/\n$/, "");
+          const isMultiline = codeText.includes("\n");
 
-          if (!isInline && match) {
+          if (match || isMultiline) {
             return (
-              <CodeBlock language={match[1]}>
-                {String(children).replace(/\n$/, "")}
+              <CodeBlock language={match?.[1] ?? "text"}>
+                {codeText}
               </CodeBlock>
             );
           }
@@ -826,7 +827,7 @@ function CodeBlock({
   };
 
   return (
-    <div className="relative group rounded-xl overflow-hidden my-5 border border-gray-100 shadow-sm">
+    <div className="relative group max-w-full rounded-xl overflow-hidden my-5 border border-gray-100 shadow-sm">
       <button
         className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 h-7 w-7 flex items-center justify-center rounded-md bg-white/80 hover:bg-white border border-gray-200 shadow-sm"
         onClick={handleCopy}
@@ -841,11 +842,22 @@ function CodeBlock({
       <SyntaxHighlighter
         language={language}
         style={oneLight}
+        wrapLongLines
         customStyle={{
           margin: 0,
+          maxWidth: "100%",
+          overflowX: "auto",
           borderRadius: "0.75rem",
           fontSize: "0.875rem",
           lineHeight: "1.6",
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+        }}
+        codeTagProps={{
+          style: {
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          },
         }}
       >
         {children}

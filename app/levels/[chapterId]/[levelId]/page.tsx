@@ -258,8 +258,8 @@ export default async function LevelPage({ params }: LevelPageProps) {
         <div className="max-w-3xl mx-auto px-6 py-10">
 
           {/* Breadcrumb and previous level */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+          <div className="flex items-center justify-between gap-3 mb-8">
+            <div className="flex min-w-0 flex-1 items-center gap-2 text-sm text-gray-400">
               <Link
                 href={isLoggedIn ? "/dashboard" : "/"}
                 className="flex items-center gap-1 hover:text-gray-700 transition-colors"
@@ -273,10 +273,10 @@ export default async function LevelPage({ params }: LevelPageProps) {
             {prevLevel && (
               <Link
                 href={`/levels/${prevLevel.chapterId}/${prevLevel.levelId}`}
-                className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 px-3 py-1.5 rounded-full border border-gray-100 hover:border-gray-200 transition-all"
+                className="flex shrink-0 items-center gap-1 text-xs text-gray-400 hover:text-gray-700 px-3 py-1.5 rounded-full border border-gray-100 hover:border-gray-200 transition-all"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
-                Previous
+                <span className="hidden sm:inline">Previous</span>
               </Link>
             )}
           </div>
