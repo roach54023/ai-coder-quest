@@ -23,6 +23,7 @@ export const EN_CHAPTERS_DATA = [
       { id: "1-2", title: "Multi-page website" },
       { id: "1-3", title: "Visual polish" },
       { id: "1-4", title: "Deploy the site", delivery: true },
+      { id: "1-5", title: "Search, maps, and sharing" },
     ],
   },
   {
@@ -65,6 +66,7 @@ export const EN_CHAPTERS_DATA = [
       { id: "4-3", title: "Admin dashboard" },
       { id: "4-4", title: "Analytics basics" },
       { id: "4-5", title: "Deploy version four", delivery: true },
+      { id: "4-6", title: "AI feature integration" },
     ],
   },
   {

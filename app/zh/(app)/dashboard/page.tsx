@@ -20,14 +20,15 @@ const CHAPTERS_DATA = [
   {
     id: "chapter_1",
     title: "第一章",
-    titleFull: "第一章 · 作品集网站",
-    subtitle: "用 Next.js 做出三页作品集，部署到 Vercel",
+    titleFull: "第一章 · 静态网站",
+    subtitle: "做一个城市美食探索网站，部署上线拿到真实网址",
     color: "#10B981",
     levels: [
-      { id: "1-1", title: "搭建 Next.js 项目" },
-      { id: "1-2", title: "三页作品集" },
-      { id: "1-3", title: "视觉美化" },
+      { id: "1-1", title: "Prompt 核心技巧" },
+      { id: "1-2", title: "餐厅列表页" },
+      { id: "1-3", title: "餐厅详情页" },
       { id: "1-4", title: "部署上线", delivery: true },
+      { id: "1-5", title: "搜索、地图和分享功能" },
     ],
   },
   {
@@ -69,7 +70,8 @@ const CHAPTERS_DATA = [
       { id: "4-2", title: "数据库入门" },
       { id: "4-3", title: "后台管理" },
       { id: "4-4", title: "访问统计" },
-      { id: "4-5", title: "部署第四版", delivery: true },
+      { id: "4-5", title: "环境变量部署", delivery: true },
+      { id: "4-6", title: "接入 AI 能力" },
     ],
   },
   {

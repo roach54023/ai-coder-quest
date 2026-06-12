@@ -31,8 +31,10 @@ const journey = [
     color: "#10B981",
     levels: [
       { id: "1-1", title: "Prompting fundamentals", desc: "Write clear instructions that AI can turn into code." },
-      { id: "1-2", title: "Personal portfolio pages", desc: "Create a real portfolio you can share." },
-      { id: "1-3", title: "Visual polish", desc: "Make the site consistent and presentable." },
+      { id: "1-2", title: "Listing page", desc: "Build a restaurant listing page with cards and navigation." },
+      { id: "1-3", title: "Detail page", desc: "Complete a three-page static website flow." },
+      { id: "1-4", title: "Deploy the site", desc: "Publish the project and get a real public URL." },
+      { id: "1-5", title: "Search, maps, and sharing", desc: "Add product-like search, map, and share features." },
     ],
   },
   {
