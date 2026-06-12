@@ -19,6 +19,7 @@ import { siteUrl } from "@/lib/site-url";
 
 interface LevelPageProps {
   params: Promise<{ chapterId: string; levelId: string }>;
+  searchParams?: Promise<{ previewShare?: string }>;
 }
 
 export async function generateMetadata({ params }: LevelPageProps): Promise<Metadata> {
@@ -61,8 +62,9 @@ export async function generateMetadata({ params }: LevelPageProps): Promise<Meta
   };
 }
 
-export default async function LevelPage({ params }: LevelPageProps) {
+export default async function LevelPage({ params, searchParams }: LevelPageProps) {
   const { chapterId, levelId } = await params;
+  const query = await searchParams;
   const levelContent = getLevelContent(levelId, "zh");
 
   if (!levelContent) {
@@ -110,7 +112,8 @@ export default async function LevelPage({ params }: LevelPageProps) {
     currentRank = getRankByXP(totalXP);
   }
 
-  const isCompleted = progress?.status === "completed";
+  const isPreviewingShare = process.env.NODE_ENV === "development" && query?.previewShare === "1";
+  const isCompleted = progress?.status === "completed" || isPreviewingShare;
   const isSkipped = progress?.status === "skipped";
 
   // Checklist and URL-submit levels can complete from the checklist.
@@ -130,6 +133,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
   const prevLevel = getPrevLevel(levelId);
   const siblingLevels = getSiblingLevels(levelId);
   const nextChapterFirst = getAdjacentChapterFirstLevel(levelId);
+  const isChapterEnd = !nextLevel || nextLevel.chapterId !== chapterId;
 
   // Internal links to nearby lessons from the same chapter.
   const siblingContents = siblingLevels
@@ -313,9 +317,11 @@ export default async function LevelPage({ params }: LevelPageProps) {
           </div>
 
           {/* Completed: share prompt + next level CTA */}
-          {isCompleted && (
+          {isCompleted && isChapterEnd && (
             <SharePrompt
+              levelId={levelId}
               levelTitle={levelContent.meta.title}
+              chapterId={chapterId}
               nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
               dashboardUrl="/zh/dashboard"
               locale="zh"
@@ -341,6 +347,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
             isDeliveryLevel={isLoggedIn ? isDeliveryLevel : false}
             deliveryPrompt={levelContent.meta.delivery_prompt}
             isLevelCompleted={isCompleted}
+            showCompletionShare={isChapterEnd}
             nextLevelUrl={nextLevel ? `/zh/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
             dashboardUrl="/zh/dashboard"
             locale="zh"

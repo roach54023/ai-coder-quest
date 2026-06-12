@@ -130,6 +130,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
   const prevLevel = getPrevLevel(levelId);
   const siblingLevels = getSiblingLevels(levelId);
   const nextChapterFirst = getAdjacentChapterFirstLevel(levelId);
+  const isChapterEnd = !nextLevel || nextLevel.chapterId !== chapterId;
 
   // Internal links to nearby lessons from the same chapter.
   const siblingContents = siblingLevels
@@ -307,9 +308,11 @@ export default async function LevelPage({ params }: LevelPageProps) {
           </div>
 
           {/* Completed: share prompt + next level CTA */}
-          {isCompleted && (
+          {isCompleted && isChapterEnd && (
             <SharePrompt
+              levelId={levelId}
               levelTitle={levelContent.meta.title}
+              chapterId={chapterId}
               nextLevelUrl={nextLevel ? `/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
               dashboardUrl="/dashboard"
               locale="en"
@@ -335,6 +338,7 @@ export default async function LevelPage({ params }: LevelPageProps) {
             isDeliveryLevel={isLoggedIn ? isDeliveryLevel : false}
             deliveryPrompt={levelContent.meta.delivery_prompt}
             isLevelCompleted={isCompleted}
+            showCompletionShare={isChapterEnd}
             nextLevelUrl={nextLevel ? `/levels/${nextLevel.chapterId}/${nextLevel.levelId}` : null}
             dashboardUrl="/dashboard"
             locale="en"

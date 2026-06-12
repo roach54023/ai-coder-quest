@@ -28,7 +28,9 @@ export function middleware(request: NextRequest) {
     "/dashboard", "/profile", "/share", "/admin",
     "/zh/dashboard", "/zh/profile", "/zh/share", "/zh/admin",
   ];
-  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+  const isProtected = protectedPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
 
   // Redirect anonymous users to the matching language auth flow.
   if (isProtected && !isLoggedIn) {

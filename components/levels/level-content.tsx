@@ -21,6 +21,7 @@ interface LevelContentProps {
   isDeliveryLevel?: boolean;
   deliveryPrompt?: string;
   isLevelCompleted?: boolean;
+  showCompletionShare?: boolean;
   nextLevelUrl?: string | null;
   dashboardUrl?: string;
   locale?: "en" | "zh";
@@ -36,6 +37,7 @@ export function LevelContent({
   isDeliveryLevel = false,
   deliveryPrompt,
   isLevelCompleted = false,
+  showCompletionShare = false,
   nextLevelUrl = null,
   dashboardUrl = "/dashboard",
   locale = "en",
@@ -85,22 +87,33 @@ export function LevelContent({
   const autoComplete = useCallback(() => {
     if (!isSimpleLevel || completing || isLevelCompleted) return;
     setCompleting(true);
-
-    // Navigate immediately while progress is recorded in the background.
     trackLevelComplete(levelId, chapterId, levelTitle);
-    if (nextLevelUrl) {
-      router.push(nextLevelUrl);
-    } else {
-      router.push(dashboardUrl);
+
+    if (locale !== "zh" || !showCompletionShare) {
+      if (nextLevelUrl) {
+        router.push(nextLevelUrl);
+      } else {
+        router.push(dashboardUrl);
+      }
     }
 
-    // Record progress silently without blocking navigation.
     fetch("/api/progress/complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ level_id: levelId }),
-    }).catch(() => {/* Progress will sync again next time the page opens. */});
-  }, [isSimpleLevel, completing, isLevelCompleted, levelId, chapterId, levelTitle, nextLevelUrl, router, dashboardUrl]);
+    })
+      .then(() => {
+        if (locale === "zh" && showCompletionShare) {
+          router.refresh();
+          setCompleting(false);
+        }
+      })
+      .catch(() => {
+        if (locale === "zh" && showCompletionShare) {
+          setCompleting(false);
+        }
+      });
+  }, [isSimpleLevel, completing, isLevelCompleted, levelId, chapterId, levelTitle, locale, showCompletionShare, nextLevelUrl, router, dashboardUrl]);
 
   const handleDeliverySubmit = useCallback(async () => {
     if (!deliveryUrl.trim()) {
@@ -123,10 +136,15 @@ export function LevelContent({
       const data = await res.json();
       if (data.level_completed || data.already_completed) {
         trackLevelComplete(levelId, chapterId, levelTitle);
-        if (nextLevelUrl) {
-          router.push(nextLevelUrl);
+        if (locale === "zh" && showCompletionShare) {
+          router.refresh();
+          setDeliverySubmitting(false);
         } else {
-          router.push(dashboardUrl);
+          if (nextLevelUrl) {
+            router.push(nextLevelUrl);
+          } else {
+            router.push(dashboardUrl);
+          }
         }
       } else {
         setDeliveryError(locale === "zh" ? "提交失败，请重试。" : "Submission failed. Please try again.");
@@ -136,7 +154,7 @@ export function LevelContent({
       setDeliveryError(locale === "zh" ? "网络错误，请重试。" : "Network error. Please try again.");
       setDeliverySubmitting(false);
     }
-  }, [deliveryUrl, levelId, chapterId, levelTitle, nextLevelUrl, router, dashboardUrl, locale]);
+  }, [deliveryUrl, levelId, chapterId, levelTitle, nextLevelUrl, router, dashboardUrl, locale, showCompletionShare]);
 
   const handleStepComplete = useCallback(
     (step: StepItem) => {

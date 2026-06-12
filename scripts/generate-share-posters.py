@@ -163,12 +163,31 @@ def make_qr(url: str, poster_id: str) -> Image.Image:
     QR_DIR.mkdir(parents=True, exist_ok=True)
     path = QR_DIR / f"{poster_id}.png"
     if not path.exists():
-        api = (
-            "https://api.qrserver.com/v1/create-qr-code/"
-            f"?size=420x420&margin=18&data={quote(url, safe='')}"
-        )
-        with urlopen(api, timeout=20) as resp:
-            path.write_bytes(resp.read())
+        try:
+            from reportlab.graphics.barcode.qr import QrCodeWidget
+
+            qr = QrCodeWidget(url).qr
+            qr.make()
+            module_count = qr.getModuleCount()
+            border = 4
+            box_size = 10
+            size = (module_count + border * 2) * box_size
+            image = Image.new("RGB", (size, size), "white")
+            qr_draw = ImageDraw.Draw(image)
+            for row in range(module_count):
+                for col in range(module_count):
+                    if qr.isDark(row, col):
+                        x = (col + border) * box_size
+                        y = (row + border) * box_size
+                        qr_draw.rectangle((x, y, x + box_size - 1, y + box_size - 1), fill="black")
+            image.resize((420, 420), Image.Resampling.NEAREST).save(path)
+        except ImportError:
+            api = (
+                "https://api.qrserver.com/v1/create-qr-code/"
+                f"?size=420x420&margin=18&data={quote(url, safe='')}"
+            )
+            with urlopen(api, timeout=20) as resp:
+                path.write_bytes(resp.read())
     return Image.open(path).convert("RGBA")
 
 
@@ -285,6 +304,8 @@ def make_chapter_1_poster(spec: dict, url: str) -> dict:
 def make_poster(spec: dict) -> dict:
     share_id = f"poster_{spec['campaign']}_v1"
     url = f"{BASE_URL}?utm_source=wechat&utm_medium=poster&utm_campaign={spec['campaign']}&share_id={share_id}"
+    poster_url = f"https://vibecamps.org/share-posters/{spec['file']}"
+    make_qr(poster_url, f"{spec['id']}_transfer")
     if spec["id"] == "chapter_1":
         return make_chapter_1_poster(spec, url)
 
